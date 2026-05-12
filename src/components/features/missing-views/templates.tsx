@@ -5,6 +5,7 @@ import Navbar from "@/components/shared/organisms/Navbar";
 import Footer from "@/components/shared/organisms/Footer";
 import Button from "@/components/shared/atoms/Button";
 import Icon from "@/components/shared/atoms/Icon";
+import { BlobUploadTool } from "@/components/features/blob/BlobUploadTool";
 
 const images = {
   canopy:
@@ -877,6 +878,7 @@ const adminLinks = [
   ["#", "inventory_2", "Paquetes"],
   ["#", "payments", "Pagos"],
   ["#", "account_tree", "Ontologia"],
+  ["/admin/blob", "image", "Imagenes"],
   ["#", "bar_chart", "Reportes"],
 ];
 
@@ -1223,6 +1225,17 @@ export const AdminDashboardTemplate = () => (
         </div>
       </section>
     </div>
+  </PanelLayout>
+);
+
+export const AdminBlobUploadTemplate = () => (
+  <PanelLayout
+    admin
+    active="Imagenes"
+    title="Imagenes RDF"
+    subtitle="Carga de archivos publicos y URLs para individuos de la ontologia."
+  >
+    <BlobUploadTool />
   </PanelLayout>
 );
 
