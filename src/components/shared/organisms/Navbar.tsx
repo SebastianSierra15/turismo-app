@@ -7,6 +7,7 @@ import Icon from "@/components/shared/atoms/Icon";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
+import { isAdminRole, isOperatorOrAdminRole } from "@/lib/roles";
 
 const Navbar: React.FC = () => {
   const pathname = usePathname();
@@ -23,14 +24,6 @@ const Navbar: React.FC = () => {
     { href: "/sitios", label: "Sitios", title: "Ir a Sitios" },
     { href: "/acerca_de", label: "Acerca de", title: "Ir a Acerca de" },
   ];
-  const role = (user?.rol ?? "").toString().toLowerCase();
-  if (role === "operador" || role === "admin") {
-    navItems.push({
-      href: "/panel",
-      label: "Operación",
-      title: "Ir a panel operativo",
-    });
-  }
 
   return (
     <header className="sticky top-0 z-50 w-full bg-white border-b border-primary/10">
@@ -95,7 +88,7 @@ const Navbar: React.FC = () => {
                       <Icon name="person" className="text-base" />
                       Mi perfil
                     </Link>
-                    {(role === "operador" || role === "admin") && (
+                    {isOperatorOrAdminRole(user?.rol) && (
                       <Link
                         href="/panel"
                         className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-primary"
@@ -104,7 +97,7 @@ const Navbar: React.FC = () => {
                         Centro operativo
                       </Link>
                     )}
-                    {role === "admin" && (
+                    {isAdminRole(user?.rol) && (
                       <Link
                         href="/admin"
                         className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-primary"

@@ -21,6 +21,8 @@ export const PlanDetailSchema = z.object({
   durationDays: z.number().optional().nullable(),
   difficulty: z.string().optional().nullable(),
   capacityMax: z.number().optional().nullable(),
+  agencyUri: z.string().optional(),
+  agencyName: z.string().optional(),
   heroImage: z.string().url().optional(),
   galleryImages: z.array(z.string().url()).optional(),
   categories: z.array(z.string()).optional(),

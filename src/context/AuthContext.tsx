@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { normalizeRole } from "@/lib/roles";
 
 interface AuthUser {
   nombre_completo?: string;
@@ -62,6 +63,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setLoading(false);
     localStorage.setItem("token", newToken);
     localStorage.setItem("user", JSON.stringify(userData));
+    const role = normalizeRole(userData?.rol);
+    if (role === "admin") {
+      router.push("/admin");
+      return;
+    }
+    if (role === "operador") {
+      router.push("/panel");
+      return;
+    }
     router.push("/perfil");
   };
 

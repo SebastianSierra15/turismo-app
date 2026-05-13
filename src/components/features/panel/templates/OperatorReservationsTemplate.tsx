@@ -7,6 +7,7 @@ import PaginationControls from "@/components/shared/organisms/PaginationControls
 import { useAuth } from "@/context/AuthContext";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useDebouncedValue } from "@/hooks/useDebouncedValue";
+import { isOperatorOrAdminRole } from "@/lib/roles";
 import {
   getOperatorReservations,
   updateOperatorReservationStatus,
@@ -59,8 +60,7 @@ const OperatorReservationsTemplate: React.FC = () => {
   });
 
   const canOperate = React.useMemo(() => {
-    const role = (user?.rol ?? "").toString().toLowerCase();
-    return role === "operador" || role === "admin";
+    return isOperatorOrAdminRole(user?.rol);
   }, [user?.rol]);
 
   const loadData = React.useCallback(async () => {

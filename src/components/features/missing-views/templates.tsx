@@ -1072,6 +1072,7 @@ const panelLinks = [
 
 const adminLinks = [
   ["/admin", "dashboard", "Resumen"],
+  ["/admin/reservas", "event_available", "Reservas"],
   ["#", "group", "Usuarios"],
   ["#", "admin_panel_settings", "Roles"],
   ["#", "business", "Agencias"],
@@ -1109,7 +1110,7 @@ export const PanelLayout = ({
 
   return (
     <div className="min-h-screen bg-background-light text-slate-900">
-      <aside className="fixed inset-y-0 left-0 z-40 hidden w-64 flex-col border-r border-slate-200 bg-white px-4 py-6 lg:flex">
+      <aside className="fixed inset-y-0 left-0 z-40 hidden w-64 flex-col overflow-y-auto border-r border-slate-200 bg-white px-4 py-6 lg:flex">
         <Link href="/" className="flex items-center gap-3 px-3 text-slate-950">
           <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-white">
             <Icon name="forest" />
@@ -1154,7 +1155,7 @@ export const PanelLayout = ({
         aria-hidden={!isSidebarOpen}
       />
       <aside
-        className={`fixed inset-y-0 left-0 z-50 w-72 border-r border-slate-200 bg-white px-4 py-6 shadow-xl transition-transform duration-200 lg:hidden ${
+        className={`fixed inset-y-0 left-0 z-50 w-72 overflow-y-auto border-r border-slate-200 bg-white px-4 py-6 shadow-xl transition-transform duration-200 lg:hidden ${
           isSidebarOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >

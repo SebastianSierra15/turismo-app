@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { AdminDashboardTemplate } from "@/components/features/missing-views/templates";
+import AdminDashboardTemplate from "@/components/features/panel/templates/AdminDashboardTemplate";
 
 export const metadata: Metadata = {
   title: "Amaturis | Administrador general",

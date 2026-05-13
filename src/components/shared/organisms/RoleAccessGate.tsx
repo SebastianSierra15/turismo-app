@@ -4,14 +4,13 @@ import React from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
+import { normalizeRole } from "@/lib/roles";
 
 type RoleAccessGateProps = {
   allowedRoles: string[];
   sectionLabel: string;
   children: React.ReactNode;
 };
-
-const normalizeRole = (value: unknown) => String(value ?? "").trim().toLowerCase();
 
 const RoleAccessGate: React.FC<RoleAccessGateProps> = ({
   allowedRoles,
@@ -27,7 +26,7 @@ const RoleAccessGate: React.FC<RoleAccessGateProps> = ({
   );
 
   const currentRole = normalizeRole(user?.rol);
-  const hasRoleAccess = currentRole !== "" && allowedSet.has(currentRole);
+  const hasRoleAccess = allowedSet.has(currentRole);
 
   React.useEffect(() => {
     if (!loading && !token) {

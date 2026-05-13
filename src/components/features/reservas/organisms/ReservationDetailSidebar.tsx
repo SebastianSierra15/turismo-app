@@ -61,7 +61,7 @@ const ReservationDetailSidebar: React.FC<ReservationDetailSidebarProps> = ({
         <div className="flex items-center gap-2 mb-4">
           <Icon name="support_agent" className="text-primary" />
           <h3 className="text-sm font-bold uppercase tracking-widest text-slate-500">
-            Proveedor del Plan
+            Agencia del Plan
           </h3>
         </div>
         <p className="font-black text-slate-900 text-lg mb-4">

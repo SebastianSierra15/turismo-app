@@ -31,6 +31,8 @@ export const PaqueteDetalleApiSchema = z.object({
   capacidad_max_personas: z.number().optional().nullable(),
   incluye_descripcion: z.string().optional().nullable(),
   no_incluye: z.string().optional().nullable(),
+  agencia_uri: z.string().optional().nullable(),
+  agencia_nombre: z.string().optional().nullable(),
   url_imagen: z.string().url().optional().nullable(),
   galeria_imagenes: z.string().optional().nullable(),
   destinos: z.array(PaqueteDetalleDestinoApiSchema).optional().nullable(),

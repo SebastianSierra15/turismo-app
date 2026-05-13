@@ -315,6 +315,15 @@ const PlanDetailContent: React.FC<PlanDetailContentProps> = ({ plan }) => {
             </div>
           </div>
           <div className="p-6 space-y-6">
+            <div className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
+              <p className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                Agencia operadora
+              </p>
+              <p className="mt-1 flex items-center gap-2 text-sm font-semibold text-slate-900">
+                <Icon name="storefront" className="text-primary text-base" />
+                {plan.agencyName ?? "Agencia por asignar"}
+              </p>
+            </div>
             <div className="space-y-4">
               <div className="space-y-2">
                 <label className="text-xs font-bold uppercase text-slate-500 tracking-wider">

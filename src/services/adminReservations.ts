@@ -1,20 +1,25 @@
 import { buildApiUrl } from "@/lib/api";
-import { OperatorReservationsSchema } from "@/schemas/operatorReservations";
-import { type OperatorReservationStatus, type OperatorReservations } from "@/types/operatorReservations";
+import {
+  AdminReservationsKpisSchema,
+  AdminReservationsSchema,
+} from "@/schemas/adminReservations";
+import { type AdminReservationStatus, type AdminReservations, type AdminReservationsKpis } from "@/types/adminReservations";
 
-export type OperatorReservationFilters = {
+export type AdminReservationFilters = {
   q?: string;
-  estado?: OperatorReservationStatus | "";
+  estado?: AdminReservationStatus | "";
   fecha_desde?: string;
   fecha_hasta?: string;
 };
 
-export const getOperatorReservations = async (
+export const getAdminReservations = async (
   token: string,
-  filters: OperatorReservationFilters = {}
-): Promise<OperatorReservations> => {
+  filters: AdminReservationFilters = {}
+): Promise<AdminReservations> => {
   const response = await fetch(
-    buildApiUrl("/operador/reservas", {
+    buildApiUrl("/admin/reservas", {
+      q: filters.q || undefined,
+      estado: filters.estado || undefined,
       fecha_desde: filters.fecha_desde || undefined,
       fecha_hasta: filters.fecha_hasta || undefined,
     }),
@@ -29,7 +34,7 @@ export const getOperatorReservations = async (
   );
 
   if (!response.ok) {
-    let detail = "No se pudo cargar la lista operativa de reservas";
+    let detail = "No se pudo cargar el listado global de reservas";
     try {
       const payload = await response.json();
       if (payload && typeof payload.detail === "string" && payload.detail.trim()) {
@@ -42,28 +47,32 @@ export const getOperatorReservations = async (
   }
 
   const data = await response.json();
-  return OperatorReservationsSchema.parse(data);
+  return AdminReservationsSchema.parse(data);
 };
 
-export const updateOperatorReservationStatus = async (
+export const getAdminReservationsKpis = async (
   token: string,
-  reservationId: string,
-  estado: OperatorReservationStatus
-): Promise<void> => {
+  filters: AdminReservationFilters = {}
+): Promise<AdminReservationsKpis> => {
   const response = await fetch(
-    buildApiUrl(`/operador/reservas/${encodeURIComponent(reservationId)}/estado`),
+    buildApiUrl("/admin/reservas/kpis", {
+      q: filters.q || undefined,
+      estado: filters.estado || undefined,
+      fecha_desde: filters.fecha_desde || undefined,
+      fecha_hasta: filters.fecha_hasta || undefined,
+    }),
     {
-      method: "PATCH",
+      method: "GET",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({ estado }),
+      cache: "no-store",
     }
   );
 
   if (!response.ok) {
-    let detail = "No se pudo actualizar el estado de la reserva";
+    let detail = "No se pudieron cargar los KPIs globales";
     try {
       const payload = await response.json();
       if (payload && typeof payload.detail === "string" && payload.detail.trim()) {
@@ -74,4 +83,7 @@ export const updateOperatorReservationStatus = async (
     }
     throw new Error(detail);
   }
+
+  const data = await response.json();
+  return AdminReservationsKpisSchema.parse(data);
 };
