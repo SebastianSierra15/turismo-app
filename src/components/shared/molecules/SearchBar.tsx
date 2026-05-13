@@ -16,6 +16,7 @@ interface SearchBarProps {
   className?: string;
   destinations?: string[];
   topDestinations?: string[];
+  defaultFilters?: Partial<SearchFilters>;
   onSearch?: (filters: SearchFilters) => void;
   resetSignal?: number;
 }
@@ -26,6 +27,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
   className = "",
   destinations = [],
   topDestinations = [],
+  defaultFilters,
   onSearch,
   resetSignal = 0,
 }) => {
@@ -42,6 +44,15 @@ const SearchBar: React.FC<SearchBarProps> = ({
   const [showSuggestions, setShowSuggestions] = React.useState(false);
   const [showCalendar, setShowCalendar] = React.useState(false);
   const [warning, setWarning] = React.useState("");
+  const defaultDestination = defaultFilters?.destination?.trim() ?? "";
+  const defaultStartDate = defaultFilters?.startDate ?? "";
+  const defaultEndDate = defaultFilters?.endDate ?? "";
+  const defaultTravelers =
+    typeof defaultFilters?.travelers === "number" &&
+    defaultFilters.travelers >= 1 &&
+    defaultFilters.travelers <= 30
+      ? String(defaultFilters.travelers)
+      : "";
 
   const requiresSelection = destinations.length > 0;
 
@@ -82,6 +93,20 @@ const SearchBar: React.FC<SearchBarProps> = ({
     setShowSuggestions(false);
     setShowCalendar(false);
   }, [resetSignal]);
+
+  React.useEffect(() => {
+    setDestinationInput(defaultDestination);
+    setSelectedDestination(defaultDestination || null);
+    setStartDate(defaultStartDate);
+    setEndDate(defaultEndDate);
+    setTravelers(defaultTravelers);
+    setWarning("");
+  }, [
+    defaultDestination,
+    defaultStartDate,
+    defaultEndDate,
+    defaultTravelers,
+  ]);
 
   React.useEffect(() => {
     const timeout = window.setTimeout(() => {

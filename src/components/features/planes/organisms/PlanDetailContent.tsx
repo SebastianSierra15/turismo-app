@@ -7,6 +7,7 @@ import Button from "@/components/shared/atoms/Button";
 import PlanDetailGallery from "@/components/features/planes/organisms/PlanDetailGallery";
 import PlanDetailMap from "@/components/features/planes/organisms/PlanDetailMap";
 import { type PlanDetail } from "@/types/planDetail";
+import { extractSiteSlug } from "@/utils/siteId";
 
 const activityImages = [
   "https://lh3.googleusercontent.com/aida-public/AB6AXuDF1k7JWAqcHrIZ7csMXOGesAGH_1paEuMxkdWsd7Ff97IAhWVLRR0KLwgZuZ007hw7VIf0bev40daaemE7kcN7TgHg8PyRWctewsQ-xM1ihFsBkk00q7acwvXwlYUTn3mwf1MaTyf-Qobvyv5qOKQ_Encvp6rRjYE619TMtjnZtPl1jpFgDzIVBueDrk3LGo_c7Ki0LmaEjftZWgI2GDi728PgtQYkwbBvZFtDk_0zKeAWPcbuRu-3d0HQe_5zeNHa3jLPF3-lCEM",
@@ -98,14 +99,39 @@ const PlanDetailContent: React.FC<PlanDetailContentProps> = ({ plan }) => {
     .filter(Boolean);
 
   const primaryDestination = plan.destinations?.[0];
+  const planGallery = plan.galleryImages ?? [];
+  const destinationGallery = Array.from(
+    new Map(
+      (plan.destinations ?? [])
+        .filter((dest) => Boolean(dest.image))
+        .map((dest) => [
+          dest.id ?? dest.name,
+          {
+            image: dest.image!,
+            alt: dest.name,
+            label: dest.name,
+            href: dest.id ? `/sitios/${extractSiteSlug(dest.id)}` : undefined,
+          },
+        ]),
+    ).values(),
+  );
+
   const galleryImages =
-    destinationNames.length > 0
-      ? destinationNames.map((name, index) => ({
-          image: defaultGallery[index % defaultGallery.length].image,
-          alt: name,
-          label: name,
-        }))
-      : defaultGallery;
+    destinationGallery.length > 0
+      ? destinationGallery
+      : planGallery.length > 0
+        ? planGallery.map((image, index) => ({
+            image,
+            alt: index === 0 ? plan.title : `${plan.title} ${index + 1}`,
+            label: index === 0 ? plan.title : `Imagen ${index + 1}`,
+          }))
+        : destinationNames.length > 0
+          ? destinationNames.map((name, index) => ({
+              image: defaultGallery[index % defaultGallery.length].image,
+              alt: name,
+              label: name,
+            }))
+          : defaultGallery;
 
   const rawMaxTravelers =
     plan.capacityMax && plan.capacityMax > 0 ? plan.capacityMax : 10;

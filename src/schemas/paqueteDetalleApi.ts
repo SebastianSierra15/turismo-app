@@ -1,11 +1,14 @@
 ﻿import { z } from "zod";
 
 export const PaqueteDetalleDestinoApiSchema = z.object({
+  id: z.string().optional().nullable(),
   nombre: z.string(),
   municipio: z.string().optional().nullable(),
   latitud: z.number().optional().nullable(),
   longitud: z.number().optional().nullable(),
   categoria: z.string().optional().nullable(),
+  url_imagen: z.string().url().optional().nullable(),
+  galeria_imagenes: z.string().optional().nullable(),
 });
 
 export const PaqueteDetalleServicioApiSchema = z.object({
@@ -28,6 +31,8 @@ export const PaqueteDetalleApiSchema = z.object({
   capacidad_max_personas: z.number().optional().nullable(),
   incluye_descripcion: z.string().optional().nullable(),
   no_incluye: z.string().optional().nullable(),
+  url_imagen: z.string().url().optional().nullable(),
+  galeria_imagenes: z.string().optional().nullable(),
   destinos: z.array(PaqueteDetalleDestinoApiSchema).optional().nullable(),
   servicios: z.array(PaqueteDetalleServicioApiSchema).optional().nullable(),
   itinerarios: z.array(PaqueteDetalleItinerarioApiSchema).optional().nullable(),

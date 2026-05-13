@@ -17,11 +17,12 @@ interface PlanDetailHeroProps {
 const PlanDetailHero: React.FC<PlanDetailHeroProps> = ({ plan }) => {
   const categoryLabel = plan.categories?.[0] ?? "Aventura";
   const durationLabel = formatDurationBadge(plan.durationDays ?? undefined);
+  const image = plan.heroImage ?? heroImage;
 
   return (
     <section className="relative h-[60vh] min-h-105 w-full overflow-hidden">
       <Image
-        src={heroImage}
+        src={image}
         alt={plan.title}
         title={plan.title}
         fill

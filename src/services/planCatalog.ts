@@ -67,6 +67,14 @@ const pickLocation = (municipios?: string | null, destinos?: string | null) => {
   return "Caquetá";
 };
 
+interface PlanCatalogOptions {
+  busqueda?: string;
+  maxPrecio?: number;
+  orden?: "nombre" | "popularidad" | "precio";
+  limit?: number;
+  offset?: number;
+}
+
 export const mapPaquetesToCatalog = (
   paquetes: ReturnType<typeof PaquetesApiSchema.parse>,
 ): PlanCatalogItem[] => {
@@ -74,7 +82,7 @@ export const mapPaquetesToCatalog = (
     id: item.id,
     title: item.nombre,
     description: item.descripcion,
-    image: DEFAULT_PLAN_IMAGE,
+    image: item.url_imagen ?? DEFAULT_PLAN_IMAGE,
     price: formatPrice(item.precio),
     location: pickLocation(item.municipios, item.destinos),
     duration: formatDuration(item.duracion_dias ?? undefined),
@@ -87,20 +95,32 @@ export const mapPaquetesToCatalog = (
     destinations: splitValues(item.destinos),
     municipalities: splitValues(item.municipios),
     capacityMax: item.capacidad_max_personas ?? undefined,
+    popularity: item.popularidad ?? undefined,
   }));
 
   return PlanCatalogSchema.parse(mapped);
 };
 
-export const getPlanCatalog = async (): Promise<PlanCatalogItem[]> => {
+export const getPlanCatalog = async (
+  options: PlanCatalogOptions = {},
+): Promise<PlanCatalogItem[]> => {
+  const {
+    busqueda = "",
+    maxPrecio = 2_000_000,
+    orden = "popularidad",
+    limit = 300,
+    offset = 0,
+  } = options;
+
   try {
     const data = await fetchApiJson<unknown>(
       "/paquetes",
       {
-        busqueda: "",
-        max_precio: 2000000,
-        limit: 300,
-        offset: 0,
+        busqueda,
+        max_precio: maxPrecio,
+        orden,
+        limit,
+        offset,
       },
     );
 

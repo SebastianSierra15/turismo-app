@@ -1,6 +1,8 @@
-﻿import React from "react";
+import React from "react";
 import Image from "next/image";
+import Link from "next/link";
 import Icon from "@/components/shared/atoms/Icon";
+import { extractPlanSlug } from "@/utils/planId";
 
 interface PlanCardProps {
   id?: string;
@@ -15,6 +17,7 @@ interface PlanCardProps {
 }
 
 const PlanCard: React.FC<PlanCardProps> = ({
+  id,
   title,
   description,
   image,
@@ -24,8 +27,14 @@ const PlanCard: React.FC<PlanCardProps> = ({
   tag,
   tagIcon,
 }) => {
+  const href = id ? `/planes/${extractPlanSlug(id)}` : "/planes";
+
   return (
-    <div className="group bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-slate-100 cursor-pointer">
+    <Link
+      className="group block bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-slate-100 cursor-pointer"
+      href={href}
+      title={`Ver detalle de ${title}`}
+    >
       <div className="relative h-64 overflow-hidden">
         <Image
           src={image}
@@ -65,16 +74,15 @@ const PlanCard: React.FC<PlanCardProps> = ({
               <span className="text-sm font-normal text-slate-400">/pp</span>
             </p>
           </div>
-          <button
+          <span
+            aria-hidden="true"
             className="bg-primary/10 text-primary px-3 py-2 rounded-full hover:bg-primary hover:text-white transition-colors cursor-pointer"
-            type="button"
-            title="Comprar"
           >
             <Icon name="add_shopping_cart" />
-          </button>
+          </span>
         </div>
       </div>
-    </div>
+    </Link>
   );
 };
 

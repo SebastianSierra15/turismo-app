@@ -35,7 +35,11 @@ const SiteDetailTemplate: React.FC<SiteDetailTemplateProps> = ({
                 ))}
               </div>
             </section>
-            <SiteDetailGallery images={site.galleryImages} />
+            <SiteDetailGallery
+              images={site.galleryImages}
+              siteName={site.name}
+              siteType={site.type}
+            />
             <SiteDetailVideo cover={site.videoCover} />
           </div>
           <SiteDetailSidebar site={site} />

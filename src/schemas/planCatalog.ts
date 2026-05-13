@@ -17,6 +17,7 @@ export const PlanCatalogItemSchema = z.object({
   destinations: z.array(z.string()).optional(),
   municipalities: z.array(z.string()).optional(),
   capacityMax: z.number().optional(),
+  popularity: z.number().optional(),
 });
 
 export const PlanCatalogSchema = z.array(PlanCatalogItemSchema);

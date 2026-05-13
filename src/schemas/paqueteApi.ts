@@ -11,6 +11,9 @@ export const PaqueteApiSchema = z.object({
   municipios: z.string().optional().nullable(),
   categorias: z.string().optional().nullable(),
   capacidad_max_personas: z.number().optional().nullable(),
+  popularidad: z.number().optional().nullable(),
+  url_imagen: z.string().url().optional().nullable(),
+  galeria_imagenes: z.string().optional().nullable(),
 });
 
 export const PaquetesApiSchema = z.array(PaqueteApiSchema);

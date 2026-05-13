@@ -60,7 +60,7 @@ export const getSiteCatalog = async (): Promise<SiteCatalogItem[]> => {
       location: pickLocation(item.municipio ?? undefined),
       description: item.descripcion ?? "Sin descripción disponible.",
       capacityPerDay: formatCapacity(item.capacidad_diaria ?? undefined),
-      image: DEFAULT_SITE_IMAGE,
+      image: item.url_imagen ?? DEFAULT_SITE_IMAGE,
       capacityValue: item.capacidad_diaria ?? undefined,
       popularity: item.popularidad ?? undefined,
       types: splitValues(item.tipos),

@@ -176,14 +176,22 @@ export const AllyRegistrationTemplate = () => (
         <form className="mt-8 space-y-5">
           <Field
             label="Tipo de cuenta"
-            options={["Agencia de viajes", "Prestador de servicio", "Comunidad local"]}
+            options={[
+              "Agencia de viajes",
+              "Prestador de servicio",
+              "Comunidad local",
+            ]}
           />
           <div className="grid gap-4 sm:grid-cols-2">
             <Field label="Nombre comercial" placeholder="Selva Expeditions" />
             <Field label="Responsable" placeholder="Nombre completo" />
           </div>
           <div className="grid gap-4 sm:grid-cols-2">
-            <Field label="Correo electronico" placeholder="contacto@amaturis.test" type="email" />
+            <Field
+              label="Correo electronico"
+              placeholder="contacto@amaturis.test"
+              type="email"
+            />
             <Field label="Telefono" placeholder="+57 300 000 0000" type="tel" />
           </div>
           <div className="grid gap-4 sm:grid-cols-2">
@@ -196,10 +204,13 @@ export const AllyRegistrationTemplate = () => (
             textarea
           />
           <label className="flex items-start gap-3 text-sm text-slate-600">
-            <input className="mt-1 h-4 w-4 rounded border-slate-300 text-primary focus:ring-primary" type="checkbox" />
+            <input
+              className="mt-1 h-4 w-4 rounded border-slate-300 text-primary focus:ring-primary"
+              type="checkbox"
+            />
             <span>
-              Acepto la revision de la solicitud y las politicas para aliados
-              de Amaturis.
+              Acepto la revision de la solicitud y las politicas para aliados de
+              Amaturis.
             </span>
           </label>
           <Button className="w-full rounded-xl py-4 normal-case tracking-normal">
@@ -232,9 +243,21 @@ export const AllyRegistrationTemplate = () => (
           </h2>
           <div className="mt-12 space-y-7">
             {[
-              ["visibility", "Visibilidad global", "Conecta con viajeros que buscan experiencias autenticas en el Caqueta."],
-              ["monitoring", "Gestion simplificada", "Administra reservas, disponibilidad, pagos y servicios desde un panel claro."],
-              ["eco", "Impacto positivo", "Fortalece comunidades locales y promueve conservacion del territorio."],
+              [
+                "visibility",
+                "Visibilidad global",
+                "Conecta con viajeros que buscan experiencias autenticas en el Caqueta.",
+              ],
+              [
+                "monitoring",
+                "Gestion simplificada",
+                "Administra reservas, disponibilidad, pagos y servicios desde un panel claro.",
+              ],
+              [
+                "eco",
+                "Impacto positivo",
+                "Fortalece comunidades locales y promueve conservacion del territorio.",
+              ],
             ].map(([icon, title, text]) => (
               <div key={title} className="flex gap-4">
                 <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/10 text-primary backdrop-blur">
@@ -242,7 +265,9 @@ export const AllyRegistrationTemplate = () => (
                 </span>
                 <div>
                   <h3 className="font-bold">{title}</h3>
-                  <p className="mt-1 max-w-md text-sm leading-6 text-white/70">{text}</p>
+                  <p className="mt-1 max-w-md text-sm leading-6 text-white/70">
+                    {text}
+                  </p>
                 </div>
               </div>
             ))}
@@ -263,11 +288,18 @@ export const AllyRegistrationTemplate = () => (
   </div>
 );
 
-export const BookingCheckoutTemplate = ({ packageId }: { packageId?: string }) => (
+export const BookingCheckoutTemplate = ({
+  packageId,
+}: {
+  packageId?: string;
+}) => (
   <PublicLayout>
     <section className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
       <div className="mb-8">
-        <Link href="/planes" className="inline-flex items-center gap-2 text-sm font-bold text-primary">
+        <Link
+          href="/planes"
+          className="inline-flex items-center gap-2 text-sm font-bold text-primary"
+        >
           <Icon name="arrow_back" className="text-base" />
           Volver a planes
         </Link>
@@ -296,7 +328,11 @@ export const BookingCheckoutTemplate = ({ packageId }: { packageId?: string }) =
               <Field label="Identificacion" placeholder="CC / Pasaporte" />
               <Field label="Telefono" placeholder="+57 300 000 0000" />
               <div className="sm:col-span-2">
-                <Field label="Correo electronico" placeholder="viajero@email.com" type="email" />
+                <Field
+                  label="Correo electronico"
+                  placeholder="viajero@email.com"
+                  type="email"
+                />
               </div>
             </div>
           </InfoCard>
@@ -312,8 +348,14 @@ export const BookingCheckoutTemplate = ({ packageId }: { packageId?: string }) =
               "Acepto los terminos, condiciones y politica de privacidad.",
               "Entiendo los riesgos propios de actividades de naturaleza y confirmo que mi estado de salud es apto.",
             ].map((text) => (
-              <label key={text} className="flex items-start gap-3 text-sm leading-6 text-slate-600">
-                <input className="mt-1 h-4 w-4 rounded border-slate-300 text-primary focus:ring-primary" type="checkbox" />
+              <label
+                key={text}
+                className="flex items-start gap-3 text-sm leading-6 text-slate-600"
+              >
+                <input
+                  className="mt-1 h-4 w-4 rounded border-slate-300 text-primary focus:ring-primary"
+                  type="checkbox"
+                />
                 <span>{text}</span>
               </label>
             ))}
@@ -323,7 +365,11 @@ export const BookingCheckoutTemplate = ({ packageId }: { packageId?: string }) =
         <aside className="lg:sticky lg:top-24">
           <div className="overflow-hidden rounded-2xl bg-white shadow-xl ring-1 ring-slate-200">
             <div className="relative h-48">
-              <img src={images.canyon} alt="Canon de las Dalias" className="h-full w-full object-cover" />
+              <img
+                src={images.canyon}
+                alt="Canon de las Dalias"
+                className="h-full w-full object-cover"
+              />
               <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 to-transparent" />
               <div className="absolute bottom-4 left-4 right-4 text-white">
                 <StatusBadge tone="amber">Ultimos 4 cupos</StatusBadge>
@@ -344,7 +390,10 @@ export const BookingCheckoutTemplate = ({ packageId }: { packageId?: string }) =
                 </div>
               </div>
               <div className="space-y-3 border-t border-slate-100 pt-5">
-                <SummaryRow label="Paquete" value={packageId ?? "canon-dalias"} />
+                <SummaryRow
+                  label="Paquete"
+                  value={packageId ?? "canon-dalias"}
+                />
                 <SummaryRow label="Precio por persona" value="$245.000" />
                 <SummaryRow label="2 viajeros" value="$490.000" />
                 <SummaryRow label="Tarifa de servicio" value="$34.300" />
@@ -356,7 +405,8 @@ export const BookingCheckoutTemplate = ({ packageId }: { packageId?: string }) =
                 </Button>
               </Link>
               <p className="text-center text-xs leading-5 text-slate-400">
-                Tu cupo queda bloqueado temporalmente durante el proceso de pago.
+                Tu cupo queda bloqueado temporalmente durante el proceso de
+                pago.
               </p>
             </div>
           </div>
@@ -412,22 +462,33 @@ export const PaymentGatewayTemplate = () => (
 
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="sm:col-span-2">
-              <Field label="Numero de tarjeta" placeholder="0000 0000 0000 0000" />
+              <Field
+                label="Numero de tarjeta"
+                placeholder="0000 0000 0000 0000"
+              />
             </div>
             <div className="sm:col-span-2">
-              <Field label="Nombre en la tarjeta" placeholder="Como aparece en la tarjeta" />
+              <Field
+                label="Nombre en la tarjeta"
+                placeholder="Como aparece en la tarjeta"
+              />
             </div>
             <Field label="Vencimiento" placeholder="MM/AA" />
             <Field label="CVV" placeholder="123" />
             <Field label="Documento" placeholder="Cedula o pasaporte" />
-            <Field label="Cuotas" options={["1 cuota", "2 cuotas", "3 cuotas", "6 cuotas"]} />
+            <Field
+              label="Cuotas"
+              options={["1 cuota", "2 cuotas", "3 cuotas", "6 cuotas"]}
+            />
           </div>
 
           <div className="rounded-2xl bg-slate-50 p-5">
             <div className="flex gap-3">
               <Icon name="lock" className="text-primary" />
               <div>
-                <h2 className="font-black text-slate-950">Tus datos estan protegidos</h2>
+                <h2 className="font-black text-slate-950">
+                  Tus datos estan protegidos
+                </h2>
                 <p className="mt-1 text-sm leading-6 text-slate-600">
                   Amaturis no almacena informacion sensible de tarjetas. La
                   transaccion se procesa con validacion segura y trazabilidad.
@@ -445,9 +506,15 @@ export const PaymentGatewayTemplate = () => (
         </section>
 
         <aside className="space-y-5 rounded-2xl bg-white p-6 shadow-xl ring-1 ring-slate-200 lg:sticky lg:top-24">
-          <img src={images.river} alt="Rio amazonico" className="h-36 w-full rounded-xl object-cover" />
+          <img
+            src={images.river}
+            alt="Rio amazonico"
+            className="h-36 w-full rounded-xl object-cover"
+          />
           <div>
-            <h2 className="text-lg font-black">Expedicion al Canon de las Dalias</h2>
+            <h2 className="text-lg font-black">
+              Expedicion al Canon de las Dalias
+            </h2>
             <p className="mt-1 text-sm text-slate-500">
               15 nov 2026 · 2 viajeros · Prestador Selva Viva
             </p>
@@ -491,7 +558,9 @@ export const BookingConfirmationTemplate = () => (
                   ["Proveedor", "Prestador Selva Viva"],
                 ].map(([label, value]) => (
                   <div key={label} className="rounded-xl bg-slate-50 p-4">
-                    <p className="text-xs font-bold uppercase text-slate-400">{label}</p>
+                    <p className="text-xs font-bold uppercase text-slate-400">
+                      {label}
+                    </p>
                     <p className="mt-1 font-black text-slate-950">{value}</p>
                   </div>
                 ))}
@@ -499,10 +568,21 @@ export const BookingConfirmationTemplate = () => (
             </InfoCard>
             <InfoCard icon="route" title="Proximos pasos">
               <div className="grid gap-4 sm:grid-cols-3">
-                {["Revisa tu correo", "Contacta al guia", "Prepara recomendaciones"].map((item, index) => (
-                  <div key={item} className="rounded-xl border border-slate-200 p-4">
-                    <span className="text-xs font-black text-primary">0{index + 1}</span>
-                    <p className="mt-2 text-sm font-bold text-slate-700">{item}</p>
+                {[
+                  "Revisa tu correo",
+                  "Contacta al guia",
+                  "Prepara recomendaciones",
+                ].map((item, index) => (
+                  <div
+                    key={item}
+                    className="rounded-xl border border-slate-200 p-4"
+                  >
+                    <span className="text-xs font-black text-primary">
+                      0{index + 1}
+                    </span>
+                    <p className="mt-2 text-sm font-bold text-slate-700">
+                      {item}
+                    </p>
                   </div>
                 ))}
               </div>
@@ -517,11 +597,17 @@ export const BookingConfirmationTemplate = () => (
                 Ver detalle de reserva
               </Button>
             </Link>
-            <button className="flex w-full items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-bold text-slate-700" type="button">
+            <button
+              className="flex w-full items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-bold text-slate-700"
+              type="button"
+            >
               <Icon name="download" className="text-base" />
               Descargar comprobante
             </button>
-            <Link href="/" className="block text-center text-sm font-bold text-primary">
+            <Link
+              href="/"
+              className="block text-center text-sm font-bold text-primary"
+            >
               Volver al inicio
             </Link>
           </aside>
@@ -557,7 +643,9 @@ export const PaymentStatusTemplate = () => (
             ["Vence", "15 min restantes"],
           ].map(([label, value]) => (
             <div key={label} className="rounded-2xl bg-slate-50 p-4">
-              <p className="text-xs font-bold uppercase text-slate-400">{label}</p>
+              <p className="text-xs font-bold uppercase text-slate-400">
+                {label}
+              </p>
               <p className="mt-1 font-black">{value}</p>
             </div>
           ))}
@@ -569,7 +657,10 @@ export const PaymentStatusTemplate = () => (
             </Button>
           </Link>
           <Link href="/perfil/reservas" className="sm:w-auto">
-            <button className="w-full rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-bold text-slate-700" type="button">
+            <button
+              className="w-full rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-bold text-slate-700"
+              type="button"
+            >
               Ver mis reservas
             </button>
           </Link>
@@ -579,10 +670,17 @@ export const PaymentStatusTemplate = () => (
   </PublicLayout>
 );
 
-export const CancelReservationTemplate = ({ reservationId }: { reservationId?: string }) => (
+export const CancelReservationTemplate = ({
+  reservationId,
+}: {
+  reservationId?: string;
+}) => (
   <PublicLayout>
     <section className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
-      <Link href="/perfil/reservas/detalle" className="inline-flex items-center gap-2 text-sm font-bold text-primary">
+      <Link
+        href="/perfil/reservas/detalle"
+        className="inline-flex items-center gap-2 text-sm font-bold text-primary"
+      >
         <Icon name="arrow_back" className="text-base" />
         Volver al detalle
       </Link>
@@ -594,7 +692,8 @@ export const CancelReservationTemplate = ({ reservationId }: { reservationId?: s
           </h1>
           <p className="mt-2 text-slate-600">
             Revisa las condiciones antes de confirmar. Esta accion notificara al
-            prestador y registrara un evento en la reserva {reservationId ?? "AMT-2026-0842"}.
+            prestador y registrara un evento en la reserva{" "}
+            {reservationId ?? "AMT-2026-0842"}.
           </p>
           <div className="mt-8 space-y-5">
             <div className="rounded-2xl bg-slate-50 p-5">
@@ -620,12 +719,21 @@ export const CancelReservationTemplate = ({ reservationId }: { reservationId?: s
               textarea
             />
             <label className="flex items-start gap-3 rounded-2xl border border-red-100 bg-red-50 p-4 text-sm text-red-700">
-              <input className="mt-1 h-4 w-4 rounded border-red-300 text-red-600 focus:ring-red-500" type="checkbox" />
-              <span>Entiendo que esta solicitud puede afectar cupos, pagos y disponibilidad del prestador.</span>
+              <input
+                className="mt-1 h-4 w-4 rounded border-red-300 text-red-600 focus:ring-red-500"
+                type="checkbox"
+              />
+              <span>
+                Entiendo que esta solicitud puede afectar cupos, pagos y
+                disponibilidad del prestador.
+              </span>
             </label>
             <div className="flex flex-col gap-3 sm:flex-row">
               <Link href="/perfil/reservas/detalle">
-                <button className="w-full rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-bold text-slate-700 sm:w-auto" type="button">
+                <button
+                  className="w-full rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-bold text-slate-700 sm:w-auto"
+                  type="button"
+                >
                   No cancelar
                 </button>
               </Link>
@@ -638,7 +746,11 @@ export const CancelReservationTemplate = ({ reservationId }: { reservationId?: s
           </div>
         </section>
         <aside className="h-fit rounded-3xl bg-white p-6 shadow-xl ring-1 ring-slate-200 lg:sticky lg:top-24">
-          <img src={images.waterfall} alt="Cascada en Caqueta" className="h-40 w-full rounded-2xl object-cover" />
+          <img
+            src={images.waterfall}
+            alt="Cascada en Caqueta"
+            className="h-40 w-full rounded-2xl object-cover"
+          />
           <h2 className="mt-5 text-xl font-black">Aventura en el Hacha</h2>
           <div className="mt-5 space-y-3">
             <SummaryRow label="Fecha" value="15 nov 2026" />
@@ -667,12 +779,20 @@ export const CancelSuccessTemplate = () => (
   </PublicLayout>
 );
 
-export const ReviewFormTemplate = ({ reservationId }: { reservationId?: string }) => (
+export const ReviewFormTemplate = ({
+  reservationId,
+}: {
+  reservationId?: string;
+}) => (
   <PublicLayout>
     <section className="mx-auto max-w-5xl px-4 py-10 sm:px-6 lg:px-8">
       <div className="grid gap-8 lg:grid-cols-[320px_1fr]">
         <aside className="overflow-hidden rounded-3xl bg-white shadow-sm ring-1 ring-slate-200">
-          <img src={images.canyon} alt="Viaje al Canon de las Dalias" className="h-48 w-full object-cover" />
+          <img
+            src={images.canyon}
+            alt="Viaje al Canon de las Dalias"
+            className="h-48 w-full object-cover"
+          />
           <div className="space-y-3 p-5">
             <StatusBadge tone="green">Viaje completado</StatusBadge>
             <h1 className="text-xl font-black">Comparte tu experiencia</h1>
@@ -685,11 +805,14 @@ export const ReviewFormTemplate = ({ reservationId }: { reservationId?: string }
         <section className="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-slate-200 sm:p-8">
           <h2 className="text-3xl font-black text-slate-950">Dejar resena</h2>
           <p className="mt-2 text-slate-600">
-            Tu opinion ayuda a otros viajeros y mejora la calidad de los aliados.
+            Tu opinion ayuda a otros viajeros y mejora la calidad de los
+            aliados.
           </p>
           <div className="mt-8 space-y-6">
             <div>
-              <p className="text-xs font-bold uppercase tracking-wider text-slate-500">Calificacion</p>
+              <p className="text-xs font-bold uppercase tracking-wider text-slate-500">
+                Calificacion
+              </p>
               <div className="mt-3 flex gap-2 text-amber-400">
                 {[1, 2, 3, 4, 5].map((star) => (
                   <Icon key={star} name="star" className="text-4xl" fill />
@@ -706,16 +829,32 @@ export const ReviewFormTemplate = ({ reservationId }: { reservationId?: string }
                 Aspectos destacados
               </p>
               <div className="mt-3 flex flex-wrap gap-2">
-                {["Guia", "Puntualidad", "Naturaleza", "Comida", "Seguridad", "Comunidad"].map((tag) => (
-                  <button key={tag} className="rounded-full border border-primary/20 bg-primary/10 px-4 py-2 text-sm font-bold text-primary" type="button">
+                {[
+                  "Guia",
+                  "Puntualidad",
+                  "Naturaleza",
+                  "Comida",
+                  "Seguridad",
+                  "Comunidad",
+                ].map((tag) => (
+                  <button
+                    key={tag}
+                    className="rounded-full border border-primary/20 bg-primary/10 px-4 py-2 text-sm font-bold text-primary"
+                    type="button"
+                  >
                     {tag}
                   </button>
                 ))}
               </div>
             </div>
             <div className="rounded-2xl border-2 border-dashed border-slate-200 p-6 text-center">
-              <Icon name="add_photo_alternate" className="text-4xl text-primary" />
-              <p className="mt-2 text-sm font-bold text-slate-700">Subir fotos del viaje</p>
+              <Icon
+                name="add_photo_alternate"
+                className="text-4xl text-primary"
+              />
+              <p className="mt-2 text-sm font-bold text-slate-700">
+                Subir fotos del viaje
+              </p>
               <p className="text-xs text-slate-400">JPG o PNG hasta 5 MB</p>
             </div>
             <Link href="/perfil/reservas/resena-publicada" className="block">
@@ -765,14 +904,14 @@ const CenteredResult = ({
   secondaryLabel: string;
 }) => {
   const colors =
-    tone === "green"
-      ? "bg-primary/10 text-primary"
-      : "bg-red-100 text-red-700";
+    tone === "green" ? "bg-primary/10 text-primary" : "bg-red-100 text-red-700";
 
   return (
     <section className="mx-auto flex min-h-[62vh] max-w-3xl items-center px-4 py-14 sm:px-6">
       <div className="w-full rounded-3xl bg-white p-8 text-center shadow-xl ring-1 ring-slate-200 sm:p-12">
-        <span className={`mx-auto flex h-20 w-20 items-center justify-center rounded-full ${colors}`}>
+        <span
+          className={`mx-auto flex h-20 w-20 items-center justify-center rounded-full ${colors}`}
+        >
           <Icon name={icon} className="text-5xl" />
         </span>
         <h1 className="mt-6 text-3xl font-black text-slate-950">{title}</h1>
@@ -784,7 +923,10 @@ const CenteredResult = ({
             </Button>
           </Link>
           <Link href={secondaryHref}>
-            <button className="w-full rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-bold text-slate-700 sm:w-auto" type="button">
+            <button
+              className="w-full rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-bold text-slate-700 sm:w-auto"
+              type="button"
+            >
               {secondaryLabel}
             </button>
           </Link>
@@ -796,11 +938,46 @@ const CenteredResult = ({
 
 export const NotificationsTemplate = () => {
   const notifications = [
-    ["payments", "Pago aprobado", "Tu pago de $524.300 fue confirmado.", "Hace 5 min", "Reservas", "green"],
-    ["event_available", "Reserva creada", "Aventura en el Hacha quedo registrada.", "Hoy", "Reservas", "blue"],
-    ["person_pin_circle", "Mensaje del guia", "Laura confirmo el punto de encuentro.", "Ayer", "Sistema", "slate"],
-    ["campaign", "Promocion", "Nuevas rutas de cascadas disponibles este mes.", "Ayer", "Promociones", "amber"],
-    ["warning", "Recordatorio", "Faltan documentos del viajero principal.", "2 dias", "Sistema", "red"],
+    [
+      "payments",
+      "Pago aprobado",
+      "Tu pago de $524.300 fue confirmado.",
+      "Hace 5 min",
+      "Reservas",
+      "green",
+    ],
+    [
+      "event_available",
+      "Reserva creada",
+      "Aventura en el Hacha quedo registrada.",
+      "Hoy",
+      "Reservas",
+      "blue",
+    ],
+    [
+      "person_pin_circle",
+      "Mensaje del guia",
+      "Laura confirmo el punto de encuentro.",
+      "Ayer",
+      "Sistema",
+      "slate",
+    ],
+    [
+      "campaign",
+      "Promocion",
+      "Nuevas rutas de cascadas disponibles este mes.",
+      "Ayer",
+      "Promociones",
+      "amber",
+    ],
+    [
+      "warning",
+      "Recordatorio",
+      "Faltan documentos del viajero principal.",
+      "2 dias",
+      "Sistema",
+      "red",
+    ],
   ] as const;
 
   return (
@@ -808,52 +985,73 @@ export const NotificationsTemplate = () => {
       <section className="mx-auto max-w-5xl px-4 py-10 sm:px-6 lg:px-8">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <h1 className="text-3xl font-black text-slate-950">Notificaciones</h1>
+            <h1 className="text-3xl font-black text-slate-950">
+              Notificaciones
+            </h1>
             <p className="mt-2 text-slate-600">
-              Estado de reservas, pagos, mensajes de guia y novedades de Amaturis.
+              Estado de reservas, pagos, mensajes de guia y novedades de
+              Amaturis.
             </p>
           </div>
-          <button className="rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-bold text-slate-700" type="button">
+          <button
+            className="rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-bold text-slate-700"
+            type="button"
+          >
             Marcar todas como leidas
           </button>
         </div>
         <div className="mt-8 flex gap-2 overflow-x-auto pb-2">
-          {["Todas", "Reservas", "Pagos", "Sistema", "Promociones"].map((filter, index) => (
-            <button
-              key={filter}
-              className={`rounded-full px-4 py-2 text-sm font-bold ${
-                index === 0 ? "bg-primary text-white" : "bg-white text-slate-600 ring-1 ring-slate-200"
-              }`}
-              type="button"
-            >
-              {filter}
-            </button>
-          ))}
+          {["Todas", "Reservas", "Pagos", "Sistema", "Promociones"].map(
+            (filter, index) => (
+              <button
+                key={filter}
+                className={`rounded-full px-4 py-2 text-sm font-bold ${
+                  index === 0
+                    ? "bg-primary text-white"
+                    : "bg-white text-slate-600 ring-1 ring-slate-200"
+                }`}
+                type="button"
+              >
+                {filter}
+              </button>
+            ),
+          )}
         </div>
         <div className="mt-6 overflow-hidden rounded-3xl bg-white shadow-sm ring-1 ring-slate-200">
-          {notifications.map(([icon, title, text, time, category, tone], index) => (
-            <div
-              key={title}
-              className={`flex flex-col gap-4 p-5 sm:flex-row sm:items-center ${
-                index !== notifications.length - 1 ? "border-b border-slate-100" : ""
-              }`}
-            >
-              <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-                <Icon name={icon} />
-              </span>
-              <div className="flex-1">
-                <div className="flex flex-wrap items-center gap-2">
-                  <h2 className="font-black text-slate-950">{title}</h2>
-                  <StatusBadge tone={tone}>{category}</StatusBadge>
+          {notifications.map(
+            ([icon, title, text, time, category, tone], index) => (
+              <div
+                key={title}
+                className={`flex flex-col gap-4 p-5 sm:flex-row sm:items-center ${
+                  index !== notifications.length - 1
+                    ? "border-b border-slate-100"
+                    : ""
+                }`}
+              >
+                <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+                  <Icon name={icon} />
+                </span>
+                <div className="flex-1">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <h2 className="font-black text-slate-950">{title}</h2>
+                    <StatusBadge tone={tone}>{category}</StatusBadge>
+                  </div>
+                  <p className="mt-1 text-sm text-slate-600">{text}</p>
                 </div>
-                <p className="mt-1 text-sm text-slate-600">{text}</p>
+                <div className="flex items-center justify-between gap-4 sm:flex-col sm:items-end">
+                  <span className="text-xs font-bold uppercase text-slate-400">
+                    {time}
+                  </span>
+                  <button
+                    className="text-sm font-bold text-primary"
+                    type="button"
+                  >
+                    Ver
+                  </button>
+                </div>
               </div>
-              <div className="flex items-center justify-between gap-4 sm:flex-col sm:items-end">
-                <span className="text-xs font-bold uppercase text-slate-400">{time}</span>
-                <button className="text-sm font-bold text-primary" type="button">Ver</button>
-              </div>
-            </div>
-          ))}
+            ),
+          )}
         </div>
       </section>
     </PublicLayout>
@@ -927,7 +1125,10 @@ const PanelLayout = ({
             </Link>
           ))}
         </nav>
-        <Link href="/" className="flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-bold text-slate-500 hover:text-red-600">
+        <Link
+          href="/"
+          className="flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-bold text-slate-500 hover:text-red-600"
+        >
           <Icon name="logout" />
           Cerrar sesion
         </Link>
@@ -936,18 +1137,26 @@ const PanelLayout = ({
         <header className="sticky top-0 z-30 border-b border-slate-200 bg-white/85 px-4 py-4 backdrop-blur sm:px-6 lg:px-8">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <h1 className="text-2xl font-black tracking-tight text-slate-950">{title}</h1>
+              <h1 className="text-2xl font-black tracking-tight text-slate-950">
+                {title}
+              </h1>
               <p className="mt-1 text-sm text-slate-500">{subtitle}</p>
             </div>
             <div className="flex items-center gap-3">
               <div className="relative hidden sm:block">
-                <Icon name="search" className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-slate-400" />
+                <Icon
+                  name="search"
+                  className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-slate-400"
+                />
                 <input
                   className="w-64 rounded-xl border-0 bg-slate-50 py-2 pl-9 pr-4 text-sm ring-1 ring-slate-200 focus:ring-2 focus:ring-primary"
                   placeholder="Buscar..."
                 />
               </div>
-              <Link href="/notificaciones" className="rounded-full bg-slate-50 p-2 text-slate-500 ring-1 ring-slate-200">
+              <Link
+                href="/notificaciones"
+                className="rounded-full bg-slate-50 p-2 text-slate-500 ring-1 ring-slate-200"
+              >
                 <Icon name="notifications" />
               </Link>
             </div>
@@ -989,10 +1198,30 @@ export const PartnerDashboardTemplate = () => (
     subtitle="Reservas, ingresos, cupos y tareas de tus experiencias."
   >
     <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
-      <MetricCard icon="event_available" label="Reservas activas" value="24" delta="+12%" />
-      <MetricCard icon="payments" label="Ingresos estimados" value="$8.4M" delta="+8%" />
-      <MetricCard icon="groups" label="Cupos proximos" value="68" delta="7 dias" />
-      <MetricCard icon="star" label="Calificacion" value="4.8" delta="152 resenas" />
+      <MetricCard
+        icon="event_available"
+        label="Reservas activas"
+        value="24"
+        delta="+12%"
+      />
+      <MetricCard
+        icon="payments"
+        label="Ingresos estimados"
+        value="$8.4M"
+        delta="+8%"
+      />
+      <MetricCard
+        icon="groups"
+        label="Cupos proximos"
+        value="68"
+        delta="7 dias"
+      />
+      <MetricCard
+        icon="star"
+        label="Calificacion"
+        value="4.8"
+        delta="152 resenas"
+      />
     </div>
     <div className="mt-8 grid gap-6 xl:grid-cols-[1fr_360px]">
       <TableCard
@@ -1042,14 +1271,18 @@ const TableCard = ({
   <section className="overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-slate-200">
     <div className="flex items-center justify-between border-b border-slate-100 p-5">
       <h2 className="font-black text-slate-950">{title}</h2>
-      <button className="text-sm font-bold text-primary" type="button">Ver todo</button>
+      <button className="text-sm font-bold text-primary" type="button">
+        Ver todo
+      </button>
     </div>
     <div className="overflow-x-auto">
       <table className="min-w-full text-left text-sm">
         <thead className="bg-slate-50 text-xs uppercase tracking-wider text-slate-500">
           <tr>
             {columns.map((column) => (
-              <th key={column} className="px-5 py-3 font-black">{column}</th>
+              <th key={column} className="px-5 py-3 font-black">
+                {column}
+              </th>
             ))}
           </tr>
         </thead>
@@ -1058,7 +1291,15 @@ const TableCard = ({
             <tr key={row.join("-")} className="text-slate-700">
               {row.map((cell, index) => (
                 <td key={`${cell}-${index}`} className="px-5 py-4">
-                  {index === row.length - 1 ? <StatusBadge tone={cell === "Pendiente" ? "amber" : "green"}>{cell}</StatusBadge> : cell}
+                  {index === row.length - 1 ? (
+                    <StatusBadge
+                      tone={cell === "Pendiente" ? "amber" : "green"}
+                    >
+                      {cell}
+                    </StatusBadge>
+                  ) : (
+                    cell
+                  )}
                 </td>
               ))}
             </tr>
@@ -1077,11 +1318,17 @@ export const PackageManagementTemplate = () => (
   >
     <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
       <div className="flex flex-wrap gap-2">
-        {["Todos", "Publicados", "Borradores", "Pausados"].map((item, index) => (
-          <button key={item} className={`rounded-full px-4 py-2 text-sm font-bold ${index === 0 ? "bg-primary text-white" : "bg-white text-slate-600 ring-1 ring-slate-200"}`} type="button">
-            {item}
-          </button>
-        ))}
+        {["Todos", "Publicados", "Borradores", "Pausados"].map(
+          (item, index) => (
+            <button
+              key={item}
+              className={`rounded-full px-4 py-2 text-sm font-bold ${index === 0 ? "bg-primary text-white" : "bg-white text-slate-600 ring-1 ring-slate-200"}`}
+              type="button"
+            >
+              {item}
+            </button>
+          ),
+        )}
       </div>
       <Button className="rounded-xl normal-case tracking-normal">
         <Icon name="add" />
@@ -1098,7 +1345,15 @@ export const PackageManagementTemplate = () => (
         ["Cascadas La Avispa", "Florencia", "$320.000", "6", "Publicada"],
       ]}
     />
-    <QuickForm title="Creacion rapida" fields={["Nombre del paquete", "Destino principal", "Precio por persona", "Capacidad maxima"]} />
+    <QuickForm
+      title="Creacion rapida"
+      fields={[
+        "Nombre del paquete",
+        "Destino principal",
+        "Precio por persona",
+        "Capacidad maxima",
+      ]}
+    />
   </PanelLayout>
 );
 
@@ -1121,7 +1376,11 @@ export const ServicesManagementTemplate = () => (
   >
     <div className="mb-6 flex gap-2 overflow-x-auto pb-2">
       {["Servicios", "Sitios", "Productos locales"].map((tab, index) => (
-        <button key={tab} className={`rounded-full px-4 py-2 text-sm font-bold ${index === 0 ? "bg-primary text-white" : "bg-white text-slate-600 ring-1 ring-slate-200"}`} type="button">
+        <button
+          key={tab}
+          className={`rounded-full px-4 py-2 text-sm font-bold ${index === 0 ? "bg-primary text-white" : "bg-white text-slate-600 ring-1 ring-slate-200"}`}
+          type="button"
+        >
           {tab}
         </button>
       ))}
@@ -1135,18 +1394,33 @@ export const ServicesManagementTemplate = () => (
         ["waterfall_chart", "Cascada La Avispa", "Sitio", "Activo"],
         ["local_mall", "Cacao amazonico", "Producto", "Activo"],
       ].map(([icon, title, type, status]) => (
-        <article key={title} className="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-200">
+        <article
+          key={title}
+          className="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-200"
+        >
           <div className="flex items-start justify-between gap-4">
             <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary">
               <Icon name={icon} />
             </span>
-            <StatusBadge tone={status === "Activo" ? "green" : "slate"}>{status}</StatusBadge>
+            <StatusBadge tone={status === "Activo" ? "green" : "slate"}>
+              {status}
+            </StatusBadge>
           </div>
           <h2 className="mt-5 font-black text-slate-950">{title}</h2>
           <p className="text-sm text-slate-500">{type}</p>
           <div className="mt-5 flex gap-2">
-            <button className="rounded-lg bg-slate-50 px-3 py-2 text-xs font-bold text-slate-600" type="button">Editar</button>
-            <button className="rounded-lg bg-red-50 px-3 py-2 text-xs font-bold text-red-600" type="button">Eliminar</button>
+            <button
+              className="rounded-lg bg-slate-50 px-3 py-2 text-xs font-bold text-slate-600"
+              type="button"
+            >
+              Editar
+            </button>
+            <button
+              className="rounded-lg bg-red-50 px-3 py-2 text-xs font-bold text-red-600"
+              type="button"
+            >
+              Eliminar
+            </button>
           </div>
         </article>
       ))}
@@ -1161,10 +1435,30 @@ export const CommunityPanelTemplate = () => (
     subtitle="Prestadores, productos, paquetes asociados e impacto local."
   >
     <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
-      <MetricCard icon="diversity_3" label="Prestadores" value="18" delta="3 pendientes" />
-      <MetricCard icon="local_mall" label="Productos activos" value="42" delta="+6" />
-      <MetricCard icon="inventory_2" label="Paquetes asociados" value="11" delta="5 municipios" />
-      <MetricCard icon="payments" label="Ingresos estimados" value="$12.8M" delta="mes" />
+      <MetricCard
+        icon="diversity_3"
+        label="Prestadores"
+        value="18"
+        delta="3 pendientes"
+      />
+      <MetricCard
+        icon="local_mall"
+        label="Productos activos"
+        value="42"
+        delta="+6"
+      />
+      <MetricCard
+        icon="inventory_2"
+        label="Paquetes asociados"
+        value="11"
+        delta="5 municipios"
+      />
+      <MetricCard
+        icon="payments"
+        label="Ingresos estimados"
+        value="$12.8M"
+        delta="mes"
+      />
     </div>
     <div className="mt-8 grid gap-6 xl:grid-cols-2">
       <TableCard
@@ -1198,10 +1492,30 @@ export const AdminDashboardTemplate = () => (
   >
     <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-5">
       <MetricCard icon="group" label="Usuarios" value="1.240" delta="+18%" />
-      <MetricCard icon="event_available" label="Reservas mes" value="326" delta="+9%" />
-      <MetricCard icon="payments" label="Pagos aprobados" value="298" delta="91%" />
-      <MetricCard icon="inventory_2" label="Paquetes activos" value="84" delta="+12" />
-      <MetricCard icon="person_pin" label="Prestadores pendientes" value="17" delta="revision" />
+      <MetricCard
+        icon="event_available"
+        label="Reservas mes"
+        value="326"
+        delta="+9%"
+      />
+      <MetricCard
+        icon="payments"
+        label="Pagos aprobados"
+        value="298"
+        delta="91%"
+      />
+      <MetricCard
+        icon="inventory_2"
+        label="Paquetes activos"
+        value="84"
+        delta="+12"
+      />
+      <MetricCard
+        icon="person_pin"
+        label="Prestadores pendientes"
+        value="17"
+        delta="revision"
+      />
     </div>
     <div className="mt-8 grid gap-6 xl:grid-cols-[1fr_360px]">
       <TableCard
@@ -1217,7 +1531,10 @@ export const AdminDashboardTemplate = () => (
         <h2 className="font-black text-slate-950">Estado de servicios</h2>
         <div className="mt-5 space-y-3">
           {["FastAPI", "Fuseki", "Postgres", "n8n"].map((service) => (
-            <div key={service} className="flex items-center justify-between rounded-xl bg-slate-50 p-3">
+            <div
+              key={service}
+              className="flex items-center justify-between rounded-xl bg-slate-50 p-3"
+            >
               <span className="font-bold text-slate-700">{service}</span>
               <StatusBadge tone="green">Online</StatusBadge>
             </div>
@@ -1243,7 +1560,11 @@ export const AboutFullTemplate = () => (
   <PublicLayout>
     <section className="relative overflow-hidden">
       <div className="absolute inset-0">
-        <img src={images.canopy} alt="Selva amazonica del Caqueta" className="h-full w-full object-cover" />
+        <img
+          src={images.canopy}
+          alt="Selva amazonica del Caqueta"
+          className="h-full w-full object-cover"
+        />
         <div className="absolute inset-0 bg-gradient-to-b from-slate-950/20 via-slate-950/50 to-slate-950/85" />
       </div>
       <div className="relative mx-auto flex min-h-[70vh] max-w-7xl items-end px-4 pb-16 pt-28 sm:px-6 lg:px-8">
@@ -1252,7 +1573,8 @@ export const AboutFullTemplate = () => (
             Turismo sostenible en Caqueta
           </p>
           <h1 className="mt-5 text-4xl font-black leading-tight sm:text-6xl">
-            Amaturis conecta viajeros con comunidades, naturaleza y conocimiento local.
+            Amaturis conecta viajeros con comunidades, naturaleza y conocimiento
+            local.
           </h1>
           <p className="mt-6 max-w-2xl text-lg leading-8 text-white/80">
             Creamos una plataforma para reservar experiencias responsables,
@@ -1265,11 +1587,26 @@ export const AboutFullTemplate = () => (
     <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
       <div className="grid gap-8 lg:grid-cols-3">
         {[
-          ["eco", "Sostenibilidad", "Planes con capacidad de carga, operadores locales y cuidado del ecosistema."],
-          ["diversity_3", "Comunidad", "Prestadores, agencias y comunidades trabajan dentro de una red visible."],
-          ["verified_user", "Seguridad", "Reservas, pagos, roles y trazabilidad para operar con confianza."],
+          [
+            "eco",
+            "Sostenibilidad",
+            "Planes con capacidad de carga, operadores locales y cuidado del ecosistema.",
+          ],
+          [
+            "diversity_3",
+            "Comunidad",
+            "Prestadores, agencias y comunidades trabajan dentro de una red visible.",
+          ],
+          [
+            "verified_user",
+            "Seguridad",
+            "Reservas, pagos, roles y trazabilidad para operar con confianza.",
+          ],
         ].map(([icon, title, text]) => (
-          <article key={title} className="rounded-3xl bg-white p-7 shadow-sm ring-1 ring-slate-200">
+          <article
+            key={title}
+            className="rounded-3xl bg-white p-7 shadow-sm ring-1 ring-slate-200"
+          >
             <Icon name={icon} className="text-4xl text-primary" />
             <h2 className="mt-5 text-xl font-black">{title}</h2>
             <p className="mt-3 leading-7 text-slate-600">{text}</p>
@@ -1285,8 +1622,16 @@ export const AboutFullTemplate = () => (
             Del conocimiento territorial a una reserva clara.
           </h2>
           <div className="mt-8 space-y-5">
-            {["Explora planes, sitios y rutas del Caqueta.", "Reserva con fechas, cupos y pagos trazables.", "Vive la experiencia con guias y prestadores locales.", "Califica el viaje para mejorar la red."].map((step, index) => (
-              <div key={step} className="flex gap-4 rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-200">
+            {[
+              "Explora planes, sitios y rutas del Caqueta.",
+              "Reserva con fechas, cupos y pagos trazables.",
+              "Vive la experiencia con guias y prestadores locales.",
+              "Califica el viaje para mejorar la red.",
+            ].map((step, index) => (
+              <div
+                key={step}
+                className="flex gap-4 rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-200"
+              >
                 <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-black text-white">
                   {index + 1}
                 </span>
@@ -1296,16 +1641,22 @@ export const AboutFullTemplate = () => (
           </div>
         </div>
         <div className="overflow-hidden rounded-3xl bg-white shadow-xl ring-1 ring-slate-200">
-          <img src={images.river} alt="Rio del Caqueta" className="h-72 w-full object-cover" />
+          <img
+            src={images.river}
+            alt="Rio del Caqueta"
+            className="h-72 w-full object-cover"
+          />
           <div className="grid grid-cols-3 divide-x divide-slate-100 p-6 text-center">
             {[
               ["16", "municipios"],
               ["40+", "planes base"],
-              ["1000", "individuos RDF"],
+              ["45+", "sitios turísticos"],
             ].map(([value, label]) => (
               <div key={label}>
                 <p className="text-2xl font-black text-primary">{value}</p>
-                <p className="mt-1 text-xs font-bold uppercase text-slate-400">{label}</p>
+                <p className="mt-1 text-xs font-bold uppercase text-slate-400">
+                  {label}
+                </p>
               </div>
             ))}
           </div>
@@ -1314,7 +1665,9 @@ export const AboutFullTemplate = () => (
       <div className="mt-16 rounded-3xl bg-slate-950 p-8 text-white sm:p-10">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
           <div>
-            <h2 className="text-3xl font-black">Explora o aliate con Amaturis</h2>
+            <h2 className="text-3xl font-black">
+              Explora o aliate con Amaturis
+            </h2>
             <p className="mt-2 text-white/70">
               La misma plataforma conecta viajeros, prestadores y comunidades.
             </p>
@@ -1326,7 +1679,10 @@ export const AboutFullTemplate = () => (
               </Button>
             </Link>
             <Link href="/registro/agente">
-              <button className="w-full rounded-xl border border-white/20 px-5 py-3 text-sm font-bold text-white sm:w-auto" type="button">
+              <button
+                className="w-full rounded-xl border border-white/20 px-5 py-3 text-sm font-bold text-white sm:w-auto"
+                type="button"
+              >
                 Ser aliado
               </button>
             </Link>

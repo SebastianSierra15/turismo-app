@@ -6,6 +6,7 @@ import PlansFilters from "@/components/features/planes/organisms/PlansFilters";
 import PlansGridClient from "@/components/features/planes/organisms/PlansGridClient";
 import PlansPagination from "@/components/features/planes/organisms/PlansPagination";
 import { type PlanCatalogItem } from "@/types/planCatalog";
+import { useRouter, useSearchParams } from "next/navigation";
 
 const PAGE_SIZE = 12;
 const PRICE_STEP = 10000;
@@ -45,7 +46,45 @@ interface SearchFilters {
   travelers: number;
 }
 
+const parseSearchFiltersFromQuery = (
+  params: URLSearchParams,
+): SearchFilters | null => {
+  const destination = (params.get("destino") ?? "").trim();
+  const startDate = (params.get("fecha_inicio") ?? "").trim();
+  const endDate = (params.get("fecha_fin") ?? "").trim();
+  const travelersRaw = (params.get("viajeros") ?? "").trim();
+
+  if (!destination && !startDate && !endDate && !travelersRaw) {
+    return null;
+  }
+
+  const travelers = Number(travelersRaw);
+  const datesValid =
+    Boolean(startDate) &&
+    Boolean(endDate) &&
+    !Number.isNaN(new Date(startDate).getTime()) &&
+    !Number.isNaN(new Date(endDate).getTime()) &&
+    startDate <= endDate;
+
+  if (!destination || !datesValid || !Number.isInteger(travelers)) {
+    return null;
+  }
+
+  if (travelers < 1 || travelers > 30) {
+    return null;
+  }
+
+  return {
+    destination,
+    startDate,
+    endDate,
+    travelers,
+  };
+};
+
 const PlansExplorer: React.FC<PlansExplorerProps> = ({ initialPlans }) => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const [plans, setPlans] = React.useState<PlanCatalogItem[]>(initialPlans);
   const [selectedDurations, setSelectedDurations] = React.useState<string[]>(
     [],
@@ -62,6 +101,15 @@ const PlansExplorer: React.FC<PlansExplorerProps> = ({ initialPlans }) => {
     null,
   );
   const [searchResetSignal, setSearchResetSignal] = React.useState(0);
+
+  const urlSearchFilters = React.useMemo(() => {
+    const params = new URLSearchParams(searchParams.toString());
+    return parseSearchFiltersFromQuery(params);
+  }, [searchParams]);
+
+  React.useEffect(() => {
+    setSearchFilters(urlSearchFilters);
+  }, [urlSearchFilters]);
 
   const priceStats = React.useMemo(() => {
     if (!plans.length) {
@@ -231,7 +279,9 @@ const PlansExplorer: React.FC<PlansExplorerProps> = ({ initialPlans }) => {
 
   const sortedPlans = React.useMemo(() => {
     if (sortOrder === "popular") {
-      return filteredPlans;
+      return [...filteredPlans].sort(
+        (a, b) => (b.popularity ?? 0) - (a.popularity ?? 0),
+      );
     }
 
     const sorted = [...filteredPlans];
@@ -304,11 +354,18 @@ const PlansExplorer: React.FC<PlansExplorerProps> = ({ initialPlans }) => {
     setSortOrder("popular");
     setSearchFilters(null);
     setSearchResetSignal((prev) => prev + 1);
+    router.replace("/planes", { scroll: false });
   };
 
   const handleSearch = (filters: SearchFilters) => {
     setSearchFilters(filters);
     setCurrentPage(1);
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("destino", filters.destination);
+    params.set("fecha_inicio", filters.startDate);
+    params.set("fecha_fin", filters.endDate);
+    params.set("viajeros", String(filters.travelers));
+    router.replace(`/planes?${params.toString()}`, { scroll: false });
   };
 
   return (
@@ -317,6 +374,7 @@ const PlansExplorer: React.FC<PlansExplorerProps> = ({ initialPlans }) => {
         <SearchBar
           destinations={destinationOptions.all}
           topDestinations={destinationOptions.top}
+          defaultFilters={searchFilters ?? undefined}
           onSearch={handleSearch}
           resetSignal={searchResetSignal}
         />

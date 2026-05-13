@@ -1,8 +1,30 @@
-﻿import React from "react";
 import Image from "next/image";
 import SearchBar from "@/components/shared/molecules/SearchBar";
+import { getPlanCatalog } from "@/services/planCatalog";
 
-const Hero: React.FC = () => {
+const Hero = async () => {
+  const plans = await getPlanCatalog({
+    orden: "popularidad",
+    limit: 300,
+    offset: 0,
+  });
+
+  const destinationCounts = new Map<string, number>();
+  plans.forEach((plan) => {
+    const candidates = plan.destinations?.length
+      ? plan.destinations
+      : [plan.location];
+    candidates.forEach((item) => {
+      const value = item.trim();
+      if (!value) return;
+      destinationCounts.set(value, (destinationCounts.get(value) ?? 0) + 1);
+    });
+  });
+
+  const sortedDestinations = Array.from(destinationCounts.entries())
+    .sort((a, b) => b[1] - a[1])
+    .map(([name]) => name);
+
   return (
     <section className="relative h-[85vh] w-full overflow-hidden">
       <div className="absolute inset-0">
@@ -30,7 +52,10 @@ const Hero: React.FC = () => {
           </p>
         </div>
 
-        <SearchBar />
+        <SearchBar
+          destinations={sortedDestinations}
+          topDestinations={sortedDestinations.slice(0, 8)}
+        />
       </div>
     </section>
   );

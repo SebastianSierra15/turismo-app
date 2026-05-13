@@ -26,6 +26,14 @@ const splitTextList = (value?: string | null) => {
     .filter(Boolean);
 };
 
+const splitImageList = (value?: string | null) => {
+  if (!value) return [];
+  return value
+    .split(/\s*,\s*|\s*\|\s*|\r?\n+/)
+    .map((item) => item.trim())
+    .filter(Boolean);
+};
+
 const mapFromApi = (data: unknown, slug: string): PlanDetail => {
   const parsed = PaqueteDetalleApiSchema.parse(data);
   const categories = (parsed.destinos ?? [])
@@ -34,11 +42,14 @@ const mapFromApi = (data: unknown, slug: string): PlanDetail => {
   const uniqueCategories = Array.from(new Set(categories));
 
   const destinations = (parsed.destinos ?? []).map((dest) => ({
+    id: dest.id ?? undefined,
     name: dest.nombre,
     municipality: dest.municipio ?? undefined,
     latitude: dest.latitud ?? undefined,
     longitude: dest.longitud ?? undefined,
     category: dest.categoria ?? undefined,
+    image: dest.url_imagen ?? undefined,
+    galleryImages: splitImageList(dest.galeria_imagenes),
   }));
 
   const activities = (parsed.servicios ?? [])
@@ -59,6 +70,8 @@ const mapFromApi = (data: unknown, slug: string): PlanDetail => {
     durationDays: parsed.duracion_dias ?? undefined,
     difficulty: parsed.dificultad ?? undefined,
     capacityMax: parsed.capacidad_max_personas ?? undefined,
+    heroImage: parsed.url_imagen ?? undefined,
+    galleryImages: splitImageList(parsed.galeria_imagenes),
     categories: uniqueCategories.length ? uniqueCategories : undefined,
     destinations: destinations.length ? destinations : undefined,
     activities: activities.length ? activities : undefined,
@@ -99,6 +112,8 @@ const mapFromCatalog = (plan: PlanCatalogItem, slug: string): PlanDetail => {
     durationDays: plan.durationDays ?? undefined,
     difficulty: plan.difficulty ?? undefined,
     capacityMax: plan.capacityMax ?? undefined,
+    heroImage: plan.image,
+    galleryImages: [plan.image],
     categories: plan.categories?.length ? plan.categories : undefined,
     destinations: destinations.length ? destinations : undefined,
     activities: undefined,

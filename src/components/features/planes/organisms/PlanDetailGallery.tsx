@@ -8,6 +8,7 @@ interface GalleryImage {
   image: string;
   alt: string;
   label?: string;
+  href?: string;
 }
 
 interface PlanDetailGalleryProps {
@@ -59,29 +60,56 @@ const PlanDetailGallery: React.FC<PlanDetailGalleryProps> = ({ images }) => {
       </h2>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {images.map((item, index) => (
-          <button
-            key={`${item.image}-${item.label ?? item.alt}`}
-            type="button"
-            className="group relative h-32 w-full overflow-hidden rounded-lg cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary/40"
-            onClick={() => setActiveIndex(index)}
-            title="Ver imagen en detalle"
-          >
-            <Image
-              src={item.image}
-              alt={item.alt}
-              title={item.label ?? item.alt}
-              fill
-              sizes="(min-width: 1024px) 16vw, (min-width: 768px) 25vw, 50vw"
-              className="object-cover transition-transform duration-500 group-hover:scale-105"
-            />
-            {item.label && (
-              <div className="absolute inset-0 bg-linear-to-t from-black/65 via-black/10 to-transparent flex items-end p-3">
-                <span className="text-white text-xs font-semibold drop-shadow">
-                  {item.label}
-                </span>
-              </div>
-            )}
-          </button>
+          item.href ? (
+            <a
+              key={`${item.image}-${item.label ?? item.alt}`}
+              href={item.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group relative h-32 w-full overflow-hidden rounded-lg cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary/40"
+              title="Abrir detalle del sitio en una nueva pestaña"
+            >
+              <Image
+                src={item.image}
+                alt={item.alt}
+                title={item.label ?? item.alt}
+                fill
+                sizes="(min-width: 1024px) 16vw, (min-width: 768px) 25vw, 50vw"
+                className="object-cover transition-transform duration-500 group-hover:scale-105"
+              />
+              {item.label && (
+                <div className="absolute inset-0 bg-linear-to-t from-black/65 via-black/10 to-transparent flex items-end p-3">
+                  <span className="text-white text-xs font-semibold drop-shadow">
+                    {item.label}
+                  </span>
+                </div>
+              )}
+            </a>
+          ) : (
+            <button
+              key={`${item.image}-${item.label ?? item.alt}`}
+              type="button"
+              className="group relative h-32 w-full overflow-hidden rounded-lg cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary/40"
+              onClick={() => setActiveIndex(index)}
+              title="Ver imagen en detalle"
+            >
+              <Image
+                src={item.image}
+                alt={item.alt}
+                title={item.label ?? item.alt}
+                fill
+                sizes="(min-width: 1024px) 16vw, (min-width: 768px) 25vw, 50vw"
+                className="object-cover transition-transform duration-500 group-hover:scale-105"
+              />
+              {item.label && (
+                <div className="absolute inset-0 bg-linear-to-t from-black/65 via-black/10 to-transparent flex items-end p-3">
+                  <span className="text-white text-xs font-semibold drop-shadow">
+                    {item.label}
+                  </span>
+                </div>
+              )}
+            </button>
+          )
         ))}
       </div>
 

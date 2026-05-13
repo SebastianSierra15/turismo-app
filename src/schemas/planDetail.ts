@@ -1,11 +1,14 @@
 ﻿import { z } from "zod";
 
 export const PlanDestinationSchema = z.object({
+  id: z.string().optional(),
   name: z.string(),
   municipality: z.string().optional(),
   latitude: z.number().optional(),
   longitude: z.number().optional(),
   category: z.string().optional(),
+  image: z.string().url().optional(),
+  galleryImages: z.array(z.string().url()).optional(),
 });
 
 export const PlanDetailSchema = z.object({
@@ -18,6 +21,8 @@ export const PlanDetailSchema = z.object({
   durationDays: z.number().optional().nullable(),
   difficulty: z.string().optional().nullable(),
   capacityMax: z.number().optional().nullable(),
+  heroImage: z.string().url().optional(),
+  galleryImages: z.array(z.string().url()).optional(),
   categories: z.array(z.string()).optional(),
   destinations: z.array(PlanDestinationSchema).optional(),
   activities: z.array(z.string()).optional(),
