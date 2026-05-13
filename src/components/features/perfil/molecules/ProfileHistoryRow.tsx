@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 import Icon from "@/components/shared/atoms/Icon";
 import { type ProfileHistoryItem } from "@/types/profile";
 
@@ -7,6 +8,7 @@ interface ProfileHistoryRowProps {
 }
 
 const ProfileHistoryRow: React.FC<ProfileHistoryRowProps> = ({ item }) => {
+  const detailsHref = item.href ?? `/perfil/reservas/${item.id}`;
   return (
     <tr className="hover:bg-slate-50 transition-colors">
       <td className="px-6 py-4 font-medium text-sm text-slate-900">
@@ -20,12 +22,12 @@ const ProfileHistoryRow: React.FC<ProfileHistoryRowProps> = ({ item }) => {
         </span>
       </td>
       <td className="px-6 py-4 text-right">
-        <button
-          type="button"
+        <Link
+          href={detailsHref}
           className="text-primary text-xs font-bold hover:underline cursor-pointer rounded-full px-3 py-1"
         >
           {item.actionLabel}
-        </button>
+        </Link>
       </td>
     </tr>
   );

@@ -13,6 +13,7 @@ export const ProfileBookingSchema = z.object({
   dateRange: z.string(),
   people: z.string(),
   image: z.string().url(),
+  href: z.string().optional(),
 });
 
 export const ProfileHistoryItemSchema = z.object({
@@ -21,6 +22,7 @@ export const ProfileHistoryItemSchema = z.object({
   date: z.string(),
   status: z.string(),
   actionLabel: z.string(),
+  href: z.string().optional(),
 });
 
 export const ProfileMapSchema = z.object({

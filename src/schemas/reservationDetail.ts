@@ -4,6 +4,7 @@ export const ReservationDetailStatusSchema = z.enum([
   "confirmada",
   "pendiente",
   "completada",
+  "cancelada",
 ]);
 
 export const ReservationDetailItinerarySchema = z.object({

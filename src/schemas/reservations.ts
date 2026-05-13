@@ -4,6 +4,7 @@ export const ReservationStatusSchema = z.enum([
   "confirmada",
   "pendiente",
   "completada",
+  "cancelada",
 ]);
 
 export const ReservationDetailSchema = z.object({
@@ -18,6 +19,7 @@ export const ReservationActionSchema = z.object({
   label: z.string(),
   variant: z.enum(["primary", "dark", "outline"]),
   title: z.string(),
+  href: z.string().optional(),
 });
 
 export const ReservationSchema = z.object({
@@ -35,6 +37,7 @@ export const ReservationSchema = z.object({
     .object({
       icon: z.string(),
       title: z.string(),
+      href: z.string().optional(),
     })
     .optional(),
 });

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { CancelReservationTemplate } from "@/components/features/missing-views/templates";
+import CancelReservationClient from "./CancelReservationClient";
 
 type CancelReservationPageProps = {
   params: Promise<{ id: string }>;
@@ -8,13 +8,12 @@ type CancelReservationPageProps = {
 export const metadata: Metadata = {
   title: "Amaturis | Cancelar reserva",
   description:
-    "Revisa la politica de cancelacion, reembolso estimado y confirma la solicitud.",
+    "Revisa la política de cancelación y confirma la solicitud de forma segura.",
 };
 
 export default async function CancelReservationPage({
   params,
 }: CancelReservationPageProps) {
   const { id } = await params;
-
-  return <CancelReservationTemplate reservationId={id} />;
+  return <CancelReservationClient reservationId={id} />;
 }

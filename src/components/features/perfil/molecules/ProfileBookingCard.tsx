@@ -1,5 +1,6 @@
 import React from "react";
 import Image from "next/image";
+import Link from "next/link";
 import Icon from "@/components/shared/atoms/Icon";
 import { type ProfileBooking } from "@/types/profile";
 
@@ -13,6 +14,7 @@ const statusStyles: Record<ProfileBooking["status"], string> = {
 };
 
 const ProfileBookingCard: React.FC<ProfileBookingCardProps> = ({ booking }) => {
+  const detailsHref = booking.href ?? `/perfil/reservas/${booking.id}`;
   return (
     <div className="bg-white border border-primary/10 rounded-xl p-4 flex flex-col sm:flex-row gap-4 items-center">
       <div className="relative w-full sm:w-32 h-24 rounded-lg overflow-hidden shrink-0">
@@ -45,18 +47,18 @@ const ProfileBookingCard: React.FC<ProfileBookingCardProps> = ({ booking }) => {
           </span>
         </div>
         <div className="mt-4 flex flex-wrap gap-3">
-          <button
-            type="button"
+          <Link
+            href={detailsHref}
             className="bg-primary text-white text-xs font-bold py-2 px-4 rounded-full hover:bg-primary/90 transition-colors cursor-pointer w-40 shrink-0"
           >
             {booking.status === "Confirmado" ? "Ver itinerario" : "Completar pago"}
-          </button>
-          <button
-            type="button"
+          </Link>
+          <Link
+            href={detailsHref}
             className="border border-slate-200 text-xs font-bold py-2 px-4 rounded-full hover:bg-slate-50 transition-colors cursor-pointer w-28 shrink-0"
           >
             {booking.status === "Confirmado" ? "Gestionar" : "Detalles"}
-          </button>
+          </Link>
         </div>
       </div>
     </div>

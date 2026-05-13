@@ -1,10 +1,13 @@
-﻿import React from "react";
+import React from "react";
 import Image from "next/image";
+import Link from "next/link";
 import Icon from "@/components/shared/atoms/Icon";
 import { type Reservation } from "@/types/reservations";
 
 interface ReservationCardProps {
   reservation: Reservation;
+  onCancel?: (reservationId: string) => void;
+  submitting?: boolean;
 }
 
 const statusStyles = {
@@ -35,6 +38,14 @@ const statusStyles = {
     primaryButton: "border-2 border-primary text-primary hover:bg-primary/10",
     secondaryButton: "border-2 border-slate-200",
   },
+  cancelada: {
+    badge: "bg-slate-200 text-slate-700",
+    icon: "bg-slate-100 text-slate-500",
+    card: "bg-white/80 border-slate-200",
+    total: "text-slate-700",
+    primaryButton: "border-2 border-slate-400 text-slate-700 hover:bg-slate-100",
+    secondaryButton: "border-2 border-slate-200 text-slate-400",
+  },
 } as const;
 
 const toneStyles = {
@@ -43,7 +54,11 @@ const toneStyles = {
   secondary: "bg-slate-100 text-slate-500",
 } as const;
 
-const ReservationCard: React.FC<ReservationCardProps> = ({ reservation }) => {
+const ReservationCard: React.FC<ReservationCardProps> = ({
+  reservation,
+  onCancel,
+  submitting = false,
+}) => {
   const styles = statusStyles[reservation.status];
 
   return (
@@ -123,22 +138,34 @@ const ReservationCard: React.FC<ReservationCardProps> = ({ reservation }) => {
             </p>
           </div>
           <div className="flex gap-3 w-full sm:w-auto">
-            <button
-              type="button"
-              className={`flex-1 sm:flex-none px-6 py-3 rounded-full text-sm font-bold transition-all cursor-pointer ${styles.primaryButton}`}
-              title={reservation.primaryAction.title}
-            >
-              {reservation.primaryAction.label}
-            </button>
-            {reservation.secondaryAction && (
+            {reservation.primaryAction.href ? (
+              <Link
+                href={reservation.primaryAction.href}
+                className={`flex-1 sm:flex-none px-6 py-3 rounded-full text-sm font-bold transition-all text-center cursor-pointer ${styles.primaryButton}`}
+                title={reservation.primaryAction.title}
+              >
+                {reservation.primaryAction.label}
+              </Link>
+            ) : (
               <button
                 type="button"
+                className={`flex-1 sm:flex-none px-6 py-3 rounded-full text-sm font-bold transition-all cursor-pointer ${styles.primaryButton}`}
+                title={reservation.primaryAction.title}
+              >
+                {reservation.primaryAction.label}
+              </button>
+            )}
+            {reservation.secondaryAction ? (
+              <button
+                type="button"
+                onClick={() => onCancel?.(reservation.id)}
+                disabled={submitting}
                 className={`px-3 pb-2 pt-2.5 rounded-full transition-colors cursor-pointer ${styles.secondaryButton}`}
                 title={reservation.secondaryAction.title}
               >
-                <Icon name={reservation.secondaryAction.icon} />
+                {submitting ? <span className="text-xs font-bold">...</span> : <Icon name={reservation.secondaryAction.icon} />}
               </button>
-            )}
+            ) : null}
           </div>
         </div>
       </div>

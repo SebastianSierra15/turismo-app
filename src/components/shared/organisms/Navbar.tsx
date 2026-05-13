@@ -10,7 +10,7 @@ import { useAuth } from "@/context/AuthContext";
 
 const Navbar: React.FC = () => {
   const pathname = usePathname();
-  const { user, isAuthenticated, logout } = useAuth();
+  const { user, isAuthenticated, logout, loading } = useAuth();
 
   const isActive = (href: string) => {
     if (href === "/") return pathname === "/";
@@ -23,6 +23,14 @@ const Navbar: React.FC = () => {
     { href: "/sitios", label: "Sitios", title: "Ir a Sitios" },
     { href: "/acerca_de", label: "Acerca de", title: "Ir a Acerca de" },
   ];
+  const role = (user?.rol ?? "").toString().toLowerCase();
+  if (role === "operador" || role === "admin") {
+    navItems.push({
+      href: "/panel",
+      label: "Operación",
+      title: "Ir a panel operativo",
+    });
+  }
 
   return (
     <header className="sticky top-0 z-50 w-full bg-white border-b border-primary/10">
@@ -57,8 +65,10 @@ const Navbar: React.FC = () => {
           </nav>
 
           <div className="flex items-center gap-4">
-            {isAuthenticated ? (
-              /* --- VISTA CUANDO EL USUARIO ESTÁ LOGUEADO --- */
+            {loading ? (
+              <div className="hidden sm:block h-9 w-36 rounded-full bg-slate-100 animate-pulse" />
+            ) : isAuthenticated ? (
+              /* --- VISTA CUANDO EL USUARIO ESTA LOGUEADO --- */
               <div className="flex items-center gap-3">
                 <div className="hidden sm:flex flex-col items-end mr-2">
                   <span className="text-xs font-bold text-slate-900 leading-none">
@@ -69,21 +79,50 @@ const Navbar: React.FC = () => {
                   </span>
                 </div>
 
-                {/* Botón de Perfil / Avatar */}
-                <Link href="/perfil" title="Ver mi perfil">
-                  <div className="h-9 w-9 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-all">
+                <div className="relative group">
+                  <button
+                    type="button"
+                    title="Abrir menú de cuenta"
+                    className="h-9 w-9 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-all"
+                  >
                     <Icon name="person" />
+                  </button>
+                  <div className="invisible pointer-events-none absolute right-0 top-11 z-[70] w-56 rounded-xl border border-slate-200 bg-white p-2 opacity-0 shadow-lg transition-all duration-150 group-hover:visible group-hover:pointer-events-auto group-hover:opacity-100 group-focus-within:visible group-focus-within:pointer-events-auto group-focus-within:opacity-100">
+                    <Link
+                      href="/perfil"
+                      className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-primary"
+                    >
+                      <Icon name="person" className="text-base" />
+                      Mi perfil
+                    </Link>
+                    {(role === "operador" || role === "admin") && (
+                      <Link
+                        href="/panel"
+                        className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-primary"
+                      >
+                        <Icon name="dashboard" className="text-base" />
+                        Centro operativo
+                      </Link>
+                    )}
+                    {role === "admin" && (
+                      <Link
+                        href="/admin"
+                        className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-primary"
+                      >
+                        <Icon name="admin_panel_settings" className="text-base" />
+                        Administración
+                      </Link>
+                    )}
+                    <button
+                      type="button"
+                      onClick={logout}
+                      className="mt-1 flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm font-semibold text-rose-600 hover:bg-rose-50"
+                    >
+                      <Icon name="logout" className="text-base" />
+                      Cerrar sesión
+                    </button>
                   </div>
-                </Link>
-
-                {/* Botón de Cerrar Sesión */}
-                <button
-                  onClick={logout}
-                  className="p-2 text-slate-400 hover:text-red-500 transition-colors"
-                  title="Cerrar sesión"
-                >
-                  <Icon name="logout" className="text-xl" />
-                </button>
+                </div>
               </div>
             ) : (
               /* --- VISTA CUANDO NO HAY NADIE LOGUEADO --- */

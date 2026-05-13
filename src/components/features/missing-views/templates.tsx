@@ -1,3 +1,5 @@
+ "use client";
+
 /* eslint-disable @next/next/no-img-element */
 import React from "react";
 import Link from "next/link";
@@ -6,6 +8,7 @@ import Footer from "@/components/shared/organisms/Footer";
 import Button from "@/components/shared/atoms/Button";
 import Icon from "@/components/shared/atoms/Icon";
 import { BlobUploadTool } from "@/components/features/blob/BlobUploadTool";
+import { useAuth } from "@/context/AuthContext";
 
 const images = {
   canopy:
@@ -1060,6 +1063,7 @@ export const NotificationsTemplate = () => {
 
 const panelLinks = [
   ["/panel", "dashboard", "Resumen"],
+  ["/panel/reservas", "event_available", "Reservas"],
   ["/panel/paquetes", "inventory_2", "Paquetes"],
   ["/panel/servicios", "room_service", "Servicios"],
   ["/panel/comunidad", "diversity_3", "Comunidad"],
@@ -1080,7 +1084,7 @@ const adminLinks = [
   ["#", "bar_chart", "Reportes"],
 ];
 
-const PanelLayout = ({
+export const PanelLayout = ({
   title,
   subtitle,
   active,
@@ -1094,6 +1098,14 @@ const PanelLayout = ({
   children: React.ReactNode;
 }) => {
   const links = admin ? adminLinks : panelLinks;
+  const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
+  const { logout } = useAuth();
+
+  const closeSidebar = () => setIsSidebarOpen(false);
+  const handleLogout = () => {
+    closeSidebar();
+    logout();
+  };
 
   return (
     <div className="min-h-screen bg-background-light text-slate-900">
@@ -1125,22 +1137,92 @@ const PanelLayout = ({
             </Link>
           ))}
         </nav>
-        <Link
-          href="/"
+        <button
+          type="button"
+          onClick={handleLogout}
           className="flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-bold text-slate-500 hover:text-red-600"
         >
           <Icon name="logout" />
           Cerrar sesion
-        </Link>
+        </button>
+      </aside>
+      <div
+        className={`fixed inset-0 z-40 bg-slate-950/45 transition-opacity duration-200 lg:hidden ${
+          isSidebarOpen ? "opacity-100" : "pointer-events-none opacity-0"
+        }`}
+        onClick={closeSidebar}
+        aria-hidden={!isSidebarOpen}
+      />
+      <aside
+        className={`fixed inset-y-0 left-0 z-50 w-72 border-r border-slate-200 bg-white px-4 py-6 shadow-xl transition-transform duration-200 lg:hidden ${
+          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
+      >
+        <div className="flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-3 px-3 text-slate-950">
+            <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-white">
+              <Icon name="forest" />
+            </span>
+            <div>
+              <p className="font-black">Amaturis</p>
+              <p className="text-[10px] font-bold uppercase tracking-wider text-primary">
+                {admin ? "Admin general" : "Aliados"}
+              </p>
+            </div>
+          </Link>
+          <button
+            type="button"
+            onClick={closeSidebar}
+            className="rounded-full p-2 text-slate-500 hover:bg-slate-100"
+            title="Cerrar menu"
+          >
+            <Icon name="close" />
+          </button>
+        </div>
+        <nav className="mt-8 space-y-1">
+          {links.map(([href, icon, label]) => (
+            <Link
+              key={`mobile-${label}`}
+              href={href}
+              onClick={closeSidebar}
+              className={`flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-bold transition ${
+                label === active
+                  ? "bg-primary/10 text-primary"
+                  : "text-slate-500 hover:bg-slate-50 hover:text-primary"
+              }`}
+            >
+              <Icon name={icon} className="text-xl" />
+              {label}
+            </Link>
+          ))}
+        </nav>
+        <button
+          type="button"
+          onClick={handleLogout}
+          className="mt-4 flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-bold text-slate-500 hover:bg-slate-50 hover:text-red-600"
+        >
+          <Icon name="logout" />
+          Cerrar sesion
+        </button>
       </aside>
       <div className="lg:pl-64">
         <header className="sticky top-0 z-30 border-b border-slate-200 bg-white/85 px-4 py-4 backdrop-blur sm:px-6 lg:px-8">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-            <div>
-              <h1 className="text-2xl font-black tracking-tight text-slate-950">
-                {title}
-              </h1>
-              <p className="mt-1 text-sm text-slate-500">{subtitle}</p>
+            <div className="flex items-start gap-3">
+              <button
+                type="button"
+                onClick={() => setIsSidebarOpen(true)}
+                className="mt-1 inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-600 lg:hidden"
+                title="Abrir menu"
+              >
+                <Icon name="menu" />
+              </button>
+              <div>
+                <h1 className="text-2xl font-black tracking-tight text-slate-950">
+                  {title}
+                </h1>
+                <p className="mt-1 text-sm text-slate-500">{subtitle}</p>
+              </div>
             </div>
             <div className="flex items-center gap-3">
               <div className="relative hidden sm:block">
@@ -1228,9 +1310,15 @@ export const PartnerDashboardTemplate = () => (
         title="Proximas reservas"
         columns={["Reserva", "Viajero", "Fecha", "Estado"]}
         rows={[
-          ["Canon de las Dalias", "Laura Munoz", "15 nov", "Confirmada"],
-          ["Ruta Rio Hacha", "Camilo Rojas", "18 nov", "Pendiente"],
-          ["Cascadas La Avispa", "Diana Vargas", "20 nov", "Confirmada"],
+          ["Reserva_6efd3d69", "Laura Munoz", "15 nov", "Confirmada"],
+          ["Reserva_97f99c22", "Camilo Rojas", "18 nov", "Pendiente"],
+          ["Reserva_0f3a91bd", "Diana Vargas", "20 nov", "Confirmada"],
+        ]}
+        viewAllHref="/panel/reservas"
+        rowLinks={[
+          "/panel/reservas?reserva=Reserva_6efd3d69",
+          "/panel/reservas?reserva=Reserva_97f99c22",
+          "/panel/reservas?reserva=Reserva_0f3a91bd",
         ]}
       />
       <TaskPanel />
@@ -1263,17 +1351,27 @@ const TableCard = ({
   title,
   columns,
   rows,
+  viewAllHref,
+  rowLinks,
 }: {
   title: string;
   columns: string[];
   rows: string[][];
+  viewAllHref?: string;
+  rowLinks?: string[];
 }) => (
   <section className="overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-slate-200">
     <div className="flex items-center justify-between border-b border-slate-100 p-5">
       <h2 className="font-black text-slate-950">{title}</h2>
-      <button className="text-sm font-bold text-primary" type="button">
-        Ver todo
-      </button>
+      {viewAllHref ? (
+        <Link href={viewAllHref} className="text-sm font-bold text-primary" title="Ver todas las reservas">
+          Ver todo
+        </Link>
+      ) : (
+        <button className="text-sm font-bold text-primary" type="button">
+          Ver todo
+        </button>
+      )}
     </div>
     <div className="overflow-x-auto">
       <table className="min-w-full text-left text-sm">
@@ -1284,10 +1382,11 @@ const TableCard = ({
                 {column}
               </th>
             ))}
+            {rowLinks ? <th className="px-5 py-3 font-black text-right">Accion</th> : null}
           </tr>
         </thead>
         <tbody className="divide-y divide-slate-100">
-          {rows.map((row) => (
+          {rows.map((row, rowIndex) => (
             <tr key={row.join("-")} className="text-slate-700">
               {row.map((cell, index) => (
                 <td key={`${cell}-${index}`} className="px-5 py-4">
@@ -1302,6 +1401,17 @@ const TableCard = ({
                   )}
                 </td>
               ))}
+              {rowLinks ? (
+                <td className="px-5 py-4 text-right">
+                  <Link
+                    href={rowLinks[rowIndex] ?? "/panel/reservas"}
+                    className="text-xs font-bold text-primary hover:underline"
+                    title="Abrir reserva"
+                  >
+                    Abrir
+                  </Link>
+                </td>
+              ) : null}
             </tr>
           ))}
         </tbody>

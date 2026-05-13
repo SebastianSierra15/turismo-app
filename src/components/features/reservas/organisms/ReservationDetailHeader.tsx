@@ -5,10 +5,12 @@ import { type ReservationDetail } from "@/types/reservationDetail";
 
 interface ReservationDetailHeaderProps {
   reservation: ReservationDetail;
+  onCancelClick?: () => void;
 }
 
 const ReservationDetailHeader: React.FC<ReservationDetailHeaderProps> = ({
   reservation,
+  onCancelClick,
 }) => {
   return (
     <header className="mb-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
@@ -37,6 +39,7 @@ const ReservationDetailHeader: React.FC<ReservationDetailHeaderProps> = ({
       <div className="flex flex-wrap gap-3">
         <button
           type="button"
+          onClick={onCancelClick}
           className="px-6 py-3 border-2 border-primary text-primary rounded-full font-bold text-sm hover:bg-primary/10 transition-all cursor-pointer"
           title="Cancelar reserva"
         >

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 interface AuthUser {
@@ -43,15 +43,23 @@ const getStoredAuth = (): { token: string | null; user: AuthUser | null } => {
 };
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const storedAuth = getStoredAuth();
-  const [user, setUser] = useState<AuthUser | null>(storedAuth.user);
-  const [token, setToken] = useState<string | null>(storedAuth.token);
-  const [loading] = useState(false);
+  const [user, setUser] = useState<AuthUser | null>(null);
+  const [token, setToken] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
+
+  useEffect(() => {
+    const storedAuth = getStoredAuth();
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setUser(storedAuth.user);
+    setToken(storedAuth.token);
+    setLoading(false);
+  }, []);
 
   const login = (newToken: string, userData: AuthUser) => {
     setToken(newToken);
     setUser(userData);
+    setLoading(false);
     localStorage.setItem("token", newToken);
     localStorage.setItem("user", JSON.stringify(userData));
     router.push("/perfil");
@@ -60,6 +68,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const logout = () => {
     setToken(null);
     setUser(null);
+    setLoading(false);
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     router.push("/");

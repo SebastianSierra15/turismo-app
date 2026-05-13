@@ -8,6 +8,7 @@ import PlanDetailGallery from "@/components/features/planes/organisms/PlanDetail
 import PlanDetailMap from "@/components/features/planes/organisms/PlanDetailMap";
 import { type PlanDetail } from "@/types/planDetail";
 import { extractSiteSlug } from "@/utils/siteId";
+import { useRouter } from "next/navigation";
 
 const activityImages = [
   "https://lh3.googleusercontent.com/aida-public/AB6AXuDF1k7JWAqcHrIZ7csMXOGesAGH_1paEuMxkdWsd7Ff97IAhWVLRR0KLwgZuZ007hw7VIf0bev40daaemE7kcN7TgHg8PyRWctewsQ-xM1ihFsBkk00q7acwvXwlYUTn3mwf1MaTyf-Qobvyv5qOKQ_Encvp6rRjYE619TMtjnZtPl1jpFgDzIVBueDrk3LGo_c7Ki0LmaEjftZWgI2GDi728PgtQYkwbBvZFtDk_0zKeAWPcbuRu-3d0HQe_5zeNHa3jLPF3-lCEM",
@@ -55,6 +56,7 @@ interface PlanDetailContentProps {
 }
 
 const PlanDetailContent: React.FC<PlanDetailContentProps> = ({ plan }) => {
+  const router = useRouter();
   const summaryItems = [
     {
       label: "Dificultad",
@@ -136,15 +138,28 @@ const PlanDetailContent: React.FC<PlanDetailContentProps> = ({ plan }) => {
   const rawMaxTravelers =
     plan.capacityMax && plan.capacityMax > 0 ? plan.capacityMax : 10;
   const maxTravelers = Math.max(rawMaxTravelers, 1);
-  const [selectedTravelers, setSelectedTravelers] = React.useState(
-    Math.min(1, maxTravelers)
+  const [selectedTravelers, setSelectedTravelers] = React.useState<number | "">(
+    ""
   );
+  const [selectedDate, setSelectedDate] = React.useState("");
 
   const priceValue = plan.priceValue ?? 0;
-  const subtotal = priceValue * selectedTravelers;
+  const travelersCount = typeof selectedTravelers === "number" ? selectedTravelers : 0;
+  const subtotal = priceValue * travelersCount;
   const serviceFee = Math.round(subtotal * 0.07);
   const total = subtotal + serviceFee;
   const travelerOptions = Array.from({ length: maxTravelers }, (_, i) => i + 1);
+  const canReserve = Boolean(selectedDate) && typeof selectedTravelers === "number";
+
+  const handleReserve = () => {
+    if (!canReserve) return;
+    const packageId = encodeURIComponent(plan.slug || plan.id);
+    const date = encodeURIComponent(selectedDate);
+    const travelers = encodeURIComponent(String(selectedTravelers));
+    router.push(
+      `/pasarela_pagos?paquete_id=${packageId}&fecha_viaje=${date}&cantidad_personas=${travelers}`
+    );
+  };
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 grid grid-cols-1 lg:grid-cols-3 gap-12">
@@ -313,6 +328,8 @@ const PlanDetailContent: React.FC<PlanDetailContentProps> = ({ plan }) => {
                   <input
                     className="w-full pl-10 pr-4 py-3 rounded-full border border-slate-200 bg-slate-50 text-slate-700 focus:ring-primary focus:border-primary"
                     type="date"
+                    value={selectedDate}
+                    onChange={(event) => setSelectedDate(event.target.value)}
                   />
                 </div>
               </div>
@@ -329,9 +346,12 @@ const PlanDetailContent: React.FC<PlanDetailContentProps> = ({ plan }) => {
                     className="w-full pl-10 pr-4 py-3 rounded-full border border-slate-200 bg-slate-50 text-slate-700 focus:ring-primary focus:border-primary"
                     value={selectedTravelers}
                     onChange={(event) =>
-                      setSelectedTravelers(Number(event.target.value))
+                      setSelectedTravelers(
+                        event.target.value ? Number(event.target.value) : ""
+                      )
                     }
                   >
+                    <option value="">Selecciona viajeros</option>
                     {travelerOptions.map((option) => (
                       <option key={option} value={option}>
                         {option} {option === 1 ? "Adulto" : "Adultos"}
@@ -344,7 +364,7 @@ const PlanDetailContent: React.FC<PlanDetailContentProps> = ({ plan }) => {
             <div className="pt-4 border-t border-slate-100 space-y-3 text-sm">
               <div className="flex justify-between text-slate-500">
                 <span>
-                  {selectedTravelers} {selectedTravelers === 1 ? "Adulto" : "Adultos"} x {formatCurrency(priceValue)}
+                  {travelersCount} {travelersCount === 1 ? "Adulto" : "Adultos"} x {formatCurrency(priceValue)}
                 </span>
                 <span className="font-bold text-slate-900">
                   {formatCurrency(subtotal)}
@@ -365,7 +385,9 @@ const PlanDetailContent: React.FC<PlanDetailContentProps> = ({ plan }) => {
             </div>
             <Button
               variant="primary"
-              className="w-full normal-case tracking-normal py-4 cursor-pointer"
+              className="w-full normal-case tracking-normal py-4 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+              disabled={!canReserve}
+              onClick={handleReserve}
             >
               <Icon name="bolt" />
               Reservar ahora

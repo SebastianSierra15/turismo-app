@@ -12,23 +12,36 @@ import EditProfileModal from "@/components/features/perfil/organisms/EditProfile
 import { getProfile, updateProfile } from "@/services/profile";
 import { useAuth } from "@/context/AuthContext";
 import { type ProfileData } from "@/types/profile";
+import { useRouter } from "next/navigation";
 
 const ProfileTemplate = () => {
-  const { token, loading } = useAuth();
+  const { token, loading, logout } = useAuth();
+  const router = useRouter();
   const [profile, setProfile] = useState<ProfileData | null>(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [profileError, setProfileError] = useState("");
 
   // Usamos useCallback para que la función sea estable y no dispare useEffect innecesariamente
   const fetchProfile = useCallback(async () => {
     if (token) {
       try {
+        setProfileError("");
         const data = await getProfile(token);
         setProfile(data);
       } catch (error) {
         console.error("Error cargando perfil:", error);
+        const maybeStatus = (error as { status?: number })?.status;
+        if (maybeStatus === 401) {
+          logout();
+          router.push("/login");
+          return;
+        }
+        const message =
+          error instanceof Error ? error.message : "No se pudo cargar el perfil";
+        setProfileError(message);
       }
     }
-  }, [token]);
+  }, [logout, router, token]);
 
   useEffect(() => {
     // Solo pedimos el perfil si el AuthContext terminó de cargar y tenemos un token
@@ -52,7 +65,7 @@ const ProfileTemplate = () => {
   };
 
   // CORRECCIÓN: Si está cargando el Auth o si aún no tenemos el perfil, mostramos el loading
-  if (loading || !profile) {
+  if (loading || (!profile && !profileError)) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-background-light">
         <div className="text-center space-y-4">
@@ -63,6 +76,29 @@ const ProfileTemplate = () => {
     );
   }
 
+  if (profileError && !profile) {
+    return (
+      <div className="relative flex min-h-screen w-full flex-col overflow-x-hidden bg-background-light text-slate-900">
+        <Navbar />
+        <main className="flex flex-1 items-center justify-center px-4">
+          <div className="w-full max-w-xl rounded-2xl border border-rose-200 bg-rose-50 p-6 text-center">
+            <p className="text-sm font-semibold text-rose-700">{profileError}</p>
+            <button
+              type="button"
+              onClick={fetchProfile}
+              className="mt-4 rounded-full bg-primary px-6 py-2 text-sm font-bold text-white"
+            >
+              Reintentar
+            </button>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
+  const currentProfile = profile as ProfileData;
+
   return (
     <div className="relative flex min-h-screen w-full flex-col overflow-x-hidden bg-background-light text-slate-900">
       <Navbar />
@@ -70,27 +106,27 @@ const ProfileTemplate = () => {
       <main className="flex-1 flex flex-col md:flex-row max-w-7xl mx-auto w-full gap-8 p-4 md:p-10">
         {/* Sidebar con info básica y botón de editar */}
         <ProfileSidebar
-          profile={profile}
+          profile={currentProfile}
           onEditProfile={() => setIsEditModalOpen(true)}
         />
 
         <div className="flex-1 space-y-8">
           {/* Bienvenida dinámica */}
           <ProfileWelcome
-            name={profile.name.split(" ")[0]}
-            upcomingTrips={profile.bookings.length}
+            name={currentProfile.name.split(" ")[0]}
+            upcomingTrips={currentProfile.bookings.length}
           />
 
           {/* Secciones de Reservas y Mapas */}
-          <ProfileBookings bookings={profile.bookings} />
+          <ProfileBookings bookings={currentProfile.bookings} />
 
-          <ProfileHistory history={profile.history} />
+          <ProfileHistory history={currentProfile.history} />
 
           <ProfileMapSection
-            title={profile.map.title}
-            subtitle={profile.map.subtitle}
-            lat={profile.map.lat}
-            lng={profile.map.lng}
+            title={currentProfile.map.title}
+            subtitle={currentProfile.map.subtitle}
+            lat={currentProfile.map.lat}
+            lng={currentProfile.map.lng}
           />
         </div>
       </main>
@@ -103,10 +139,10 @@ const ProfileTemplate = () => {
         onClose={() => setIsEditModalOpen(false)}
         onSave={handleEditProfileSave}
         initialData={{
-          name: profile.name,
-          location: profile.location,
-          avatar: profile.avatar,
-          bio: profile.bio || "",
+          name: currentProfile.name,
+          location: currentProfile.location,
+          avatar: currentProfile.avatar,
+          bio: currentProfile.bio || "",
         }}
       />
     </div>
