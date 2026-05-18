@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { PartnerDashboardTemplate } from "@/components/features/missing-views/templates";
+import OperatorDashboardTemplate from "@/components/features/panel/templates/OperatorDashboardTemplate";
 
 export const metadata: Metadata = {
   title: "Amaturis | Panel de aliados",
@@ -8,5 +8,5 @@ export const metadata: Metadata = {
 };
 
 export default function PanelPage() {
-  return <PartnerDashboardTemplate />;
+  return <OperatorDashboardTemplate />;
 }

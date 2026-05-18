@@ -13,7 +13,6 @@ const RegisterTemplate: React.FC = () => {
 
       <div className="flex flex-1 flex-col items-center justify-center px-6 py-12 lg:px-20 xl:px-32 bg-background-light">
         <div className="w-full max-w-md space-y-8">
-          {/* Logo móvil (solo visible en pantallas pequeñas) */}
           <Link
             href="/"
             className="flex flex-col items-center lg:hidden"
@@ -28,24 +27,23 @@ const RegisterTemplate: React.FC = () => {
           <RegisterForm />
         </div>
 
-        {/* Footer de links legales */}
         <div className="mt-auto flex flex-wrap justify-center gap-x-6 gap-y-2 text-xs font-medium text-slate-500 pt-10">
           <Link
-            href="#"
+            href="/politica-de-privacidad"
             className="hover:text-primary"
             title="Política de privacidad"
           >
             Política de privacidad
           </Link>
           <Link
-            href="#"
+            href="/terminos-del-servicio"
             className="hover:text-primary"
             title="Términos del servicio"
           >
             Términos del servicio
           </Link>
           <Link
-            href="#"
+            href="/centro-de-ayuda"
             className="hover:text-primary"
             title="Centro de ayuda"
           >

@@ -48,6 +48,7 @@ const AdminReservationsTemplate: React.FC = () => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const reservaFromUrl = searchParams.get("reserva")?.trim() ?? "";
+  const qFromUrl = searchParams.get("q")?.trim() ?? "";
 
   const [rows, setRows] = React.useState<AdminReservation[]>([]);
   const [kpis, setKpis] = React.useState<AdminReservationsKpis>(EMPTY_KPIS);
@@ -123,9 +124,10 @@ const AdminReservationsTemplate: React.FC = () => {
   };
 
   React.useEffect(() => {
-    if (!reservaFromUrl) return;
-    setFilters((prev) => ({ ...prev, q: reservaFromUrl }));
-  }, [reservaFromUrl]);
+    const nextQuery = qFromUrl || reservaFromUrl;
+    if (!nextQuery) return;
+    setFilters((prev) => ({ ...prev, q: nextQuery }));
+  }, [qFromUrl, reservaFromUrl]);
 
   const filteredRows = React.useMemo(() => {
     const q = debouncedQuery.trim().toLowerCase();

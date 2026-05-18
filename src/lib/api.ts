@@ -12,6 +12,16 @@ export const api = axios.create({
   },
 });
 
+export class ApiHttpError extends Error {
+  status: number;
+
+  constructor(message: string, status: number) {
+    super(message);
+    this.name = "ApiHttpError";
+    this.status = status;
+  }
+}
+
 export const buildApiUrl = (path: string, params?: QueryParams) => {
   const url = new URL(path, API_BASE_URL);
 
@@ -45,6 +55,45 @@ export const fetchApiJson = async <T>(
   }
 
   return response.json() as Promise<T>;
+};
+
+export const isUnauthorizedResponse = (response: Response) =>
+  response.status === 401 || response.status === 403;
+
+const clearClientSession = () => {
+  if (typeof window === "undefined") return;
+  localStorage.removeItem("token");
+  localStorage.removeItem("user");
+};
+
+export const forceLoginRedirect = () => {
+  if (typeof window === "undefined") return;
+  clearClientSession();
+  if (window.location.pathname !== "/login") {
+    window.location.assign("/login");
+  }
+};
+
+export const parseApiError = async (
+  response: Response,
+  fallbackMessage: string,
+) => {
+  let detail = fallbackMessage;
+
+  try {
+    const payload = await response.json();
+    if (payload && typeof payload.detail === "string" && payload.detail.trim()) {
+      detail = payload.detail;
+    }
+  } catch {
+    // noop
+  }
+
+  if (isUnauthorizedResponse(response)) {
+    forceLoginRedirect();
+  }
+
+  return new ApiHttpError(detail, response.status);
 };
 
 // Funcion para enviar mensajes al chatbot

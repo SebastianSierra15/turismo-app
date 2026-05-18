@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
@@ -6,12 +6,12 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   icon?: React.ReactNode;
 }
 
-const Input: React.FC<InputProps> = ({ 
-  label, 
-  error, 
-  icon, 
-  className = '', 
-  ...props 
+const Input: React.FC<InputProps> = ({
+  label,
+  error,
+  icon,
+  className = "",
+  ...props
 }) => {
   return (
     <div className="space-y-1.5">
@@ -26,7 +26,7 @@ const Input: React.FC<InputProps> = ({
       <div className="relative">
         <input
           {...props}
-          className={`block w-full rounded-lg border border-slate-300 bg-white text-slate-900 placeholder-slate-400 focus:border-primary focus:ring-1 focus:ring-primary py-3 transition-all ${icon ? "pr-10" : ""} ${error ? "border-red-500" : ""} ${className}`}
+          className={`block w-full rounded-lg border border-slate-300 bg-white text-slate-900 placeholder-slate-400 focus:border-primary focus:ring-1 focus:ring-primary p-3 transition-all ${icon ? "pr-10" : ""} ${error ? "border-red-500" : ""} ${className}`}
         />
         {icon && (
           <div className="absolute inset-y-0 right-0 flex items-center pr-3">

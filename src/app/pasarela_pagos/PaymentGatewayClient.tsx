@@ -8,6 +8,7 @@ import Footer from "@/components/shared/organisms/Footer";
 import Button from "@/components/shared/atoms/Button";
 import Icon from "@/components/shared/atoms/Icon";
 import { useAuth } from "@/context/AuthContext";
+import { parseApiError } from "@/lib/api";
 
 type Props = {
   paqueteId: string;
@@ -94,8 +95,7 @@ const PaymentGatewayClient: React.FC<Props> = ({ paqueteId, fechaViaje, viajeros
       });
 
       if (!response.ok) {
-        const data = await response.json().catch(() => ({}));
-        throw new Error(data?.detail ?? "No se pudo registrar la reserva.");
+        throw await parseApiError(response, "No se pudo registrar la reserva.");
       }
 
       const data = await response.json();

@@ -23,6 +23,14 @@ const PlanDetailMap: React.FC<PlanDetailMapProps> = ({ destination }) => {
   const coordsLabel = hasCoords
     ? `${destination!.latitude!.toFixed(4)}°, ${destination!.longitude!.toFixed(4)}°`
     : "Coordenadas por definir";
+  const googleMapsUrl = hasCoords
+    ? `https://www.google.com/maps/dir/?api=1&destination=${destination!.latitude},${destination!.longitude}`
+    : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${label}, ${municipality}`)}`;
+
+  const handleDirections = () => {
+    if (typeof window === "undefined") return;
+    window.open(googleMapsUrl, "_blank", "noopener,noreferrer");
+  };
 
   return (
     <section className="space-y-6">
@@ -48,6 +56,7 @@ const PlanDetailMap: React.FC<PlanDetailMapProps> = ({ destination }) => {
           <Button
             variant="primary"
             className="w-full normal-case tracking-normal text-sm py-3 cursor-pointer"
+            onClick={handleDirections}
           >
             <Icon name="directions" className="text-lg" />
             Cómo llegar

@@ -8,7 +8,10 @@ interface ChatHeaderProps {
   isOnline?: boolean;
 }
 
-export const ChatHeader: React.FC<ChatHeaderProps> = ({ onClose, isOnline = true }) => {
+export const ChatHeader: React.FC<ChatHeaderProps> = ({
+  onClose,
+  isOnline = true,
+}) => {
   return (
     <div className="flex items-center justify-between p-4 bg-[#2D5A27] text-white rounded-t-2xl shadow-md">
       <div className="flex items-center gap-3">
@@ -27,9 +30,9 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({ onClose, isOnline = true
           </p>
         </div>
       </div>
-      <button 
+      <button
         onClick={onClose}
-        className="p-1 hover:bg-white/10 rounded-full transition-colors"
+        className="p-1 hover:bg-white/10 rounded-full transition-colors cursor-pointer"
       >
         <X size={20} />
       </button>

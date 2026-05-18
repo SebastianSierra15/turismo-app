@@ -34,6 +34,12 @@ const splitImageList = (value?: string | null) => {
     .filter(Boolean);
 };
 
+const shortId = (value?: string | null) => {
+  if (!value) return undefined;
+  const hashIndex = value.lastIndexOf("#");
+  return hashIndex >= 0 ? value.slice(hashIndex + 1) : value;
+};
+
 const mapFromApi = (data: unknown, slug: string): PlanDetail => {
   const parsed = PaqueteDetalleApiSchema.parse(data);
   const categories = (parsed.destinos ?? [])
@@ -57,8 +63,21 @@ const mapFromApi = (data: unknown, slug: string): PlanDetail => {
     .filter(Boolean);
 
   const itinerary = (parsed.itinerarios ?? [])
-    .map((item) => item.descripcion ?? item.titulo ?? "")
-    .filter(Boolean);
+    .map((item, index) => {
+      const rawTitle = item.titulo?.trim();
+      const rawDescription = item.descripcion?.trim();
+      const destinationRef = destinations[index % Math.max(destinations.length, 1)];
+      return {
+        id: shortId(item.id) ?? `itinerario-${index + 1}`,
+        stepNumber: index + 1,
+        title: rawTitle || `Paso ${index + 1}`,
+        description:
+          rawDescription ||
+          "Actividad programada dentro del recorrido turístico.",
+        location: destinationRef?.municipality ?? destinationRef?.name ?? undefined,
+      };
+    })
+    .filter((item) => Boolean(item.title) && Boolean(item.description));
 
   const detail: PlanDetail = {
     id: parsed.id,

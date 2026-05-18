@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Icon from "@/components/shared/atoms/Icon";
 
 type PaginationControlsProps = {
   page: number;
@@ -23,7 +24,8 @@ const PaginationControls: React.FC<PaginationControlsProps> = ({
   const currentPage = Math.min(Math.max(page, 1), totalPages);
 
   const start = totalItems === 0 ? 0 : (currentPage - 1) * pageSize + 1;
-  const end = totalItems === 0 ? 0 : Math.min(currentPage * pageSize, totalItems);
+  const end =
+    totalItems === 0 ? 0 : Math.min(currentPage * pageSize, totalItems);
 
   const pagesToShow = React.useMemo(() => {
     const maxButtons = 5;
@@ -39,7 +41,10 @@ const PaginationControls: React.FC<PaginationControlsProps> = ({
   return (
     <div className="mt-4 flex flex-col gap-3 rounded-xl border border-primary/10 bg-white px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
       <div className="flex items-center gap-3">
-        <label className="text-xs font-bold uppercase tracking-wider text-slate-500" htmlFor="page-size-select">
+        <label
+          className="text-xs font-bold uppercase tracking-wider text-slate-500"
+          htmlFor="page-size-select"
+        >
           Por página
         </label>
         <select
@@ -65,9 +70,11 @@ const PaginationControls: React.FC<PaginationControlsProps> = ({
           type="button"
           onClick={() => onPageChange(currentPage - 1)}
           disabled={currentPage <= 1}
-          className="h-9 rounded-lg border border-slate-200 px-3 text-sm font-bold text-slate-700 disabled:opacity-50"
+          aria-label="Pagina anterior"
+          title="Pagina anterior"
+          className="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 text-slate-700 disabled:opacity-50 cursor-pointer"
         >
-          Anterior
+          <Icon name="chevron_left" className="text-lg" />
         </button>
 
         {pagesToShow.map((item) => (
@@ -75,7 +82,7 @@ const PaginationControls: React.FC<PaginationControlsProps> = ({
             key={item}
             type="button"
             onClick={() => onPageChange(item)}
-            className={`h-9 min-w-9 rounded-lg px-3 text-sm font-bold ${
+            className={`h-9 min-w-9 rounded-lg px-3 text-sm font-bold cursor-pointer ${
               item === currentPage
                 ? "bg-primary text-white"
                 : "border border-slate-200 text-slate-700"
@@ -89,9 +96,11 @@ const PaginationControls: React.FC<PaginationControlsProps> = ({
           type="button"
           onClick={() => onPageChange(currentPage + 1)}
           disabled={currentPage >= totalPages}
-          className="h-9 rounded-lg border border-slate-200 px-3 text-sm font-bold text-slate-700 disabled:opacity-50"
+          aria-label="Pagina siguiente"
+          title="Pagina siguiente"
+          className="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 text-slate-700 disabled:opacity-50 cursor-pointer"
         >
-          Siguiente
+          <Icon name="chevron_right" className="text-lg" />
         </button>
       </div>
     </div>

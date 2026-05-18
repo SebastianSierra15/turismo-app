@@ -64,11 +64,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     localStorage.setItem("token", newToken);
     localStorage.setItem("user", JSON.stringify(userData));
     const role = normalizeRole(userData?.rol);
-    if (role === "admin") {
-      router.push("/admin");
-      return;
-    }
-    if (role === "operador") {
+    if (role === "admin" || role === "operador") {
       router.push("/panel");
       return;
     }

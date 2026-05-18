@@ -4,11 +4,10 @@ import Icon from "@/components/shared/atoms/Icon";
 interface EditProfileModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSave: (data: { name: string; location: string; avatar: string; bio: string }) => Promise<void>;
+  onSave: (data: { name: string; location: string; bio: string }) => Promise<void>;
   initialData: {
     name: string;
     location: string;
-    avatar: string;
     bio?: string;
   };
 }
@@ -22,7 +21,6 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
   const [formData, setFormData] = useState({
     name: "",
     location: "",
-    avatar: "",
     bio: "",
   });
   const [loading, setLoading] = useState(false);
@@ -33,8 +31,7 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
       setFormData({
         name: initialData.name || "",
         location: initialData.location || "",
-        avatar: initialData.avatar || "",
-        bio: typeof initialData.bio === 'string' ? initialData.bio : "Estudiante de Ingeniería de Sistemas apasionada por el turismo amazónico.",
+        bio: initialData.bio || "",
       });
       setError("");
     }
@@ -71,8 +68,9 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
         <div className="flex justify-between items-center p-4 border-b border-gray-100">
           <h2 className="text-xl font-bold text-slate-800">Editar Perfil</h2>
           <button
+            type="button"
             onClick={onClose}
-            className="p-1 rounded-full hover:bg-gray-100 transition-colors text-gray-500"
+            className="p-1 rounded-full hover:bg-gray-100 transition-colors text-gray-500 cursor-pointer"
           >
             <Icon name="close" />
           </button>
@@ -110,26 +108,13 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
           </div>
 
           <div className="space-y-1">
-            <label className="text-sm font-medium text-slate-700">URL del Avatar</label>
-            <input
-              type="url"
-              name="avatar"
-              value={formData.avatar}
-              onChange={handleChange}
-              required
-              className="w-full px-4 py-2 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all font-sans"
-              placeholder="https://ejemplo.com/foto.jpg"
-            />
-          </div>
-
-          <div className="space-y-1">
             <label className="text-sm font-medium text-slate-700">Biografía</label>
             <textarea
               name="bio"
               value={formData.bio}
               onChange={handleChange}
-              required
               rows={3}
+              placeholder="Cuenta brevemente que tipo de experiencias te interesan."
               className="w-full px-4 py-2 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all font-sans resize-none"
             />
           </div>
@@ -138,14 +123,14 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
             <button
               type="button"
               onClick={onClose}
-              className="px-5 py-2.5 rounded-full font-medium text-slate-600 hover:bg-gray-100 transition-colors"
+              className="px-5 py-2.5 rounded-full font-medium text-slate-600 hover:bg-gray-100 transition-colors cursor-pointer"
             >
               Cancelar
             </button>
             <button
               type="submit"
               disabled={loading}
-              className="px-5 py-2.5 rounded-full font-medium bg-primary text-white hover:bg-primary-dark transition-colors disabled:opacity-50 flex items-center gap-2"
+              className="px-5 py-2.5 rounded-full font-medium bg-primary text-white hover:bg-primary-dark transition-colors disabled:opacity-50 flex items-center gap-2 cursor-pointer disabled:cursor-not-allowed"
             >
               {loading && <Icon name="sync" className="animate-spin text-sm" />}
               Guardar

@@ -26,11 +26,11 @@ const ReservationDetailHeader: React.FC<ReservationDetailHeaderProps> = ({
           />
           Volver a Mis Reservas
         </Link>
-        <div className="flex items-center gap-4">
-          <h1 className="text-3xl font-black tracking-tight text-slate-900">
+        <div className="flex max-w-full flex-col items-start gap-2 sm:flex-row sm:items-center sm:gap-4">
+          <h1 className="max-w-full break-all text-2xl font-black tracking-tight text-slate-900 sm:text-3xl">
             {reservation.id}
           </h1>
-          <span className="px-3 py-1 bg-primary/10 text-primary text-xs font-bold uppercase tracking-widest rounded-full border border-primary/20">
+          <span className="max-w-full rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs font-bold uppercase tracking-widest text-primary">
             {reservation.statusLabel}
           </span>
         </div>

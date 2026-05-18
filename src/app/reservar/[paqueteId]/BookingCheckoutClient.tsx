@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import Navbar from "@/components/shared/organisms/Navbar";
 import Footer from "@/components/shared/organisms/Footer";
 import { useAuth } from "@/context/AuthContext";
+import { parseApiError } from "@/lib/api";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
 
@@ -52,8 +53,7 @@ const BookingCheckoutClient: React.FC<BookingCheckoutClientProps> = ({
       });
 
       if (!response.ok) {
-        const data = await response.json().catch(() => ({}));
-        throw new Error(data?.detail ?? "No se pudo crear la reserva.");
+        throw await parseApiError(response, "No se pudo crear la reserva.");
       }
 
       const data = await response.json();

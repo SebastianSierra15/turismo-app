@@ -29,21 +29,21 @@ const LoginTemplate: React.FC = () => {
 
         <div className="mt-auto flex flex-wrap justify-center gap-x-6 gap-y-2 text-xs font-medium text-slate-500 pt-10">
           <Link
-            href="#"
+            href="/politica-de-privacidad"
             className="hover:text-primary"
             title="Política de privacidad"
           >
             Política de privacidad
           </Link>
           <Link
-            href="#"
+            href="/terminos-del-servicio"
             className="hover:text-primary"
             title="Términos del servicio"
           >
             Términos del servicio
           </Link>
           <Link
-            href="#"
+            href="/centro-de-ayuda"
             className="hover:text-primary"
             title="Centro de ayuda"
           >

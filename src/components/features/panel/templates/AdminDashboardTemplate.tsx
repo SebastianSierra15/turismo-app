@@ -88,7 +88,7 @@ const AdminDashboardTemplate: React.FC = () => {
       <section className="mt-6 overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-slate-200">
         <div className="flex items-center justify-between border-b border-slate-100 p-5">
           <h2 className="text-lg font-black text-slate-950">Trazabilidad reciente</h2>
-          <Link href="/admin/reservas" className="text-sm font-bold text-primary" title="Ver trazabilidad completa">
+          <Link href="/panel/reservas" className="text-sm font-bold text-primary" title="Ver trazabilidad completa">
             Ver todas las reservas
           </Link>
         </div>
@@ -128,7 +128,7 @@ const AdminDashboardTemplate: React.FC = () => {
                   </td>
                   <td className="px-4 py-3 text-right">
                     <Link
-                      href={`/admin/reservas?reserva=${encodeURIComponent(row.id)}`}
+                      href={`/panel/reservas?reserva=${encodeURIComponent(row.id)}`}
                       className="text-xs font-bold text-primary hover:underline"
                       title="Abrir detalle"
                     >
@@ -146,4 +146,3 @@ const AdminDashboardTemplate: React.FC = () => {
 };
 
 export default AdminDashboardTemplate;
-

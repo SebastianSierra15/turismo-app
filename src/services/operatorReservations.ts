@@ -1,4 +1,4 @@
-import { buildApiUrl } from "@/lib/api";
+import { buildApiUrl, parseApiError } from "@/lib/api";
 import { OperatorReservationsSchema } from "@/schemas/operatorReservations";
 import { type OperatorReservationStatus, type OperatorReservations } from "@/types/operatorReservations";
 
@@ -29,16 +29,7 @@ export const getOperatorReservations = async (
   );
 
   if (!response.ok) {
-    let detail = "No se pudo cargar la lista operativa de reservas";
-    try {
-      const payload = await response.json();
-      if (payload && typeof payload.detail === "string" && payload.detail.trim()) {
-        detail = payload.detail;
-      }
-    } catch {
-      // noop
-    }
-    throw new Error(detail);
+    throw await parseApiError(response, "No se pudo cargar la lista operativa de reservas");
   }
 
   const data = await response.json();
@@ -63,15 +54,6 @@ export const updateOperatorReservationStatus = async (
   );
 
   if (!response.ok) {
-    let detail = "No se pudo actualizar el estado de la reserva";
-    try {
-      const payload = await response.json();
-      if (payload && typeof payload.detail === "string" && payload.detail.trim()) {
-        detail = payload.detail;
-      }
-    } catch {
-      // noop
-    }
-    throw new Error(detail);
+    throw await parseApiError(response, "No se pudo actualizar el estado de la reserva");
   }
 };

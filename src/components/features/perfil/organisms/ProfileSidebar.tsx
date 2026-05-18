@@ -6,12 +6,21 @@ import ProfileStatItem from "@/components/features/perfil/molecules/ProfileStatI
 import { type ProfileData } from "@/types/profile";
 import { useAuth } from "@/context/AuthContext";
 
+export type ProfileSection = "reservas" | "favoritos" | "seguridad";
+
 interface ProfileSidebarProps {
   profile: ProfileData;
+  activeSection: ProfileSection;
+  onSectionChange: (section: ProfileSection) => void;
   onEditProfile?: () => void;
 }
 
-const ProfileSidebar: React.FC<ProfileSidebarProps> = ({ profile, onEditProfile }) => {
+const ProfileSidebar: React.FC<ProfileSidebarProps> = ({
+  profile,
+  activeSection,
+  onSectionChange,
+  onEditProfile,
+}) => {
   const { logout, user } = useAuth();
 
   const initial = profile.name.charAt(0).toUpperCase();
@@ -43,11 +52,31 @@ const ProfileSidebar: React.FC<ProfileSidebarProps> = ({ profile, onEditProfile 
             <Icon name="location_on" className="text-xs" />
             {profile.location}
           </p>
+          {profile.bio && (
+            <p className="mt-3 text-sm leading-relaxed text-slate-500">
+              {profile.bio}
+            </p>
+          )}
         </div>
         <nav className="flex flex-col gap-2">
-          <ProfileNavItem icon="calendar_today" label="Mis Reservas" active />
-          <ProfileNavItem icon="favorite" label="Favoritos" />
-          <ProfileNavItem icon="security" label="Seguridad" />
+          <ProfileNavItem
+            icon="calendar_today"
+            label="Mis Reservas"
+            active={activeSection === "reservas"}
+            onClick={() => onSectionChange("reservas")}
+          />
+          <ProfileNavItem
+            icon="favorite"
+            label="Favoritos"
+            active={activeSection === "favoritos"}
+            onClick={() => onSectionChange("favoritos")}
+          />
+          <ProfileNavItem
+            icon="security"
+            label="Seguridad"
+            active={activeSection === "seguridad"}
+            onClick={() => onSectionChange("seguridad")}
+          />
           <ProfileNavItem icon="person_edit" label="Editar Perfil" onClick={onEditProfile} />
           <hr className="my-2 border-primary/10" />
           <button

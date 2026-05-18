@@ -3,23 +3,28 @@
 import React, { useEffect, useState, useCallback } from "react";
 import Navbar from "@/components/shared/organisms/Navbar";
 import Footer from "@/components/shared/organisms/Footer";
-import ProfileSidebar from "@/components/features/perfil/organisms/ProfileSidebar";
+import ProfileSidebar, {
+  type ProfileSection,
+} from "@/components/features/perfil/organisms/ProfileSidebar";
 import ProfileWelcome from "@/components/features/perfil/organisms/ProfileWelcome";
 import ProfileBookings from "@/components/features/perfil/organisms/ProfileBookings";
 import ProfileHistory from "@/components/features/perfil/organisms/ProfileHistory";
 import ProfileMapSection from "@/components/features/perfil/organisms/ProfileMapSection";
+import ProfileSecurity from "@/components/features/perfil/organisms/ProfileSecurity";
+import ProfileFavorites from "@/components/features/perfil/organisms/ProfileFavorites";
 import EditProfileModal from "@/components/features/perfil/organisms/EditProfileModal";
-import { getProfile, updateProfile } from "@/services/profile";
+import { changePassword, getProfile, updateProfile } from "@/services/profile";
 import { useAuth } from "@/context/AuthContext";
 import { type ProfileData } from "@/types/profile";
 import { useRouter } from "next/navigation";
 
 const ProfileTemplate = () => {
-  const { token, loading, logout } = useAuth();
+  const { token, loading, logout, user } = useAuth();
   const router = useRouter();
   const [profile, setProfile] = useState<ProfileData | null>(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [profileError, setProfileError] = useState("");
+  const [activeSection, setActiveSection] = useState<ProfileSection>("reservas");
 
   // Usamos useCallback para que la función sea estable y no dispare useEffect innecesariamente
   const fetchProfile = useCallback(async () => {
@@ -51,7 +56,7 @@ const ProfileTemplate = () => {
     }
   }, [token, loading, fetchProfile]);
 
-  const handleEditProfileSave = async (data: { name: string; location: string; avatar: string; bio: string }) => {
+  const handleEditProfileSave = async (data: { name: string; location: string; bio: string }) => {
     if (!token) return;
 
     try {
@@ -62,6 +67,14 @@ const ProfileTemplate = () => {
       console.error("Error al actualizar:", error);
       alert("Hubo un error al guardar los cambios.");
     }
+  };
+
+  const handleChangePassword = async (data: {
+    current_password: string;
+    new_password: string;
+  }) => {
+    if (!token) return;
+    await changePassword(token, data);
   };
 
   // CORRECCIÓN: Si está cargando el Auth o si aún no tenemos el perfil, mostramos el loading
@@ -107,10 +120,26 @@ const ProfileTemplate = () => {
         {/* Sidebar con info básica y botón de editar */}
         <ProfileSidebar
           profile={currentProfile}
+          activeSection={activeSection}
+          onSectionChange={setActiveSection}
           onEditProfile={() => setIsEditModalOpen(true)}
         />
 
         <div className="flex-1 space-y-8">
+          {activeSection === "seguridad" && (
+            <ProfileSecurity
+              email={typeof user?.email === "string" ? user.email : undefined}
+              role={typeof user?.rol === "string" ? user.rol : undefined}
+              onChangePassword={handleChangePassword}
+            />
+          )}
+
+          {activeSection === "favoritos" && token && (
+            <ProfileFavorites token={token} />
+          )}
+
+          {activeSection === "reservas" && (
+            <>
           {/* Bienvenida dinámica */}
           <ProfileWelcome
             name={currentProfile.name.split(" ")[0]}
@@ -128,6 +157,8 @@ const ProfileTemplate = () => {
             lat={currentProfile.map.lat}
             lng={currentProfile.map.lng}
           />
+            </>
+          )}
         </div>
       </main>
 
@@ -141,7 +172,6 @@ const ProfileTemplate = () => {
         initialData={{
           name: currentProfile.name,
           location: currentProfile.location,
-          avatar: currentProfile.avatar,
           bio: currentProfile.bio || "",
         }}
       />

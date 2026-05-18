@@ -1,5 +1,6 @@
 import { ReservationsSchema } from "@/schemas/reservations";
 import { type Reservations } from "@/types/reservations";
+import { parseApiError } from "@/lib/api";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
 
@@ -13,7 +14,7 @@ export const getReservations = async (token: string): Promise<Reservations> => {
   });
 
   if (!response.ok) {
-    throw new Error("No se pudo cargar la lista de reservas");
+    throw await parseApiError(response, "No se pudo cargar la lista de reservas");
   }
 
   const data = await response.json();
@@ -36,6 +37,6 @@ export const cancelReservation = async (
   );
 
   if (!response.ok) {
-    throw new Error("No se pudo cancelar la reserva");
+    throw await parseApiError(response, "No se pudo cancelar la reserva");
   }
 };

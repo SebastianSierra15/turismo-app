@@ -17,6 +17,7 @@ export const PaqueteDetalleServicioApiSchema = z.object({
 });
 
 export const PaqueteDetalleItinerarioApiSchema = z.object({
+  id: z.string().optional().nullable(),
   titulo: z.string().optional().nullable(),
   descripcion: z.string().optional().nullable(),
 });

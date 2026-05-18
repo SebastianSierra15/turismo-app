@@ -1,8 +1,9 @@
- "use client";
+"use client";
 
 /* eslint-disable @next/next/no-img-element */
 import React from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import Navbar from "@/components/shared/organisms/Navbar";
 import Footer from "@/components/shared/organisms/Footer";
 import Button from "@/components/shared/atoms/Button";
@@ -1070,21 +1071,6 @@ const panelLinks = [
   ["/notificaciones", "notifications", "Notificaciones"],
 ];
 
-const adminLinks = [
-  ["/admin", "dashboard", "Resumen"],
-  ["/admin/reservas", "event_available", "Reservas"],
-  ["#", "group", "Usuarios"],
-  ["#", "admin_panel_settings", "Roles"],
-  ["#", "business", "Agencias"],
-  ["#", "person_pin", "Prestadores"],
-  ["#", "diversity_3", "Comunidades"],
-  ["#", "inventory_2", "Paquetes"],
-  ["#", "payments", "Pagos"],
-  ["#", "account_tree", "Ontologia"],
-  ["/admin/blob", "image", "Imagenes"],
-  ["#", "bar_chart", "Reportes"],
-];
-
 export const PanelLayout = ({
   title,
   subtitle,
@@ -1098,14 +1084,28 @@ export const PanelLayout = ({
   admin?: boolean;
   children: React.ReactNode;
 }) => {
-  const links = admin ? adminLinks : panelLinks;
+  const links = panelLinks;
   const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
   const { logout } = useAuth();
+  const router = useRouter();
+  const [headerSearch, setHeaderSearch] = React.useState("");
 
   const closeSidebar = () => setIsSidebarOpen(false);
   const handleLogout = () => {
     closeSidebar();
     logout();
+  };
+  const handleHeaderSearch = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const q = headerSearch.trim();
+    const basePath = "/panel/reservas";
+    if (!q) {
+      router.push(basePath);
+      return;
+    }
+    const params = new URLSearchParams();
+    params.set("q", q);
+    router.push(`${basePath}?${params.toString()}`);
   };
 
   return (
@@ -1141,7 +1141,7 @@ export const PanelLayout = ({
         <button
           type="button"
           onClick={handleLogout}
-          className="flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-bold text-slate-500 hover:text-red-600"
+          className="flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-bold text-slate-500 hover:text-red-600 cursor-pointer"
         >
           <Icon name="logout" />
           Cerrar sesion
@@ -1160,7 +1160,10 @@ export const PanelLayout = ({
         }`}
       >
         <div className="flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-3 px-3 text-slate-950">
+          <Link
+            href="/"
+            className="flex items-center gap-3 px-3 text-slate-950"
+          >
             <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-white">
               <Icon name="forest" />
             </span>
@@ -1200,7 +1203,7 @@ export const PanelLayout = ({
         <button
           type="button"
           onClick={handleLogout}
-          className="mt-4 flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-bold text-slate-500 hover:bg-slate-50 hover:text-red-600"
+          className="mt-4 flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-bold text-slate-500 hover:bg-slate-50 hover:text-red-600 cursor-pointer"
         >
           <Icon name="logout" />
           Cerrar sesion
@@ -1226,19 +1229,29 @@ export const PanelLayout = ({
               </div>
             </div>
             <div className="flex items-center gap-3">
-              <div className="relative hidden sm:block">
+              <form
+                className="relative hidden md:block"
+                onSubmit={handleHeaderSearch}
+              >
                 <Icon
                   name="search"
                   className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-slate-400"
                 />
                 <input
                   className="w-64 rounded-xl border-0 bg-slate-50 py-2 pl-9 pr-4 text-sm ring-1 ring-slate-200 focus:ring-2 focus:ring-primary"
-                  placeholder="Buscar..."
+                  placeholder="Buscar reserva..."
+                  value={headerSearch}
+                  onChange={(event) => setHeaderSearch(event.target.value)}
+                  title={
+                    admin
+                      ? "Buscar en reservas globales"
+                      : "Buscar en reservas operativas"
+                  }
                 />
-              </div>
+              </form>
               <Link
                 href="/notificaciones"
-                className="rounded-full bg-slate-50 p-2 text-slate-500 ring-1 ring-slate-200"
+                className="hidden rounded-full bg-slate-50 p-2 text-slate-500 ring-1 ring-slate-200 md:inline-flex"
               >
                 <Icon name="notifications" />
               </Link>
@@ -1365,7 +1378,11 @@ const TableCard = ({
     <div className="flex items-center justify-between border-b border-slate-100 p-5">
       <h2 className="font-black text-slate-950">{title}</h2>
       {viewAllHref ? (
-        <Link href={viewAllHref} className="text-sm font-bold text-primary" title="Ver todas las reservas">
+        <Link
+          href={viewAllHref}
+          className="text-sm font-bold text-primary"
+          title="Ver todas las reservas"
+        >
           Ver todo
         </Link>
       ) : (
@@ -1383,7 +1400,9 @@ const TableCard = ({
                 {column}
               </th>
             ))}
-            {rowLinks ? <th className="px-5 py-3 font-black text-right">Accion</th> : null}
+            {rowLinks ? (
+              <th className="px-5 py-3 font-black text-right">Accion</th>
+            ) : null}
           </tr>
         </thead>
         <tbody className="divide-y divide-slate-100">
@@ -1785,13 +1804,13 @@ export const AboutFullTemplate = () => (
           </div>
           <div className="flex flex-col gap-3 sm:flex-row">
             <Link href="/planes">
-              <Button className="w-full rounded-xl normal-case tracking-normal sm:w-auto">
+              <Button className="w-full rounded-xl normal-case tracking-normal sm:w-auto cursor-pointer">
                 Explorar planes
               </Button>
             </Link>
             <Link href="/registro/agente">
               <button
-                className="w-full rounded-xl border border-white/20 px-5 py-3 text-sm font-bold text-white sm:w-auto"
+                className="w-full rounded-xl border border-white/20 px-5 py-3 text-sm font-bold text-white sm:w-auto cursor-pointer"
                 type="button"
               >
                 Ser aliado

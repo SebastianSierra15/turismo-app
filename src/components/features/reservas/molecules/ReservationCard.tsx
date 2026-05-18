@@ -43,7 +43,8 @@ const statusStyles = {
     icon: "bg-slate-100 text-slate-500",
     card: "bg-white/80 border-slate-200",
     total: "text-slate-700",
-    primaryButton: "border-2 border-slate-400 text-slate-700 hover:bg-slate-100",
+    primaryButton:
+      "border-2 border-slate-400 text-slate-700 hover:bg-slate-100",
     secondaryButton: "border-2 border-slate-200 text-slate-400",
   },
 } as const;
@@ -141,7 +142,7 @@ const ReservationCard: React.FC<ReservationCardProps> = ({
             {reservation.primaryAction.href ? (
               <Link
                 href={reservation.primaryAction.href}
-                className={`flex-1 sm:flex-none px-6 py-3 rounded-full text-sm font-bold transition-all text-center cursor-pointer ${styles.primaryButton}`}
+                className={`flex min-h-12 flex-1 items-center justify-center rounded-full px-6 py-3 text-center text-sm font-bold transition-all cursor-pointer sm:flex-none ${styles.primaryButton}`}
                 title={reservation.primaryAction.title}
               >
                 {reservation.primaryAction.label}
@@ -149,7 +150,7 @@ const ReservationCard: React.FC<ReservationCardProps> = ({
             ) : (
               <button
                 type="button"
-                className={`flex-1 sm:flex-none px-6 py-3 rounded-full text-sm font-bold transition-all cursor-pointer ${styles.primaryButton}`}
+                className={`flex min-h-12 flex-1 items-center justify-center rounded-full px-6 py-3 text-sm font-bold transition-all cursor-pointer sm:flex-none ${styles.primaryButton}`}
                 title={reservation.primaryAction.title}
               >
                 {reservation.primaryAction.label}
@@ -163,7 +164,11 @@ const ReservationCard: React.FC<ReservationCardProps> = ({
                 className={`px-3 pb-2 pt-2.5 rounded-full transition-colors cursor-pointer ${styles.secondaryButton}`}
                 title={reservation.secondaryAction.title}
               >
-                {submitting ? <span className="text-xs font-bold">...</span> : <Icon name={reservation.secondaryAction.icon} />}
+                {submitting ? (
+                  <span className="text-xs font-bold">...</span>
+                ) : (
+                  <Icon name={reservation.secondaryAction.icon} />
+                )}
               </button>
             ) : null}
           </div>

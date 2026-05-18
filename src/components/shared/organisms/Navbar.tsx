@@ -7,11 +7,16 @@ import Icon from "@/components/shared/atoms/Icon";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
-import { isAdminRole, isOperatorOrAdminRole } from "@/lib/roles";
+import { isOperatorOrAdminRole } from "@/lib/roles";
 
 const Navbar: React.FC = () => {
   const pathname = usePathname();
   const { user, isAuthenticated, logout, loading } = useAuth();
+  const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
+
+  React.useEffect(() => {
+    setMobileMenuOpen(false);
+  }, [pathname]);
 
   const isActive = (href: string) => {
     if (href === "/") return pathname === "/";
@@ -97,15 +102,6 @@ const Navbar: React.FC = () => {
                         Centro operativo
                       </Link>
                     )}
-                    {isAdminRole(user?.rol) && (
-                      <Link
-                        href="/admin"
-                        className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-primary"
-                      >
-                        <Icon name="admin_panel_settings" className="text-base" />
-                        Administración
-                      </Link>
-                    )}
                     <button
                       type="button"
                       onClick={logout}
@@ -134,11 +130,102 @@ const Navbar: React.FC = () => {
             <button
               className="md:hidden text-slate-900 p-2 rounded-full hover:bg-primary/10 transition-colors"
               type="button"
+              title={mobileMenuOpen ? "Cerrar menú" : "Abrir menú"}
+              aria-expanded={mobileMenuOpen}
+              aria-controls="mobile-nav-panel"
+              onClick={() => setMobileMenuOpen((prev) => !prev)}
             >
-              <Icon name="menu" />
+              <Icon name={mobileMenuOpen ? "close" : "menu"} />
             </button>
           </div>
         </div>
+      </div>
+      {mobileMenuOpen && (
+        <button
+          type="button"
+          aria-label="Cerrar menú móvil"
+          className="md:hidden fixed inset-0 top-16 z-40 bg-slate-900/35"
+          onClick={() => setMobileMenuOpen(false)}
+        />
+      )}
+      <div
+        id="mobile-nav-panel"
+        className={`md:hidden absolute left-0 right-0 top-16 z-50 border-b border-primary/10 bg-white shadow-lg transition-all duration-200 ${
+          mobileMenuOpen
+            ? "max-h-[80vh] opacity-100"
+            : "pointer-events-none max-h-0 overflow-hidden opacity-0"
+        }`}
+      >
+        <nav className="px-4 py-3">
+          <ul className="space-y-1">
+            {navItems.map((item) => {
+              const active = isActive(item.href);
+              return (
+                <li key={`mobile-${item.href}`}>
+                  <Link
+                    href={item.href}
+                    className={`block rounded-lg px-3 py-2 text-sm font-semibold ${
+                      active
+                        ? "bg-primary/10 text-primary"
+                        : "text-slate-700 hover:bg-slate-50"
+                    }`}
+                    title={item.title}
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              );
+            })}
+            {isAuthenticated && (
+              <>
+                <li className="pt-2">
+                  <div className="border-t border-slate-100" />
+                </li>
+                <li>
+                  <Link
+                    href="/perfil"
+                    className="block rounded-lg px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50"
+                    title="Ir a mi perfil"
+                  >
+                    Mi perfil
+                  </Link>
+                </li>
+                {isOperatorOrAdminRole(user?.rol) && (
+                  <li>
+                    <Link
+                      href="/panel"
+                      className="block rounded-lg px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50"
+                      title="Ir al centro operativo"
+                    >
+                      Centro operativo
+                    </Link>
+                  </li>
+                )}
+                <li>
+                  <button
+                    type="button"
+                    onClick={logout}
+                    className="w-full rounded-lg px-3 py-2 text-left text-sm font-semibold text-rose-600 hover:bg-rose-50"
+                    title="Cerrar sesión"
+                  >
+                    Cerrar sesión
+                  </button>
+                </li>
+              </>
+            )}
+            {!loading && !isAuthenticated && (
+              <li className="pt-2">
+                <Link
+                  href="/login"
+                  className="block rounded-lg bg-primary px-3 py-2 text-center text-sm font-bold text-white"
+                  title="Ir a iniciar sesión"
+                >
+                  Iniciar sesión
+                </Link>
+              </li>
+            )}
+          </ul>
+        </nav>
       </div>
     </header>
   );

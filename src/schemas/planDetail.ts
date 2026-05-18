@@ -11,6 +11,14 @@ export const PlanDestinationSchema = z.object({
   galleryImages: z.array(z.string().url()).optional(),
 });
 
+export const PlanItineraryStepSchema = z.object({
+  id: z.string().optional(),
+  stepNumber: z.number().int().positive(),
+  title: z.string(),
+  description: z.string(),
+  location: z.string().optional(),
+});
+
 export const PlanDetailSchema = z.object({
   id: z.string(),
   slug: z.string(),
@@ -30,5 +38,5 @@ export const PlanDetailSchema = z.object({
   activities: z.array(z.string()).optional(),
   includes: z.array(z.string()).optional(),
   excludes: z.array(z.string()).optional(),
-  itinerary: z.array(z.string()).optional(),
+  itinerary: z.array(PlanItineraryStepSchema).optional(),
 });

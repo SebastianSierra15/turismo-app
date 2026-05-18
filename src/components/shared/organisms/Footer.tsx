@@ -94,7 +94,7 @@ const Footer: React.FC = () => {
               <li>
                 <Link
                   className="hover:text-white transition-colors"
-                  href="#"
+                  href="/centro-de-ayuda"
                   title="Ir al centro de ayuda"
                 >
                   Centro de Ayuda
@@ -103,7 +103,7 @@ const Footer: React.FC = () => {
               <li>
                 <Link
                   className="hover:text-white transition-colors"
-                  href="#"
+                  href="/terminos-del-servicio"
                   title="Ver política de reservas"
                 >
                   Política de Reservas
@@ -136,14 +136,14 @@ const Footer: React.FC = () => {
           <div className="flex gap-6">
             <Link
               className="hover:text-white transition-colors"
-              href="#"
+              href="/politica-de-privacidad"
               title="Política de privacidad"
             >
               Política de Privacidad
             </Link>
             <Link
               className="hover:text-white transition-colors"
-              href="#"
+              href="/terminos-del-servicio"
               title="Términos de servicio"
             >
               Términos de Servicio

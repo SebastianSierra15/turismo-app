@@ -41,7 +41,6 @@ const LoginForm: React.FC = () => {
 
       // Guardar sesión
       login(data.access_token, data.user);
-
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Error al iniciar sesiÃ³n");
     } finally {
@@ -53,8 +52,12 @@ const LoginForm: React.FC = () => {
     <div className="w-full max-w-md space-y-8">
       <h1 className="sr-only">Iniciar sesión en Amaturis</h1>
       <div className="text-center lg:text-left">
-        <h2 className="text-3xl font-extrabold text-slate-900">Bienvenido de vuelta</h2>
-        <p className="mt-2 text-sm text-slate-600">Ingresa tus datos para acceder a tu panel</p>
+        <h2 className="text-3xl font-extrabold text-slate-900">
+          Bienvenido de vuelta
+        </h2>
+        <p className="mt-2 text-sm text-slate-600">
+          Ingresa tus datos para acceder a tu panel
+        </p>
       </div>
 
       <div className="mt-8 space-y-6">
@@ -65,7 +68,9 @@ const LoginForm: React.FC = () => {
             <div className="w-full border-t border-slate-300"></div>
           </div>
           <div className="relative flex justify-center text-sm">
-            <span className="bg-background-light px-2 text-slate-500">O continúa con tu correo</span>
+            <span className="bg-background-light px-2 text-slate-500">
+              O continúa con tu correo
+            </span>
           </div>
         </div>
 
@@ -84,7 +89,9 @@ const LoginForm: React.FC = () => {
             type="email"
             required
             value={email}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              setEmail(e.target.value)
+            }
           />
 
           <Input
@@ -94,7 +101,9 @@ const LoginForm: React.FC = () => {
             type={showPassword ? "text" : "password"}
             required
             value={password}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              setPassword(e.target.value)
+            }
             icon={
               <button
                 type="button"
@@ -113,11 +122,17 @@ const LoginForm: React.FC = () => {
                 type="checkbox"
                 className="h-4 w-4 rounded border-slate-300 text-primary focus:ring-primary cursor-pointer"
               />
-              <label htmlFor="remember-me" className="ml-2 block text-sm text-slate-700">
+              <label
+                htmlFor="remember-me"
+                className="ml-2 block text-sm text-slate-700"
+              >
                 Recordarme
               </label>
             </div>
-            <Link href="#" className="text-sm font-semibold text-primary hover:text-primary/80">
+            <Link
+              href="/olvide-contrasena"
+              className="text-sm font-semibold text-primary hover:text-primary/80"
+            >
               ¿Olvidaste tu contraseña?
             </Link>
           </div>
@@ -125,7 +140,7 @@ const LoginForm: React.FC = () => {
           <Button
             type="submit"
             variant="primary"
-            className="w-full py-3"
+            className="w-full py-3 cursor-pointer"
             disabled={isLoading}
           >
             {isLoading ? "Cargando..." : "Iniciar sesión en la aventura"}
@@ -134,7 +149,10 @@ const LoginForm: React.FC = () => {
 
         <p className="text-center text-sm text-slate-600">
           ¿Nuevo en la selva?{" "}
-          <Link href="/registro" className="font-bold text-primary hover:text-primary/80">
+          <Link
+            href="/registro"
+            className="font-bold text-primary hover:text-primary/80"
+          >
             Crea una cuenta
           </Link>
         </p>

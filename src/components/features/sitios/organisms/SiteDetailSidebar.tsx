@@ -1,4 +1,6 @@
-﻿import React from "react";
+"use client";
+
+import React from "react";
 import Icon from "@/components/shared/atoms/Icon";
 import Button from "@/components/shared/atoms/Button";
 import SiteDetailMapClient from "@/components/features/sitios/organisms/SiteDetailMapClient";
@@ -9,6 +11,15 @@ interface SiteDetailSidebarProps {
 }
 
 const SiteDetailSidebar: React.FC<SiteDetailSidebarProps> = ({ site }) => {
+  const handleRequestInformation = () => {
+    const draft = `Hola, quiero más información sobre ${site.name}. ¿Qué planes lo incluyen, disponibilidad, precios y recomendaciones para visitarlo?`;
+    window.dispatchEvent(
+      new CustomEvent("amaturis:chat-prefill", {
+        detail: { draft },
+      }),
+    );
+  };
+
   return (
     <aside className="lg:col-span-4 space-y-12">
       <div className="grid grid-cols-1 gap-4">
@@ -72,8 +83,10 @@ const SiteDetailSidebar: React.FC<SiteDetailSidebarProps> = ({ site }) => {
           garantizar la seguridad y conservación.
         </p>
         <Button
+          type="button"
           variant="outline"
-          className="w-full bg-white border-white text-primary hover:bg-primary/10 hover:text-white hover:border-transparent"
+          onClick={handleRequestInformation}
+          className="w-full cursor-pointer bg-white border-white text-primary hover:bg-primary/10 hover:text-white hover:border-white"
         >
           Solicitar información
         </Button>

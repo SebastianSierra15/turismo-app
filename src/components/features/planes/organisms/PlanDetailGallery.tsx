@@ -59,7 +59,7 @@ const PlanDetailGallery: React.FC<PlanDetailGalleryProps> = ({ images }) => {
         Galería de la expedición
       </h2>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        {images.map((item, index) => (
+        {images.map((item, index) =>
           item.href ? (
             <a
               key={`${item.image}-${item.label ?? item.alt}`}
@@ -109,8 +109,8 @@ const PlanDetailGallery: React.FC<PlanDetailGalleryProps> = ({ images }) => {
                 </div>
               )}
             </button>
-          )
-        ))}
+          ),
+        )}
       </div>
 
       {activeIndex !== null && (

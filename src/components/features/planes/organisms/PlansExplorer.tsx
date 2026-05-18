@@ -7,6 +7,13 @@ import PlansGridClient from "@/components/features/planes/organisms/PlansGridCli
 import PlansPagination from "@/components/features/planes/organisms/PlansPagination";
 import { type PlanCatalogItem } from "@/types/planCatalog";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
+import {
+  addFavoritePlan,
+  getFavoritePlans,
+  removeFavoritePlan,
+} from "@/services/profile";
+import { extractPlanSlug } from "@/utils/planId";
 
 const PAGE_SIZE = 12;
 const PRICE_STEP = 10000;
@@ -85,6 +92,7 @@ const parseSearchFiltersFromQuery = (
 const PlansExplorer: React.FC<PlansExplorerProps> = ({ initialPlans }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { token, loading: authLoading } = useAuth();
   const [plans, setPlans] = React.useState<PlanCatalogItem[]>(initialPlans);
   const [selectedDurations, setSelectedDurations] = React.useState<string[]>(
     [],
@@ -110,6 +118,39 @@ const PlansExplorer: React.FC<PlansExplorerProps> = ({ initialPlans }) => {
   React.useEffect(() => {
     setSearchFilters(urlSearchFilters);
   }, [urlSearchFilters]);
+
+  React.useEffect(() => {
+    setPlans(initialPlans);
+  }, [initialPlans]);
+
+  React.useEffect(() => {
+    if (authLoading || !token) {
+      return;
+    }
+
+    let isMounted = true;
+
+    getFavoritePlans(token)
+      .then((favorites) => {
+        if (!isMounted) return;
+        const favoriteSlugs = new Set(
+          favorites.map((plan) => extractPlanSlug(plan.id)),
+        );
+        setPlans((currentPlans) =>
+          currentPlans.map((plan) => ({
+            ...plan,
+            isFavorite: favoriteSlugs.has(extractPlanSlug(plan.id)),
+          })),
+        );
+      })
+      .catch((error) => {
+        console.error("Error cargando favoritos:", error);
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, [authLoading, initialPlans, token]);
 
   const priceStats = React.useMemo(() => {
     if (!plans.length) {
@@ -315,12 +356,35 @@ const PlansExplorer: React.FC<PlansExplorerProps> = ({ initialPlans }) => {
   const rangeStart = totalPlans === 0 ? 0 : (clampedPage - 1) * PAGE_SIZE + 1;
   const rangeEnd = Math.min(totalPlans, clampedPage * PAGE_SIZE);
 
-  const handleToggleFavorite = (id: string) => {
+  const handleToggleFavorite = async (id: string) => {
+    if (!token) {
+      router.push("/login");
+      return;
+    }
+
+    const selectedPlan = plans.find((plan) => plan.id === id);
+    const shouldFavorite = !selectedPlan?.isFavorite;
+
     setPlans((prevPlans) =>
       prevPlans.map((plan) =>
-        plan.id === id ? { ...plan, isFavorite: !plan.isFavorite } : plan,
+        plan.id === id ? { ...plan, isFavorite: shouldFavorite } : plan,
       ),
     );
+
+    try {
+      if (shouldFavorite) {
+        await addFavoritePlan(token, id);
+      } else {
+        await removeFavoritePlan(token, id);
+      }
+    } catch (error) {
+      console.error("Error actualizando favorito:", error);
+      setPlans((prevPlans) =>
+        prevPlans.map((plan) =>
+          plan.id === id ? { ...plan, isFavorite: !shouldFavorite } : plan,
+        ),
+      );
+    }
   };
 
   const handleToggleDuration = (key: string) => {

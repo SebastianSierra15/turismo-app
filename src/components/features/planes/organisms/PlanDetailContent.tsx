@@ -83,9 +83,10 @@ const PlanDetailContent: React.FC<PlanDetailContentProps> = ({ plan }) => {
   }));
 
   const includesFromServices = activityNames;
-  const includesFromText = plan.includes && plan.includes.length ? plan.includes : [];
+  const includesFromText =
+    plan.includes && plan.includes.length ? plan.includes : [];
   const includesMerged = Array.from(
-    new Set([...includesFromServices, ...includesFromText])
+    new Set([...includesFromServices, ...includesFromText]),
   );
   const includes = includesMerged.length
     ? includesMerged
@@ -95,7 +96,9 @@ const PlanDetailContent: React.FC<PlanDetailContentProps> = ({ plan }) => {
       ? plan.excludes
       : ["Sin información disponible"];
 
-  const itineraryItems = (plan.itinerary ?? []).filter(Boolean);
+  const itineraryItems = (plan.itinerary ?? []).filter(
+    (item) => Boolean(item?.title) || Boolean(item?.description),
+  );
   const destinationNames = (plan.destinations ?? [])
     .map((dest) => dest.name)
     .filter(Boolean);
@@ -139,17 +142,19 @@ const PlanDetailContent: React.FC<PlanDetailContentProps> = ({ plan }) => {
     plan.capacityMax && plan.capacityMax > 0 ? plan.capacityMax : 10;
   const maxTravelers = Math.max(rawMaxTravelers, 1);
   const [selectedTravelers, setSelectedTravelers] = React.useState<number | "">(
-    ""
+    "",
   );
   const [selectedDate, setSelectedDate] = React.useState("");
 
   const priceValue = plan.priceValue ?? 0;
-  const travelersCount = typeof selectedTravelers === "number" ? selectedTravelers : 0;
+  const travelersCount =
+    typeof selectedTravelers === "number" ? selectedTravelers : 0;
   const subtotal = priceValue * travelersCount;
   const serviceFee = Math.round(subtotal * 0.07);
   const total = subtotal + serviceFee;
   const travelerOptions = Array.from({ length: maxTravelers }, (_, i) => i + 1);
-  const canReserve = Boolean(selectedDate) && typeof selectedTravelers === "number";
+  const canReserve =
+    Boolean(selectedDate) && typeof selectedTravelers === "number";
 
   const handleReserve = () => {
     if (!canReserve) return;
@@ -157,7 +162,7 @@ const PlanDetailContent: React.FC<PlanDetailContentProps> = ({ plan }) => {
     const date = encodeURIComponent(selectedDate);
     const travelers = encodeURIComponent(String(selectedTravelers));
     router.push(
-      `/pasarela_pagos?paquete_id=${packageId}&fecha_viaje=${date}&cantidad_personas=${travelers}`
+      `/pasarela_pagos?paquete_id=${packageId}&fecha_viaje=${date}&cantidad_personas=${travelers}`,
     );
   };
 
@@ -169,9 +174,7 @@ const PlanDetailContent: React.FC<PlanDetailContentProps> = ({ plan }) => {
             <Icon name="info" className="text-primary" />
             Resumen de la experiencia
           </h2>
-          <p className="text-slate-600 leading-relaxed">
-            {plan.description}
-          </p>
+          <p className="text-slate-600 leading-relaxed">{plan.description}</p>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4 pt-4">
             {summaryItems.map((item) => (
               <div
@@ -194,42 +197,60 @@ const PlanDetailContent: React.FC<PlanDetailContentProps> = ({ plan }) => {
             Itinerario detallado
           </h2>
           {itineraryItems.length ? (
-            <div className="space-y-4">
-              {itineraryItems.map((item, index) => (
-                <div
-                  key={`${item}-${index}`}
-                  className="p-5 rounded-xl bg-white border border-slate-200 shadow-sm"
-                >
-                  <div className="flex items-start gap-3">
-                    <div className="mt-1 text-primary">
-                      <Icon name="route" />
+            <div className="space-y-8 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-slate-300 before:to-transparent">
+              {itineraryItems.map((item, index) => {
+                const isOddStep = index % 2 === 0;
+
+                const card = (
+                  <div className="p-6 rounded-xl bg-white shadow-sm border border-slate-200">
+                    <div className="flex items-center justify-between space-x-2 mb-2">
+                      <div className="font-bold text-primary">
+                        Día {item.stepNumber}: {item.title}
+                      </div>
+                      <time className="text-xs font-bold text-slate-500 uppercase">
+                        {item.location ??
+                          destinationNames[
+                            index % Math.max(destinationNames.length, 1)
+                          ] ??
+                          "Caquetá"}
+                      </time>
                     </div>
-                    <p className="text-slate-600 text-sm">{item}</p>
+                    <div className="text-slate-600 text-sm leading-relaxed">
+                      {item.description}
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+
+                return (
+                  <div key={item.id ?? `step-${item.stepNumber}-${index}`}>
+                    <div className="flex items-center gap-6 md:hidden">
+                      <div className="flex items-center justify-center w-10 h-10 rounded-full border border-white bg-primary text-white shadow shrink-0">
+                        <span className="text-sm font-bold">
+                          {String(item.stepNumber).padStart(2, "0")}
+                        </span>
+                      </div>
+                      <div className="w-[calc(100%-4rem)]">{card}</div>
+                    </div>
+
+                    <div className="hidden md:grid md:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] md:items-center md:gap-6">
+                      {isOddStep ? <div /> : <div className="justify-self-end w-[92%]">{card}</div>}
+
+                      <div className="relative z-10 flex items-center justify-center w-10 h-10 rounded-full border border-white bg-primary text-white shadow shrink-0">
+                        <span className="text-sm font-bold">
+                          {String(item.stepNumber).padStart(2, "0")}
+                        </span>
+                      </div>
+
+                      {isOddStep ? <div className="justify-self-start w-[92%]">{card}</div> : <div />}
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           ) : (
             <p className="text-sm text-slate-500">
               Aún no hay itinerario registrado para este plan.
             </p>
-          )}
-          {destinationNames.length > 0 && (
-            <div className="pt-4">
-              <p className="text-xs uppercase tracking-wider text-slate-400 font-semibold mb-3">
-                Destinos incluidos
-              </p>
-              <div className="flex flex-wrap gap-2">
-                {destinationNames.map((name) => (
-                  <span
-                    key={name}
-                    className="px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-semibold"
-                  >
-                    {name}
-                  </span>
-                ))}
-              </div>
-            </div>
           )}
         </section>
 
@@ -356,7 +377,7 @@ const PlanDetailContent: React.FC<PlanDetailContentProps> = ({ plan }) => {
                     value={selectedTravelers}
                     onChange={(event) =>
                       setSelectedTravelers(
-                        event.target.value ? Number(event.target.value) : ""
+                        event.target.value ? Number(event.target.value) : "",
                       )
                     }
                   >
@@ -373,7 +394,8 @@ const PlanDetailContent: React.FC<PlanDetailContentProps> = ({ plan }) => {
             <div className="pt-4 border-t border-slate-100 space-y-3 text-sm">
               <div className="flex justify-between text-slate-500">
                 <span>
-                  {travelersCount} {travelersCount === 1 ? "Adulto" : "Adultos"} x {formatCurrency(priceValue)}
+                  {travelersCount} {travelersCount === 1 ? "Adulto" : "Adultos"}{" "}
+                  x {formatCurrency(priceValue)}
                 </span>
                 <span className="font-bold text-slate-900">
                   {formatCurrency(subtotal)}

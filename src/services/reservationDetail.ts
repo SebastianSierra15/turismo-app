@@ -1,5 +1,6 @@
 import { ReservationDetailSchema } from "@/schemas/reservationDetail";
 import { type ReservationDetail } from "@/types/reservationDetail";
+import { parseApiError } from "@/lib/api";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
 
@@ -19,7 +20,7 @@ export const getReservationDetail = async (
   );
 
   if (!response.ok) {
-    throw new Error("No se pudo cargar el detalle de la reserva");
+    throw await parseApiError(response, "No se pudo cargar el detalle de la reserva");
   }
 
   const data = await response.json();

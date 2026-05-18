@@ -111,7 +111,10 @@ const RegisterForm: React.FC = () => {
         <form onSubmit={handleRegister} className="space-y-5" noValidate>
           {error && (
             <div className="flex items-start gap-2.5 bg-red-50 text-red-600 p-3.5 rounded-lg text-sm font-medium border border-red-100">
-              <Icon name="error_outline" className="text-base mt-0.5 shrink-0" />
+              <Icon
+                name="error_outline"
+                className="text-base mt-0.5 shrink-0"
+              />
               <span>{error}</span>
             </div>
           )}
@@ -172,9 +175,7 @@ const RegisterForm: React.FC = () => {
           />
 
           {/* Indicador de fortaleza de contraseña */}
-          {password.length > 0 && (
-            <PasswordStrength password={password} />
-          )}
+          {password.length > 0 && <PasswordStrength password={password} />}
 
           <Input
             id="confirm_password"
@@ -204,11 +205,17 @@ const RegisterForm: React.FC = () => {
           {/* Términos */}
           <p className="text-xs text-slate-500 leading-relaxed">
             Al crear una cuenta aceptas nuestros{" "}
-            <Link href="#" className="font-semibold text-primary hover:text-primary/80">
+            <Link
+              href="/terminos-del-servicio"
+              className="font-semibold text-primary hover:text-primary/80"
+            >
               Términos del servicio
             </Link>{" "}
             y la{" "}
-            <Link href="#" className="font-semibold text-primary hover:text-primary/80">
+            <Link
+              href="/politica-de-privacidad"
+              className="font-semibold text-primary hover:text-primary/80"
+            >
               Política de privacidad
             </Link>
             .
@@ -217,12 +224,15 @@ const RegisterForm: React.FC = () => {
           <Button
             type="submit"
             variant="primary"
-            className="w-full py-3"
+            className="w-full py-3 cursor-pointer"
             disabled={isLoading}
           >
             {isLoading ? (
               <span className="flex items-center justify-center gap-2">
-                <Icon name="progress_activity" className="text-base animate-spin" />
+                <Icon
+                  name="progress_activity"
+                  className="text-base animate-spin"
+                />
                 Creando tu cuenta...
               </span>
             ) : (
@@ -247,7 +257,9 @@ const RegisterForm: React.FC = () => {
 
 // --- Sub-componente: indicador de fortaleza ---
 const PasswordStrength: React.FC<{ password: string }> = ({ password }) => {
-  const getStrength = (pw: string): { level: number; label: string; color: string } => {
+  const getStrength = (
+    pw: string,
+  ): { level: number; label: string; color: string } => {
     let score = 0;
     if (pw.length >= 8) score++;
     if (/[A-Z]/.test(pw)) score++;
@@ -255,7 +267,8 @@ const PasswordStrength: React.FC<{ password: string }> = ({ password }) => {
     if (/[^A-Za-z0-9]/.test(pw)) score++;
 
     if (score <= 1) return { level: 1, label: "Débil", color: "bg-red-400" };
-    if (score === 2) return { level: 2, label: "Regular", color: "bg-yellow-400" };
+    if (score === 2)
+      return { level: 2, label: "Regular", color: "bg-yellow-400" };
     if (score === 3) return { level: 3, label: "Buena", color: "bg-blue-400" };
     return { level: 4, label: "Fuerte", color: "bg-green-500" };
   };
@@ -268,22 +281,24 @@ const PasswordStrength: React.FC<{ password: string }> = ({ password }) => {
         {[1, 2, 3, 4].map((i) => (
           <div
             key={i}
-            className={`h-1 flex-1 rounded-full transition-all duration-300 ${i <= strength.level ? strength.color : "bg-slate-200"
-              }`}
+            className={`h-1 flex-1 rounded-full transition-all duration-300 ${
+              i <= strength.level ? strength.color : "bg-slate-200"
+            }`}
           />
         ))}
       </div>
       <p className="text-xs text-slate-500">
         Fortaleza:{" "}
         <span
-          className={`font-semibold ${strength.level <= 1
-            ? "text-red-500"
-            : strength.level === 2
-              ? "text-yellow-500"
-              : strength.level === 3
-                ? "text-blue-500"
-                : "text-green-600"
-            }`}
+          className={`font-semibold ${
+            strength.level <= 1
+              ? "text-red-500"
+              : strength.level === 2
+                ? "text-yellow-500"
+                : strength.level === 3
+                  ? "text-blue-500"
+                  : "text-green-600"
+          }`}
         >
           {strength.label}
         </span>
