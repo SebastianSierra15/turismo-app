@@ -7,6 +7,8 @@ import Navbar from "@/components/shared/organisms/Navbar";
 import Footer from "@/components/shared/organisms/Footer";
 import { useAuth } from "@/context/AuthContext";
 import { parseApiError } from "@/lib/api";
+import { getReservationAvailability } from "@/services/reservationAvailability";
+import { getTomorrowDateInputValue } from "@/utils/dateInput";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
 
@@ -23,16 +25,75 @@ const BookingCheckoutClient: React.FC<BookingCheckoutClientProps> = ({
   const [travelers, setTravelers] = React.useState(1);
   const [submitting, setSubmitting] = React.useState(false);
   const [error, setError] = React.useState("");
+  const [availableDates, setAvailableDates] = React.useState<string[]>([]);
+  const [availabilityLoading, setAvailabilityLoading] = React.useState(false);
+  const [availabilityError, setAvailabilityError] = React.useState("");
+  const [dateFieldError, setDateFieldError] = React.useState("");
+  const minimumDate = React.useMemo(() => getTomorrowDateInputValue(), []);
 
   React.useEffect(() => {
     if (!loading && !token) router.push("/login");
   }, [loading, router, token]);
+
+  React.useEffect(() => {
+    let isCancelled = false;
+    setAvailabilityLoading(true);
+    setAvailabilityError("");
+    getReservationAvailability(paqueteId, { dias: 120, viajeros: travelers })
+      .then((data) => {
+        if (isCancelled) return;
+        const dates = data.fechas_disponibles.filter(
+          (value) => value >= minimumDate,
+        );
+        setAvailableDates(dates);
+        setDateFieldError("");
+        setDate((prev) => (prev && dates.includes(prev) ? prev : ""));
+      })
+      .catch((err) => {
+        if (isCancelled) return;
+        setAvailableDates([]);
+        setDate("");
+        setAvailabilityError(
+          err instanceof Error
+            ? err.message
+            : "No se pudo consultar la disponibilidad.",
+        );
+        setDateFieldError("");
+      })
+      .finally(() => {
+        if (isCancelled) return;
+        setAvailabilityLoading(false);
+      });
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [minimumDate, paqueteId, travelers]);
+
+  const handleDateChange = (value: string) => {
+    if (!value) {
+      setDate("");
+      setDateFieldError("");
+      return;
+    }
+    if (!availableDates.includes(value)) {
+      setDate("");
+      setDateFieldError("Esa fecha no tiene cupo disponible.");
+      return;
+    }
+    setDate(value);
+    setDateFieldError("");
+  };
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     if (!token) return;
     if (!date) {
       setError("Selecciona una fecha de viaje.");
+      return;
+    }
+    if (!availableDates.includes(date)) {
+      setError("La fecha seleccionada no tiene cupo disponible.");
       return;
     }
 
@@ -85,9 +146,19 @@ const BookingCheckoutClient: React.FC<BookingCheckoutClientProps> = ({
                 <input
                   type="date"
                   value={date}
-                  onChange={(event) => setDate(event.target.value)}
+                  min={minimumDate}
+                  onChange={(event) => handleDateChange(event.target.value)}
                   className="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm"
+                  disabled={availabilityLoading || availableDates.length === 0}
                 />
+                <p className="mt-2 text-xs font-semibold text-slate-500">
+                  Solo se permite reservar desde {minimumDate} en adelante.
+                </p>
+                {dateFieldError ? (
+                  <p className="mt-2 text-xs font-semibold text-rose-600">
+                    {dateFieldError}
+                  </p>
+                ) : null}
               </div>
               <div>
                 <label className="mb-2 block text-xs font-bold uppercase tracking-wider text-slate-500">
@@ -108,6 +179,11 @@ const BookingCheckoutClient: React.FC<BookingCheckoutClientProps> = ({
               {error ? (
                 <div className="rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm font-semibold text-rose-700">
                   {error}
+                </div>
+              ) : null}
+              {availabilityError ? (
+                <div className="rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm font-semibold text-rose-700">
+                  {availabilityError}
                 </div>
               ) : null}
               <div className="flex flex-wrap gap-3">

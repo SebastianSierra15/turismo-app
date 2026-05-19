@@ -13,6 +13,10 @@ import {
   getFavoritePlans,
   removeFavoritePlan,
 } from "@/services/profile";
+import {
+  getTomorrowDateInputValue,
+  isBookableDateRange,
+} from "@/utils/dateInput";
 import { extractPlanSlug } from "@/utils/planId";
 
 const PAGE_SIZE = 12;
@@ -28,7 +32,12 @@ const parseDurationDays = (duration: string) => {
   return match ? Number(match[0]) : 0;
 };
 
-const normalizeToken = (value: string) => value.trim().toLowerCase();
+const normalizeToken = (value: string) =>
+  value
+    .trim()
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/\p{Diacritic}/gu, "");
 
 const roundDown = (value: number, step: number) =>
   Math.floor(value / step) * step;
@@ -66,12 +75,11 @@ const parseSearchFiltersFromQuery = (
   }
 
   const travelers = Number(travelersRaw);
-  const datesValid =
-    Boolean(startDate) &&
-    Boolean(endDate) &&
-    !Number.isNaN(new Date(startDate).getTime()) &&
-    !Number.isNaN(new Date(endDate).getTime()) &&
-    startDate <= endDate;
+  const datesValid = isBookableDateRange(
+    startDate,
+    endDate,
+    getTomorrowDateInputValue(),
+  );
 
   if (!destination || !datesValid || !Number.isInteger(travelers)) {
     return null;
@@ -192,9 +200,10 @@ const PlansExplorer: React.FC<PlansExplorerProps> = ({ initialPlans }) => {
   const destinationOptions = React.useMemo(() => {
     const counts = new Map<string, number>();
     plans.forEach((plan) => {
-      const targets = plan.destinations?.length
-        ? plan.destinations
-        : [plan.location];
+      const targets = new Set([
+        ...(plan.destinations?.length ? plan.destinations : [plan.location]),
+        ...(plan.municipalities ?? []),
+      ]);
       targets.forEach((item) => {
         const cleaned = item.trim();
         if (!cleaned) return;
@@ -272,9 +281,13 @@ const PlansExplorer: React.FC<PlansExplorerProps> = ({ initialPlans }) => {
       if (searchFilters) {
         const destinationToken = normalizeToken(searchFilters.destination);
         const planDestinations = (plan.destinations ?? []).map(normalizeToken);
+        const planMunicipalities = (plan.municipalities ?? []).map(
+          normalizeToken,
+        );
         const locationToken = normalizeToken(plan.location);
         const matchesDestination =
           planDestinations.includes(destinationToken) ||
+          planMunicipalities.includes(destinationToken) ||
           locationToken === destinationToken;
         if (!matchesDestination) {
           return false;

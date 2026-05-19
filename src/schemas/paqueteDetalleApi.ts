@@ -12,6 +12,7 @@ export const PaqueteDetalleDestinoApiSchema = z.object({
 });
 
 export const PaqueteDetalleServicioApiSchema = z.object({
+  id: z.string().optional().nullable(),
   nombre: z.string(),
   tipo: z.string().optional().nullable(),
 });
@@ -36,6 +37,7 @@ export const PaqueteDetalleApiSchema = z.object({
   agencia_nombre: z.string().optional().nullable(),
   url_imagen: z.string().url().optional().nullable(),
   galeria_imagenes: z.string().optional().nullable(),
+  estado_publicacion: z.string().optional().nullable(),
   destinos: z.array(PaqueteDetalleDestinoApiSchema).optional().nullable(),
   servicios: z.array(PaqueteDetalleServicioApiSchema).optional().nullable(),
   itinerarios: z.array(PaqueteDetalleItinerarioApiSchema).optional().nullable(),

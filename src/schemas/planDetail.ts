@@ -31,6 +31,7 @@ export const PlanDetailSchema = z.object({
   capacityMax: z.number().optional().nullable(),
   agencyUri: z.string().optional(),
   agencyName: z.string().optional(),
+  publicationStatus: z.string().optional().nullable(),
   heroImage: z.string().url().optional(),
   galleryImages: z.array(z.string().url()).optional(),
   categories: z.array(z.string()).optional(),

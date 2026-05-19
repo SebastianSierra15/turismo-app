@@ -1,6 +1,5 @@
-﻿import type { Metadata } from "next";
-import { notFound } from "next/navigation";
-import PlanDetailTemplate from "@/components/features/planes/templates/PlanDetailTemplate";
+import type { Metadata } from "next";
+import PlanDetailPageClient from "@/app/planes/[id]/PlanDetailPageClient";
 import { getPlanDetail } from "@/services/planDetail";
 
 const DEFAULT_IMAGE =
@@ -10,16 +9,16 @@ type PlanDetailPageProps = {
   params: Promise<{ id: string }>;
 };
 
-export const generateMetadata = async (
-  { params }: PlanDetailPageProps
-): Promise<Metadata> => {
+export const generateMetadata = async ({
+  params,
+}: PlanDetailPageProps): Promise<Metadata> => {
   const { id } = await params;
   const plan = await getPlanDetail(id);
 
   if (!plan) {
     return {
       title: "Amaturis | Plan no encontrado",
-      description: "El plan turístico solicitado no está disponible.",
+      description: "El plan turistico solicitado no esta disponible.",
     };
   }
 
@@ -52,10 +51,5 @@ export const generateMetadata = async (
 
 export default async function PlanDetailPage({ params }: PlanDetailPageProps) {
   const { id } = await params;
-  const plan = await getPlanDetail(id);
-  if (!plan) {
-    notFound();
-  }
-
-  return <PlanDetailTemplate plan={plan} />;
+  return <PlanDetailPageClient id={id} />;
 }

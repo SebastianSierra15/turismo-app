@@ -14,6 +14,9 @@ export const PaqueteApiSchema = z.object({
   popularidad: z.number().optional().nullable(),
   url_imagen: z.string().url().optional().nullable(),
   galeria_imagenes: z.string().optional().nullable(),
+  agencia_uri: z.string().optional().nullable(),
+  agencia_nombre: z.string().optional().nullable(),
+  estado_publicacion: z.string().optional().nullable(),
 });
 
 export const PaquetesApiSchema = z.array(PaqueteApiSchema);

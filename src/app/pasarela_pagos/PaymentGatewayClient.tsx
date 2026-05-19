@@ -9,6 +9,8 @@ import Button from "@/components/shared/atoms/Button";
 import Icon from "@/components/shared/atoms/Icon";
 import { useAuth } from "@/context/AuthContext";
 import { parseApiError } from "@/lib/api";
+import { getReservationAvailability } from "@/services/reservationAvailability";
+import { getTomorrowDateInputValue } from "@/utils/dateInput";
 
 type Props = {
   paqueteId: string;
@@ -19,8 +21,13 @@ type Props = {
 const image =
   "https://1qnmejprcdqaudae.public.blob.vercel-storage.com/amaturis/semillas/paisaje-amazonico-caqueta.jpg";
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
+const ISO_DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 
-const PaymentGatewayClient: React.FC<Props> = ({ paqueteId, fechaViaje, viajeros }) => {
+const PaymentGatewayClient: React.FC<Props> = ({
+  paqueteId,
+  fechaViaje,
+  viajeros,
+}) => {
   const router = useRouter();
   const { token, loading } = useAuth();
   const [cardNumber, setCardNumber] = React.useState("");
@@ -30,6 +37,9 @@ const PaymentGatewayClient: React.FC<Props> = ({ paqueteId, fechaViaje, viajeros
   const [document, setDocument] = React.useState("");
   const [isPaying, setIsPaying] = React.useState(false);
   const [error, setError] = React.useState("");
+  const [isDateAvailable, setIsDateAvailable] = React.useState(false);
+  const [availabilityLoading, setAvailabilityLoading] = React.useState(false);
+  const minimumDate = React.useMemo(() => getTomorrowDateInputValue(), []);
 
   const formattedCard = cardNumber
     .replace(/\D/g, "")
@@ -71,10 +81,46 @@ const PaymentGatewayClient: React.FC<Props> = ({ paqueteId, fechaViaje, viajeros
     }
   }, [loading, router, token]);
 
+  React.useEffect(() => {
+    let isCancelled = false;
+
+    if (!ISO_DATE_RE.test(fechaViaje) || fechaViaje < minimumDate) {
+      setIsDateAvailable(false);
+      return;
+    }
+
+    setAvailabilityLoading(true);
+    getReservationAvailability(paqueteId, { dias: 120, viajeros })
+      .then((data) => {
+        if (isCancelled) return;
+        setIsDateAvailable(data.fechas_disponibles.includes(fechaViaje));
+      })
+      .catch(() => {
+        if (isCancelled) return;
+        setIsDateAvailable(false);
+      })
+      .finally(() => {
+        if (isCancelled) return;
+        setAvailabilityLoading(false);
+      });
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [fechaViaje, minimumDate, paqueteId, viajeros]);
+
   const handlePay = async () => {
     if (!formValid) return;
     if (!token) {
       router.push("/login");
+      return;
+    }
+    if (!ISO_DATE_RE.test(fechaViaje) || fechaViaje < minimumDate) {
+      setError(`Solo puedes reservar desde ${minimumDate} en adelante.`);
+      return;
+    }
+    if (!isDateAvailable) {
+      setError("La fecha seleccionada no tiene cupo disponible.");
       return;
     }
 
@@ -102,8 +148,8 @@ const PaymentGatewayClient: React.FC<Props> = ({ paqueteId, fechaViaje, viajeros
       const reservationId = data?.reserva_id;
       router.push(
         `/reservas/confirmacion?reserva_id=${encodeURIComponent(
-          reservationId
-        )}`
+          reservationId,
+        )}`,
       );
     } catch (payError) {
       const message =
@@ -175,7 +221,9 @@ const PaymentGatewayClient: React.FC<Props> = ({ paqueteId, fechaViaje, viajeros
                   </span>
                   <input
                     value={cvv}
-                    onChange={(e) => setCvv(e.target.value.replace(/\D/g, "").slice(0, 4))}
+                    onChange={(e) =>
+                      setCvv(e.target.value.replace(/\D/g, "").slice(0, 4))
+                    }
                     placeholder="123"
                     inputMode="numeric"
                     required
@@ -198,12 +246,22 @@ const PaymentGatewayClient: React.FC<Props> = ({ paqueteId, fechaViaje, viajeros
               <Button
                 variant="primary"
                 onClick={handlePay}
-                disabled={!formValid || isPaying}
-                className="w-full rounded-xl py-4 normal-case tracking-normal"
+                disabled={
+                  !formValid ||
+                  isPaying ||
+                  !isDateAvailable ||
+                  availabilityLoading
+                }
+                className="w-full rounded-xl py-4 normal-case tracking-normal cursor-pointer"
               >
                 <Icon name="payments" />
                 {isPaying ? "Procesando pago..." : "Pagar y confirmar reserva"}
               </Button>
+              {!isDateAvailable ? (
+                <div className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm font-semibold text-amber-700">
+                  Esta fecha no esta disponible para el cupo solicitado.
+                </div>
+              ) : null}
               {error ? (
                 <div className="rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm font-semibold text-rose-700">
                   {error}
@@ -220,18 +278,24 @@ const PaymentGatewayClient: React.FC<Props> = ({ paqueteId, fechaViaje, viajeros
                   sizes="(max-width: 1024px) 100vw, 360px"
                 />
               </div>
-              <h2 className="mt-4 text-2xl font-black text-slate-950">Resumen</h2>
+              <h2 className="mt-4 text-2xl font-black text-slate-950">
+                Resumen
+              </h2>
               <p className="mt-1 text-sm text-slate-500">
                 {fechaViaje} · {viajeros} viajeros · {paqueteId}
               </p>
               <div className="mt-6 space-y-3 border-t border-slate-100 pt-4">
                 <div className="flex items-center justify-between text-sm text-slate-500">
                   <span>Subtotal</span>
-                  <span className="font-bold text-slate-800">{fmt(subtotal)}</span>
+                  <span className="font-bold text-slate-800">
+                    {fmt(subtotal)}
+                  </span>
                 </div>
                 <div className="flex items-center justify-between text-sm text-slate-500">
                   <span>Tarifa de servicio</span>
-                  <span className="font-bold text-slate-800">{fmt(serviceFee)}</span>
+                  <span className="font-bold text-slate-800">
+                    {fmt(serviceFee)}
+                  </span>
                 </div>
                 <div className="flex items-center justify-between text-lg font-black text-slate-950">
                   <span>Total a pagar</span>

@@ -40,7 +40,11 @@ const shortId = (value?: string | null) => {
   return hashIndex >= 0 ? value.slice(hashIndex + 1) : value;
 };
 
-const mapFromApi = (data: unknown, slug: string): PlanDetail => {
+export const mapPackageDetailToPlanDetail = (
+  data: unknown,
+  slugOrId: string,
+): PlanDetail => {
+  const slug = extractPlanSlug(slugOrId);
   const parsed = PaqueteDetalleApiSchema.parse(data);
   const categories = (parsed.destinos ?? [])
     .map((dest) => dest.categoria)
@@ -91,6 +95,7 @@ const mapFromApi = (data: unknown, slug: string): PlanDetail => {
     capacityMax: parsed.capacidad_max_personas ?? undefined,
     agencyUri: parsed.agencia_uri ?? undefined,
     agencyName: parsed.agencia_nombre ?? undefined,
+    publicationStatus: parsed.estado_publicacion ?? undefined,
     heroImage: parsed.url_imagen ?? undefined,
     galleryImages: splitImageList(parsed.galeria_imagenes),
     categories: uniqueCategories.length ? uniqueCategories : undefined,
@@ -135,6 +140,7 @@ const mapFromCatalog = (plan: PlanCatalogItem, slug: string): PlanDetail => {
     capacityMax: plan.capacityMax ?? undefined,
     agencyUri: undefined,
     agencyName: undefined,
+    publicationStatus: "publicado",
     heroImage: plan.image,
     galleryImages: [plan.image],
     categories: plan.categories?.length ? plan.categories : undefined,
@@ -153,7 +159,7 @@ export const getPlanDetail = async (slugOrId: string) => {
 
   try {
     const data = await fetchApiJson<unknown>(`/paquetes/${slug}`);
-    return mapFromApi(data, slug);
+    return mapPackageDetailToPlanDetail(data, slug);
   } catch (error) {
     try {
       const catalog = await getPlanCatalog();

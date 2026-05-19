@@ -502,7 +502,7 @@ export const PaymentGatewayTemplate = () => (
           </div>
 
           <Link href="/reservas/confirmacion" className="block">
-            <Button className="w-full rounded-xl py-4 normal-case tracking-normal">
+            <Button className="w-full rounded-xl py-4 normal-case tracking-normal cursor-pointer">
               <Icon name="payments" />
               Pagar y confirmar reserva
             </Button>
@@ -1066,9 +1066,6 @@ const panelLinks = [
   ["/panel", "dashboard", "Resumen"],
   ["/panel/reservas", "event_available", "Reservas"],
   ["/panel/paquetes", "inventory_2", "Paquetes"],
-  ["/panel/servicios", "room_service", "Servicios"],
-  ["/panel/comunidad", "diversity_3", "Comunidad"],
-  ["/notificaciones", "notifications", "Notificaciones"],
 ];
 
 export const PanelLayout = ({

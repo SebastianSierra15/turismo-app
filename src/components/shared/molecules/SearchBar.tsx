@@ -4,6 +4,10 @@ import React from "react";
 import Icon from "@/components/shared/atoms/Icon";
 import Button from "@/components/shared/atoms/Button";
 import { useRouter } from "next/navigation";
+import {
+  getTomorrowDateInputValue,
+  isBookableDateRange,
+} from "@/utils/dateInput";
 
 interface SearchFilters {
   destination: string;
@@ -21,7 +25,12 @@ interface SearchBarProps {
   resetSignal?: number;
 }
 
-const normalizeToken = (value: string) => value.trim().toLowerCase();
+const normalizeToken = (value: string) =>
+  value
+    .trim()
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/\p{Diacritic}/gu, "");
 
 const SearchBar: React.FC<SearchBarProps> = ({
   className = "",
@@ -33,6 +42,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
 }) => {
   const router = useRouter();
   const containerRef = React.useRef<HTMLDivElement>(null);
+  const datePickerRef = React.useRef<HTMLDivElement>(null);
   const [destinationInput, setDestinationInput] = React.useState("");
   const [selectedDestination, setSelectedDestination] = React.useState<
     string | null
@@ -44,6 +54,8 @@ const SearchBar: React.FC<SearchBarProps> = ({
   const [showSuggestions, setShowSuggestions] = React.useState(false);
   const [showCalendar, setShowCalendar] = React.useState(false);
   const [warning, setWarning] = React.useState("");
+  const minimumStartDate = React.useMemo(() => getTomorrowDateInputValue(), []);
+  const minimumEndDate = startDate || minimumStartDate;
   const defaultDestination = defaultFilters?.destination?.trim() ?? "";
   const defaultStartDate = defaultFilters?.startDate ?? "";
   const defaultEndDate = defaultFilters?.endDate ?? "";
@@ -71,11 +83,13 @@ const SearchBar: React.FC<SearchBarProps> = ({
 
   React.useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (
-        containerRef.current &&
-        !containerRef.current.contains(event.target as Node)
-      ) {
+      const target = event.target as Node;
+      if (containerRef.current && !containerRef.current.contains(target)) {
         setShowSuggestions(false);
+        setShowCalendar(false);
+        return;
+      }
+      if (datePickerRef.current && !datePickerRef.current.contains(target)) {
         setShowCalendar(false);
       }
     };
@@ -169,6 +183,30 @@ const SearchBar: React.FC<SearchBarProps> = ({
     setTravelers(String(clamped));
   };
 
+  const handleStartDateChange = (value: string) => {
+    setWarning("");
+    if (value && value < minimumStartDate) {
+      setStartDate("");
+      setEndDate("");
+      setWarning("La fecha inicial debe ser desde mañana en adelante.");
+      return;
+    }
+    setStartDate(value);
+    if (endDate && value && endDate < value) {
+      setEndDate("");
+    }
+  };
+
+  const handleEndDateChange = (value: string) => {
+    setWarning("");
+    if (value && value < minimumEndDate) {
+      setEndDate("");
+      setWarning("La fecha final no puede ser anterior a la inicial.");
+      return;
+    }
+    setEndDate(value);
+  };
+
   const handleSearch = () => {
     const destinationValue = selectedDestination ?? destinationInput.trim();
     if (!destinationValue || (requiresSelection && !selectedDestination)) {
@@ -179,8 +217,12 @@ const SearchBar: React.FC<SearchBarProps> = ({
       setWarning("Selecciona un rango de fechas para continuar.");
       return;
     }
-    if (new Date(startDate) > new Date(endDate)) {
-      setWarning("La fecha inicial no puede ser posterior a la final.");
+    if (startDate < minimumStartDate) {
+      setWarning("La fecha inicial debe ser desde mañana en adelante.");
+      return;
+    }
+    if (!isBookableDateRange(startDate, endDate, minimumStartDate)) {
+      setWarning("La fecha final no puede ser anterior a la inicial.");
       return;
     }
     const travelersValue = Number(travelers);
@@ -216,7 +258,10 @@ const SearchBar: React.FC<SearchBarProps> = ({
   return (
     <div ref={containerRef} className={`w-full max-w-5xl ${className}`}>
       <div className="w-full bg-white p-2 md:p-3 rounded-2xl md:rounded-full shadow-2xl flex flex-col md:flex-row items-center gap-2">
-        <div className="relative flex-1 w-full flex items-center gap-3 px-6 py-3 border-b md:border-b-0 md:border-r border-slate-100">
+        <div
+          ref={datePickerRef}
+          className="relative flex-1 w-full flex items-center gap-3 px-6 py-3 border-b md:border-b-0 md:border-r border-slate-100"
+        >
           <Icon name="location_on" className="text-primary" />
           <div className="flex flex-col items-start w-full">
             <span className="text-[10px] font-bold uppercase text-slate-600">
@@ -273,14 +318,11 @@ const SearchBar: React.FC<SearchBarProps> = ({
                   <input
                     className="mt-1 w-full rounded-lg border-slate-200 text-sm focus:border-primary focus:ring-primary"
                     type="date"
+                    min={minimumStartDate}
                     value={startDate}
-                    onChange={(event) => {
-                      const value = event.target.value;
-                      setStartDate(value);
-                      if (endDate && value && value > endDate) {
-                        setEndDate("");
-                      }
-                    }}
+                    onChange={(event) =>
+                      handleStartDateChange(event.target.value)
+                    }
                   />
                 </label>
                 <label className="text-xs font-semibold text-slate-500">
@@ -288,9 +330,11 @@ const SearchBar: React.FC<SearchBarProps> = ({
                   <input
                     className="mt-1 w-full rounded-lg border-slate-200 text-sm focus:border-primary focus:ring-primary"
                     type="date"
-                    min={startDate || undefined}
+                    min={minimumEndDate}
                     value={endDate}
-                    onChange={(event) => setEndDate(event.target.value)}
+                    onChange={(event) =>
+                      handleEndDateChange(event.target.value)
+                    }
                   />
                 </label>
               </div>

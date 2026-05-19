@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { PackageManagementTemplate } from "@/components/features/missing-views/templates";
+import OperatorPackagesTemplate from "@/components/features/panel/templates/OperatorPackagesTemplate";
 
 export const metadata: Metadata = {
   title: "Amaturis | Gestion de paquetes",
@@ -8,5 +8,5 @@ export const metadata: Metadata = {
 };
 
 export default function PanelPaquetesPage() {
-  return <PackageManagementTemplate />;
+  return <OperatorPackagesTemplate />;
 }

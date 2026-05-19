@@ -9,6 +9,8 @@ import PlanDetailMap from "@/components/features/planes/organisms/PlanDetailMap"
 import { type PlanDetail } from "@/types/planDetail";
 import { extractSiteSlug } from "@/utils/siteId";
 import { useRouter } from "next/navigation";
+import { getReservationAvailability } from "@/services/reservationAvailability";
+import { getTomorrowDateInputValue } from "@/utils/dateInput";
 
 const activityImages = [
   "https://lh3.googleusercontent.com/aida-public/AB6AXuDF1k7JWAqcHrIZ7csMXOGesAGH_1paEuMxkdWsd7Ff97IAhWVLRR0KLwgZuZ007hw7VIf0bev40daaemE7kcN7TgHg8PyRWctewsQ-xM1ihFsBkk00q7acwvXwlYUTn3mwf1MaTyf-Qobvyv5qOKQ_Encvp6rRjYE619TMtjnZtPl1jpFgDzIVBueDrk3LGo_c7Ki0LmaEjftZWgI2GDi728PgtQYkwbBvZFtDk_0zKeAWPcbuRu-3d0HQe_5zeNHa3jLPF3-lCEM",
@@ -145,6 +147,11 @@ const PlanDetailContent: React.FC<PlanDetailContentProps> = ({ plan }) => {
     "",
   );
   const [selectedDate, setSelectedDate] = React.useState("");
+  const [availableDates, setAvailableDates] = React.useState<string[]>([]);
+  const [availabilityLoading, setAvailabilityLoading] = React.useState(false);
+  const [availabilityError, setAvailabilityError] = React.useState("");
+  const [dateFieldError, setDateFieldError] = React.useState("");
+  const minimumDate = React.useMemo(() => getTomorrowDateInputValue(), []);
 
   const priceValue = plan.priceValue ?? 0;
   const travelersCount =
@@ -154,7 +161,74 @@ const PlanDetailContent: React.FC<PlanDetailContentProps> = ({ plan }) => {
   const total = subtotal + serviceFee;
   const travelerOptions = Array.from({ length: maxTravelers }, (_, i) => i + 1);
   const canReserve =
-    Boolean(selectedDate) && typeof selectedTravelers === "number";
+    (plan.publicationStatus ?? "publicado").toLowerCase() === "publicado" &&
+    Boolean(selectedDate) &&
+    availableDates.includes(selectedDate) &&
+    typeof selectedTravelers === "number";
+
+  React.useEffect(() => {
+    if ((plan.publicationStatus ?? "publicado").toLowerCase() !== "publicado") {
+      setAvailableDates([]);
+      setAvailabilityError("");
+      setAvailabilityLoading(false);
+      return;
+    }
+
+    let isCancelled = false;
+    const viajeros = typeof selectedTravelers === "number" ? selectedTravelers : 1;
+
+    setAvailabilityLoading(true);
+    setAvailabilityError("");
+    getReservationAvailability(plan.slug || plan.id, {
+      dias: 120,
+      viajeros,
+    })
+      .then((data) => {
+        if (isCancelled) return;
+        const validDates = data.fechas_disponibles.filter(
+          (dateValue) => dateValue >= minimumDate,
+        );
+        setAvailableDates(validDates);
+        setDateFieldError("");
+        setSelectedDate((prev) =>
+          prev && validDates.includes(prev) ? prev : "",
+        );
+      })
+      .catch((error) => {
+        if (isCancelled) return;
+        const message =
+          error instanceof Error
+            ? error.message
+            : "No se pudo cargar la disponibilidad de fechas.";
+        setAvailableDates([]);
+        setSelectedDate("");
+        setAvailabilityError(message);
+        setDateFieldError("");
+      })
+      .finally(() => {
+        if (isCancelled) return;
+        setAvailabilityLoading(false);
+      });
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [minimumDate, plan.id, plan.publicationStatus, plan.slug, selectedTravelers]);
+
+  const handleDateChange = (value: string) => {
+    if (!value) {
+      setSelectedDate("");
+      setDateFieldError("");
+      return;
+    }
+    if (!availableDates.includes(value)) {
+      setSelectedDate("");
+      setDateFieldError("Esa fecha no tiene cupo disponible.");
+      return;
+    }
+    setSelectedDate(value);
+    setDateFieldError("");
+  };
 
   const handleReserve = () => {
     if (!canReserve) return;
@@ -345,6 +419,12 @@ const PlanDetailContent: React.FC<PlanDetailContentProps> = ({ plan }) => {
                 {plan.agencyName ?? "Agencia por asignar"}
               </p>
             </div>
+            {(plan.publicationStatus ?? "publicado").toLowerCase() !==
+            "publicado" ? (
+              <div className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm font-semibold text-amber-700">
+                Este plan esta en vista privada y no permite reservas publicas.
+              </div>
+            ) : null}
             <div className="space-y-4">
               <div className="space-y-2">
                 <label className="text-xs font-bold uppercase text-slate-500 tracking-wider">
@@ -356,12 +436,27 @@ const PlanDetailContent: React.FC<PlanDetailContentProps> = ({ plan }) => {
                     className="absolute left-3 top-1/2 -translate-y-1/2 text-primary"
                   />
                   <input
-                    className="w-full pl-10 pr-4 py-3 rounded-full border border-slate-200 bg-slate-50 text-slate-700 focus:ring-primary focus:border-primary"
+                    className="w-full pl-10 pr-4 py-3 rounded-full border border-slate-200 bg-slate-50 text-slate-700 focus:ring-primary focus:border-primary disabled:cursor-not-allowed disabled:opacity-70"
                     type="date"
                     value={selectedDate}
-                    onChange={(event) => setSelectedDate(event.target.value)}
+                    min={minimumDate}
+                    onChange={(event) => handleDateChange(event.target.value)}
+                    disabled={availabilityLoading || availableDates.length === 0}
                   />
                 </div>
+                <p className="text-[11px] font-semibold text-slate-500">
+                  Solo se permite reservar desde {minimumDate} en adelante.
+                </p>
+                {dateFieldError ? (
+                  <p className="text-[11px] font-semibold text-rose-600">
+                    {dateFieldError}
+                  </p>
+                ) : null}
+                {availabilityError ? (
+                  <p className="text-[11px] font-semibold text-rose-600">
+                    {availabilityError}
+                  </p>
+                ) : null}
               </div>
               <div className="space-y-2">
                 <label className="text-xs font-bold uppercase text-slate-500 tracking-wider">

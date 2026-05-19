@@ -11,9 +11,10 @@ const Hero = async () => {
 
   const destinationCounts = new Map<string, number>();
   plans.forEach((plan) => {
-    const candidates = plan.destinations?.length
-      ? plan.destinations
-      : [plan.location];
+    const candidates = new Set([
+      ...(plan.destinations?.length ? plan.destinations : [plan.location]),
+      ...(plan.municipalities ?? []),
+    ]);
     candidates.forEach((item) => {
       const value = item.trim();
       if (!value) return;

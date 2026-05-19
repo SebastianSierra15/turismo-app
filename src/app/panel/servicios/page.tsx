@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { ServicesManagementTemplate } from "@/components/features/missing-views/templates";
+import OperatorServicesTemplate from "@/components/features/panel/templates/OperatorServicesTemplate";
 
 export const metadata: Metadata = {
   title: "Amaturis | Gestion de servicios",
@@ -8,5 +8,5 @@ export const metadata: Metadata = {
 };
 
 export default function PanelServiciosPage() {
-  return <ServicesManagementTemplate />;
+  return <OperatorServicesTemplate />;
 }
