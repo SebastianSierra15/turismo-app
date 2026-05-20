@@ -2,14 +2,12 @@ import { ProfileSchema } from "@/schemas/profile";
 import { PaquetesApiSchema } from "@/schemas/paqueteApi";
 import { type ProfileData } from "@/types/profile";
 import { type PlanCatalogItem } from "@/types/planCatalog";
-import { parseApiError } from "@/lib/api";
+import { buildApiUrl, parseApiError } from "@/lib/api";
 import { mapPaquetesToCatalog } from "@/services/planCatalog";
 import { extractPlanSlug } from "@/utils/planId";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
-
 export const getProfile = async (token: string): Promise<ProfileData> => {
-  const response = await fetch(`${API_URL}/usuarios/me/perfil`, {
+  const response = await fetch(buildApiUrl("/usuarios/me/perfil"), {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -29,7 +27,7 @@ export const updateProfile = async (
   token: string,
   profileData: { name: string; location: string; bio: string }
 ): Promise<void> => {
-  const response = await fetch(`${API_URL}/usuarios/me`, {
+  const response = await fetch(buildApiUrl("/usuarios/me"), {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -47,7 +45,7 @@ export const changePassword = async (
   token: string,
   passwordData: { current_password: string; new_password: string },
 ): Promise<void> => {
-  const response = await fetch(`${API_URL}/usuarios/me/password`, {
+  const response = await fetch(buildApiUrl("/usuarios/me/password"), {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -62,7 +60,7 @@ export const changePassword = async (
 };
 
 export const getFavoritePlans = async (token: string): Promise<PlanCatalogItem[]> => {
-  const response = await fetch(`${API_URL}/usuarios/me/favoritos`, {
+  const response = await fetch(buildApiUrl("/usuarios/me/favoritos"), {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -87,7 +85,7 @@ export const addFavoritePlan = async (
   planId: string,
 ): Promise<void> => {
   const slug = encodeURIComponent(extractPlanSlug(planId));
-  const response = await fetch(`${API_URL}/usuarios/me/favoritos/${slug}`, {
+  const response = await fetch(buildApiUrl(`/usuarios/me/favoritos/${slug}`), {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -105,7 +103,7 @@ export const removeFavoritePlan = async (
   planId: string,
 ): Promise<void> => {
   const slug = encodeURIComponent(extractPlanSlug(planId));
-  const response = await fetch(`${API_URL}/usuarios/me/favoritos/${slug}`, {
+  const response = await fetch(buildApiUrl(`/usuarios/me/favoritos/${slug}`), {
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",

@@ -1,11 +1,9 @@
 import { ReservationsSchema } from "@/schemas/reservations";
 import { type Reservations } from "@/types/reservations";
-import { parseApiError } from "@/lib/api";
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
+import { buildApiUrl, parseApiError } from "@/lib/api";
 
 export const getReservations = async (token: string): Promise<Reservations> => {
-  const response = await fetch(`${API_URL}/reservas/mias`, {
+  const response = await fetch(buildApiUrl("/reservas/mias"), {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -26,7 +24,7 @@ export const cancelReservation = async (
   reservationId: string
 ): Promise<void> => {
   const response = await fetch(
-    `${API_URL}/reservas/${encodeURIComponent(reservationId)}/cancelar`,
+    buildApiUrl(`/reservas/${encodeURIComponent(reservationId)}/cancelar`),
     {
       method: "PATCH",
       headers: {

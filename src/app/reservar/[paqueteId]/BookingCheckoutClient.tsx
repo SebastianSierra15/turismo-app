@@ -6,11 +6,9 @@ import { useRouter } from "next/navigation";
 import Navbar from "@/components/shared/organisms/Navbar";
 import Footer from "@/components/shared/organisms/Footer";
 import { useAuth } from "@/context/AuthContext";
-import { parseApiError } from "@/lib/api";
+import { buildApiUrl, parseApiError } from "@/lib/api";
 import { getReservationAvailability } from "@/services/reservationAvailability";
 import { getTomorrowDateInputValue } from "@/utils/dateInput";
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
 
 type BookingCheckoutClientProps = {
   paqueteId: string;
@@ -100,7 +98,7 @@ const BookingCheckoutClient: React.FC<BookingCheckoutClientProps> = ({
     try {
       setSubmitting(true);
       setError("");
-      const response = await fetch(`${API_URL}/reservas/crear`, {
+      const response = await fetch(buildApiUrl("/reservas/crear"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

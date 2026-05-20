@@ -7,6 +7,7 @@ import Icon from "@/components/shared/atoms/Icon";
 import SocialButtons from "../molecules/SocialButtons";
 import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
+import { buildApiUrl } from "@/lib/api";
 
 const LoginForm: React.FC = () => {
   const { login } = useAuth();
@@ -27,14 +28,25 @@ const LoginForm: React.FC = () => {
     formData.append("password", password);
 
     try {
-      const response = await fetch("http://localhost:8000/usuarios/login", {
+      const response = await fetch(buildApiUrl("/usuarios/login"), {
         method: "POST",
         body: formData,
       });
 
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.detail || "Error al iniciar sesión");
+        let message = "Error al iniciar sesion";
+        try {
+          const errorData = await response.json();
+          if (errorData?.detail) {
+            message = String(errorData.detail);
+          }
+        } catch {
+          const text = (await response.text()).trim();
+          if (text) {
+            message = text.slice(0, 200);
+          }
+        }
+        throw new Error(message);
       }
 
       const data = await response.json();

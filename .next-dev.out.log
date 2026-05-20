@@ -1,0 +1,12 @@
+
+> turismo-app@0.1.0 dev
+> next dev
+
+▲ Next.js 16.2.6 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://172.31.48.1:3000
+- Environments: .env.local
+✓ Ready in 633ms
+
+ GET /planes 200 in 493ms (next.js: 195ms, application-code: 298ms)
+ GET /planes 200 in 55ms (next.js: 3ms, application-code: 52ms)

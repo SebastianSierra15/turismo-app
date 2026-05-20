@@ -1,0 +1,12 @@
+[browser] Image with src "https://1qnmejprcdqaudae.public.blob.vercel-storage.com/amaturis/semillas/bosque-nublado-caqueta.jpg" has "fill" prop and "sizes" prop of "100vw", but image is not rendered at full viewport width. Please adjust "sizes" to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+⨯ TypeError: controller[kState].transformAlgorithm is not a function
+    at ignore-listed frames {
+  digest: '633412054'
+}
+⨯ TypeError: controller[kState].transformAlgorithm is not a function
+    at ignore-listed frames {
+  digest: '633412054'
+}
+[browser] Image with src "https://1qnmejprcdqaudae.public.blob.vercel-storage.com/amaturis/semillas/cascada-anayasito-caqueta.jpg" has "fill" prop and "sizes" prop of "100vw", but image is not rendered at full viewport width. Please adjust "sizes" to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[browser] Image with src "https://lh3.googleusercontent.com/aida-public/AB6AXuC9djbj_yIrFOfLLaLfmLW76_Z4hE5lLE0S0BTy0Lu5VkNnLpAMaLXrjITqMyvSlwMAjSFdaU2vRdvHKN1vdUPEjM5KqS--LVvIPiJGkt0GNQyreeFnU85o9XP3yYVO0RJHDTO7laLVOZBR9XZvHwMl008TbbmA4rPT2mlEs-cb0vWjBni8-tHdRYOffK8j6On6hESmzYiadk7qzCZrFwlB7N8cq2CTLi5cWgrNTcuwva4wfuvoKpuA0XAZQCqrmrqeUPPWb0FecDeK" has "fill" prop and "sizes" prop of "100vw", but image is not rendered at full viewport width. Please adjust "sizes" to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+⚠ Found a change in next.config.ts. Restarting the server to apply the changes...

@@ -1,15 +1,13 @@
 import { ReservationDetailSchema } from "@/schemas/reservationDetail";
 import { type ReservationDetail } from "@/types/reservationDetail";
-import { parseApiError } from "@/lib/api";
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
+import { buildApiUrl, parseApiError } from "@/lib/api";
 
 export const getReservationDetail = async (
   token: string,
   reservationId: string
 ): Promise<ReservationDetail> => {
   const response = await fetch(
-    `${API_URL}/reservas/${encodeURIComponent(reservationId)}`,
+    buildApiUrl(`/reservas/${encodeURIComponent(reservationId)}`),
     {
       method: "GET",
       headers: {

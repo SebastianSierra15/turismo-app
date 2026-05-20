@@ -8,7 +8,7 @@ import Footer from "@/components/shared/organisms/Footer";
 import Button from "@/components/shared/atoms/Button";
 import Icon from "@/components/shared/atoms/Icon";
 import { useAuth } from "@/context/AuthContext";
-import { parseApiError } from "@/lib/api";
+import { buildApiUrl, parseApiError } from "@/lib/api";
 import { getReservationAvailability } from "@/services/reservationAvailability";
 import { getTomorrowDateInputValue } from "@/utils/dateInput";
 
@@ -20,7 +20,6 @@ type Props = {
 
 const image =
   "https://1qnmejprcdqaudae.public.blob.vercel-storage.com/amaturis/semillas/paisaje-amazonico-caqueta.jpg";
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
 const ISO_DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 
 const PaymentGatewayClient: React.FC<Props> = ({
@@ -127,7 +126,7 @@ const PaymentGatewayClient: React.FC<Props> = ({
     try {
       setIsPaying(true);
       setError("");
-      const response = await fetch(`${API_URL}/reservas/crear`, {
+      const response = await fetch(buildApiUrl("/reservas/crear"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -186,7 +186,7 @@ const OperatorServicesTemplate: React.FC = () => {
       const reason = servicesResult.reason;
       const message =
         reason instanceof Error && reason.message === "Failed to fetch"
-          ? "No se pudo conectar con el backend (http://localhost:8000)."
+          ? "No se pudo conectar con el backend."
           : reason instanceof Error
             ? reason.message
             : "No se pudieron cargar los servicios.";

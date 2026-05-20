@@ -1,5 +1,10 @@
 import type { NextConfig } from "next";
 
+const backendApiUrl = process.env.NEXT_PUBLIC_API_URL?.trim();
+const normalizedBackendApiUrl = backendApiUrl
+  ? backendApiUrl.replace(/\/+$/, "")
+  : "";
+
 const nextConfig: NextConfig = {
   /* config options here */
   reactCompiler: true,
@@ -26,6 +31,18 @@ const nextConfig: NextConfig = {
         hostname: "*.public.blob.vercel-storage.com",
       },
     ],
+  },
+  async rewrites() {
+    if (!normalizedBackendApiUrl) {
+      return [];
+    }
+
+    return [
+      {
+        source: "/api/_backend/:path*",
+        destination: `${normalizedBackendApiUrl}/:path*`,
+      },
+    ];
   },
 };
 

@@ -7,6 +7,7 @@ import Icon from "@/components/shared/atoms/Icon";
 import SocialButtons from "../molecules/SocialButtons";
 import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
+import { buildApiUrl } from "@/lib/api";
 
 const RegisterForm: React.FC = () => {
   const { login } = useAuth();
@@ -53,7 +54,7 @@ const RegisterForm: React.FC = () => {
     setIsLoading(true);
 
     try {
-      const response = await fetch("http://localhost:8000/usuarios/registro", {
+      const response = await fetch(buildApiUrl("/usuarios/registro"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -65,8 +66,19 @@ const RegisterForm: React.FC = () => {
       });
 
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.detail || "Error al crear la cuenta");
+        let message = "Error al crear la cuenta";
+        try {
+          const errorData = await response.json();
+          if (errorData?.detail) {
+            message = String(errorData.detail);
+          }
+        } catch {
+          const text = (await response.text()).trim();
+          if (text) {
+            message = text.slice(0, 200);
+          }
+        }
+        throw new Error(message);
       }
 
       const data = await response.json();
