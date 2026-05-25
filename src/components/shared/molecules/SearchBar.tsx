@@ -259,7 +259,6 @@ const SearchBar: React.FC<SearchBarProps> = ({
     <div ref={containerRef} className={`w-full max-w-5xl ${className}`}>
       <div className="w-full bg-white p-2 md:p-3 rounded-2xl md:rounded-full shadow-2xl flex flex-col md:flex-row items-center gap-2">
         <div
-          ref={datePickerRef}
           className="relative flex-1 w-full flex items-center gap-3 px-6 py-3 border-b md:border-b-0 md:border-r border-slate-100"
         >
           <Icon name="location_on" className="text-primary" />
@@ -296,7 +295,10 @@ const SearchBar: React.FC<SearchBarProps> = ({
           )}
         </div>
 
-        <div className="relative flex-1 w-full flex items-center gap-3 px-6 py-3 border-b md:border-b-0 md:border-r border-slate-100">
+        <div
+          ref={datePickerRef}
+          className="relative flex-1 w-full flex items-center gap-3 px-6 py-3 border-b md:border-b-0 md:border-r border-slate-100"
+        >
           <Icon name="calendar_today" className="text-primary" />
           <div className="flex flex-col items-start w-full">
             <span className="text-[10px] font-bold uppercase text-slate-600">

@@ -1,0 +1,89 @@
+[browser] Error cargando favoritos: ApiHttpError: Token inválido o expirado
+    at parseApiError (src/lib/api.ts:175:10)
+    at async getFavoritePlans (src/services/profile.ts:72:11)
+  173 |   }
+  174 |
+> 175 |   return new ApiHttpError(detail, response.status);
+      |          ^
+  176 | };
+  177 |
+  178 | // Funcion para enviar mensajes al chatbot (file://C:/Users/sebsi/Documents/Proyectos/Amaturis/turismo-app/.next/dev/static/chunks/src_0ymfr6k._.js:4785:13)
+[browser] Error cargando favoritos: ApiHttpError: Token inválido o expirado
+    at parseApiError (src/lib/api.ts:175:10)
+    at async getFavoritePlans (src/services/profile.ts:72:11)
+  173 |   }
+  174 |
+> 175 |   return new ApiHttpError(detail, response.status);
+      |          ^
+  176 | };
+  177 |
+  178 | // Funcion para enviar mensajes al chatbot (file://C:/Users/sebsi/Documents/Proyectos/Amaturis/turismo-app/.next/dev/static/chunks/src_0ymfr6k._.js:4785:13)
+⚠ Found a change in next.config.ts. Restarting the server to apply the changes...
+[browser] Image with src "https://lh3.googleusercontent.com/aida-public/AB6AXuAUPQ4FTaudHjVh2_9d1HiiK6eusfERSGpn7oMsCDbheNkDXeULpV_DGhVDdxWUNxKgonnPyeG8qVo7oKw3hRBPw3k_52kxUodBxifXEGMG90eIyZKkSYsfMLUxGQuAaG5BVWb7JeoFPSvcmBEztctvkJ7FcAg6W1JJjBIt7WfRoKtK5NTMAnUZFp_BVpmYpIYpXwNupbuk7nEDq9qOle24pHekLpTzVV5leM91Dj8xb9na0eDXQOwyru2GZYJcQfAXkOqNIkyQy2o" was detected as the Largest Contentful Paint (LCP). Please add the `loading="eager"` property if this image is above the fold.
+Read more: https://nextjs.org/docs/app/api-reference/components/image#loading
+Error cargando planes desde la API: TypeError: fetch failed
+    at async fetchApiJson (src\lib\api.ts:94:20)
+    at async getPlanCatalog (src\services\planCatalog.ts:116:18)
+    at async Hero (src\components\features\inicio\organisms\Hero.tsx:6:17)
+  92 |   init?: RequestInit,
+  93 | ): Promise<T> => {
+> 94 |   const response = await fetch(buildApiUrl(path, params), {
+     |                    ^
+  95 |     cache: "no-store",
+  96 |     ...init,
+  97 |     headers: { {
+  [cause]: Error [ConnectTimeoutError]: Connect Timeout Error (attempted address: 158.23.164.186:80, timeout: 10000ms)
+      at ignore-listed frames {
+    code: 'UND_ERR_CONNECT_TIMEOUT'
+  }
+}
+Error cargando planes desde la API: TypeError: fetch failed
+    at async fetchApiJson (src\lib\api.ts:94:20)
+    at async getPlanCatalog (src\services\planCatalog.ts:116:18)
+    at async getFeaturedPlans (src\services\planes.ts:46:19)
+    at async FeaturedPlans (src\components\features\inicio\organisms\FeaturedPlans.tsx:7:17)
+  92 |   init?: RequestInit,
+  93 | ): Promise<T> => {
+> 94 |   const response = await fetch(buildApiUrl(path, params), {
+     |                    ^
+  95 |     cache: "no-store",
+  96 |     ...init,
+  97 |     headers: { {
+  [cause]: Error [ConnectTimeoutError]: Connect Timeout Error (attempted address: 158.23.164.186:80, timeout: 10000ms)
+      at ignore-listed frames {
+    code: 'UND_ERR_CONNECT_TIMEOUT'
+  }
+}
+Error cargando planes desde la API: TypeError: fetch failed
+    at async fetchApiJson (src\lib\api.ts:94:20)
+    at async getPlanCatalog (src\services\planCatalog.ts:116:18)
+    at async Hero (src\components\features\inicio\organisms\Hero.tsx:6:17)
+  92 |   init?: RequestInit,
+  93 | ): Promise<T> => {
+> 94 |   const response = await fetch(buildApiUrl(path, params), {
+     |                    ^
+  95 |     cache: "no-store",
+  96 |     ...init,
+  97 |     headers: { {
+  [cause]: Error [ConnectTimeoutError]: Connect Timeout Error (attempted address: 158.23.164.186:80, timeout: 10000ms)
+      at ignore-listed frames {
+    code: 'UND_ERR_CONNECT_TIMEOUT'
+  }
+}
+Error cargando planes desde la API: TypeError: fetch failed
+    at async fetchApiJson (src\lib\api.ts:94:20)
+    at async getPlanCatalog (src\services\planCatalog.ts:116:18)
+    at async getFeaturedPlans (src\services\planes.ts:46:19)
+    at async FeaturedPlans (src\components\features\inicio\organisms\FeaturedPlans.tsx:7:17)
+  92 |   init?: RequestInit,
+  93 | ): Promise<T> => {
+> 94 |   const response = await fetch(buildApiUrl(path, params), {
+     |                    ^
+  95 |     cache: "no-store",
+  96 |     ...init,
+  97 |     headers: { {
+  [cause]: Error [ConnectTimeoutError]: Connect Timeout Error (attempted address: 158.23.164.186:80, timeout: 10000ms)
+      at ignore-listed frames {
+    code: 'UND_ERR_CONNECT_TIMEOUT'
+  }
+}

@@ -10,3 +10,22 @@
 
  GET /planes 200 in 493ms (next.js: 195ms, application-code: 298ms)
  GET /planes 200 in 55ms (next.js: 3ms, application-code: 52ms)
+ GET / 200 in 1161ms (next.js: 145ms, application-code: 1017ms)
+ GET / 200 in 892ms (next.js: 6ms, application-code: 885ms)
+ GET /planes 200 in 45ms (next.js: 5ms, application-code: 40ms)
+ GET /login 200 in 168ms (next.js: 61ms, application-code: 107ms)
+ GET /login 200 in 97ms (next.js: 5ms, application-code: 91ms)
+ GET / 200 in 736ms (next.js: 6ms, application-code: 730ms)
+ GET /planes 200 in 45ms (next.js: 5ms, application-code: 40ms)
+ GET /planes 200 in 43ms (next.js: 4ms, application-code: 39ms)
+▲ Next.js 16.2.6 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://172.31.48.1:3000
+- Environments: .env.local
+✓ Ready in 621ms
+
+ GET /planes 200 in 1193ms (next.js: 737ms, application-code: 456ms)
+✓ Compiled in 273ms
+ GET / 200 in 11.6s (next.js: 582ms, application-code: 11.0s)
+ GET / 200 in 10.8s (next.js: 41ms, application-code: 10.8s)
+[?25h
