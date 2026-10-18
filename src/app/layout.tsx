@@ -23,6 +23,10 @@ export const metadata: Metadata = {
   creator: "Amaturis",
   publisher: "Amaturis",
   category: "travel",
+  icons: {
+    icon: "/icon.svg",
+    shortcut: "/icon.svg",
+  },
   alternates: { canonical: "/" },
   robots: {
     index: true,
@@ -62,7 +66,7 @@ const structuredData = {
       "@id": `${SITE_URL}/#organization`,
       name: "Amaturis",
       url: SITE_URL,
-      logo: `${SITE_URL}/favicon.ico`,
+      logo: `${SITE_URL}/icon.svg`,
       description:
         "Plataforma de turismo sostenible y experiencias auténticas en Caquetá.",
       areaServed: { "@type": "AdministrativeArea", name: "Caquetá, Colombia" },

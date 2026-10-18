@@ -1,6 +1,6 @@
-import Image from "next/image";
 import SearchBar from "@/components/shared/molecules/SearchBar";
 import { getPlanCatalog } from "@/services/planCatalog";
+import HeroBackgroundCarousel from "@/components/features/inicio/organisms/HeroBackgroundCarousel";
 
 const Hero = async () => {
   const plans = await getPlanCatalog({
@@ -28,18 +28,7 @@ const Hero = async () => {
 
   return (
     <section className="relative min-h-[calc(100svh-4rem)] w-full overflow-hidden sm:h-[85vh] sm:min-h-0">
-      <div className="absolute inset-0">
-        <Image
-          src="https://lh3.googleusercontent.com/aida-public/AB6AXuB6aB1OqFsG8iGytQuO0egF3B0bKBfpBOOPUgucjEZsQF_C29aXAs250nRCqTowYlR5YST7RoQ0sPNEiWUySv_-vOGT0bAwo-NJSckOjK8luPe6JV91KXnxy0g9tHbrY5bpSSdymFd6udL5qYgiCelDClo4xtYLod-BZwqGDsJhj7w8Zuvdhak-yA9F7Y0pvkzD2Bd4voVVI8J1yrI7y-jtkXRBvqBD50I1StK3NahD_YV2fo1ng7iW5FIWu2n7Cd-Ro7-oh6UNpJo"
-          alt="Paisaje amazónico con río y cascada"
-          title="Paisaje amazónico con río y cascada"
-          fill
-          sizes="100vw"
-          className="object-cover"
-          priority
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/30 to-black/70" />
-      </div>
+      <HeroBackgroundCarousel />
 
       <div className="relative min-h-[calc(100svh-4rem)] sm:h-full max-w-7xl mx-auto px-4 py-4 sm:py-0 flex flex-col items-center justify-start sm:justify-center text-center">
         <div className="pt-0 sm:pt-10 md:pt-0 max-w-3xl mb-4 sm:mb-12">
