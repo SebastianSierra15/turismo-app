@@ -22,37 +22,40 @@ const Footer: React.FC = () => {
               auténticas.
             </p>
             <div className="flex gap-3">
-              <a
+              <span
                 className="h-10 w-10 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center transition-colors"
-                href="#"
+                role="img"
+                aria-label="Ranking social de Amaturis"
                 title="Ver ranking social"
               >
                 <Icon name="social_leaderboard" className="text-lg" />
-              </a>
-              <a
+              </span>
+              <span
                 className="h-10 w-10 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center transition-colors"
-                href="#"
+                role="img"
+                aria-label="Sitio público de Amaturis"
                 title="Visitar sitio público"
               >
                 <Icon name="public" className="text-lg" />
-              </a>
-              <a
+              </span>
+              <span
                 className="h-10 w-10 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center transition-colors"
-                href="#"
+                role="img"
+                aria-label="Videos de Amaturis"
                 title="Ver videos"
               >
                 <Icon name="play_circle" className="text-lg" />
-              </a>
+              </span>
             </div>
           </div>
 
           <div className="md:col-span-3 space-y-4">
-            <h4 className="text-white font-semibold">Enlaces Rápidos</h4>
+            <h2 className="text-white font-semibold">Enlaces Rápidos</h2>
             <ul className="space-y-3">
               <li>
                 <Link
                   className="hover:text-white transition-colors"
-                  href="#"
+                  href="/planes"
                   title="Ver tours y actividades"
                 >
                   Tours y Actividades
@@ -61,7 +64,7 @@ const Footer: React.FC = () => {
               <li>
                 <Link
                   className="hover:text-white transition-colors"
-                  href="#"
+                  href="/acerca_de"
                   title="Conocer la región"
                 >
                   Sobre la Región
@@ -70,7 +73,7 @@ const Footer: React.FC = () => {
               <li>
                 <Link
                   className="hover:text-white transition-colors"
-                  href="#"
+                  href="/acerca_de"
                   title="Viaje responsable"
                 >
                   Viaje Responsable
@@ -79,7 +82,7 @@ const Footer: React.FC = () => {
               <li>
                 <Link
                   className="hover:text-white transition-colors"
-                  href="#"
+                  href="/centro-de-ayuda"
                   title="Contactar soporte"
                 >
                   Contacto y Soporte
@@ -89,7 +92,7 @@ const Footer: React.FC = () => {
           </div>
 
           <div className="md:col-span-4 space-y-4">
-            <h4 className="text-white font-semibold">Soporte</h4>
+            <h2 className="text-white font-semibold">Soporte</h2>
             <ul className="space-y-3">
               <li>
                 <Link
@@ -112,7 +115,7 @@ const Footer: React.FC = () => {
               <li>
                 <Link
                   className="hover:text-white transition-colors"
-                  href="#"
+                  href="/centro-de-ayuda"
                   title="Guías de seguridad"
                 >
                   Guías de Seguridad
@@ -121,7 +124,7 @@ const Footer: React.FC = () => {
               <li>
                 <Link
                   className="hover:text-white transition-colors"
-                  href="#"
+                  href="/registro/agente"
                   title="Alíate con nosotros"
                 >
                   Alíate con Nosotros

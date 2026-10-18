@@ -27,7 +27,7 @@ const Hero = async () => {
     .map(([name]) => name);
 
   return (
-    <section className="relative h-[95vh] sm:h-[85vh] w-full overflow-hidden">
+    <section className="relative min-h-[calc(100svh-4rem)] w-full overflow-hidden sm:h-[85vh] sm:min-h-0">
       <div className="absolute inset-0">
         <Image
           src="https://lh3.googleusercontent.com/aida-public/AB6AXuB6aB1OqFsG8iGytQuO0egF3B0bKBfpBOOPUgucjEZsQF_C29aXAs250nRCqTowYlR5YST7RoQ0sPNEiWUySv_-vOGT0bAwo-NJSckOjK8luPe6JV91KXnxy0g9tHbrY5bpSSdymFd6udL5qYgiCelDClo4xtYLod-BZwqGDsJhj7w8Zuvdhak-yA9F7Y0pvkzD2Bd4voVVI8J1yrI7y-jtkXRBvqBD50I1StK3NahD_YV2fo1ng7iW5FIWu2n7Cd-Ro7-oh6UNpJo"
@@ -41,13 +41,13 @@ const Hero = async () => {
         <div className="absolute inset-0 bg-gradient-to-b from-black/30 to-black/70" />
       </div>
 
-      <div className="relative h-full max-w-7xl mx-auto px-4 flex flex-col items-center justify-center text-center">
-        <div className="pt-10 md:pt-0 max-w-3xl mb-12">
-          <h1 className="text-white text-5xl md:text-7xl font-extrabold leading-tight tracking-tight mb-6">
+      <div className="relative min-h-[calc(100svh-4rem)] sm:h-full max-w-7xl mx-auto px-4 py-4 sm:py-0 flex flex-col items-center justify-start sm:justify-center text-center">
+        <div className="pt-0 sm:pt-10 md:pt-0 max-w-3xl mb-4 sm:mb-12">
+          <h1 className="text-white text-4xl sm:text-5xl md:text-7xl font-extrabold leading-[1.08] tracking-tight mb-2 sm:mb-6">
             Descubre el Corazón del&nbsp;
             <span className="text-primary">Caquetá</span>
           </h1>
-          <p className="text-white/90 text-lg md:text-xl font-medium max-w-2xl mx-auto leading-relaxed">
+          <p className="text-white/90 text-base sm:text-lg md:text-xl font-medium max-w-2xl mx-auto leading-relaxed">
             Aventuras inolvidables en las selvas y ríos indómitos del Caquetá,
             Colombia. Tu portal hacia lo inexplorado.
           </p>

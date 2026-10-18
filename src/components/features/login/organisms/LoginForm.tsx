@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import Input from "@/components/shared/atoms/Input";
 import Button from "@/components/shared/atoms/Button";
 import Icon from "@/components/shared/atoms/Icon";
-import SocialButtons from "../molecules/SocialButtons";
 import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
 import { buildApiUrl } from "@/lib/api";
@@ -73,19 +72,6 @@ const LoginForm: React.FC = () => {
       </div>
 
       <div className="mt-8 space-y-6">
-        <SocialButtons />
-
-        <div className="relative">
-          <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-slate-300"></div>
-          </div>
-          <div className="relative flex justify-center text-sm">
-            <span className="bg-background-light px-2 text-slate-500">
-              O continúa con tu correo
-            </span>
-          </div>
-        </div>
-
         {/* --- FORMULARIO CONECTADO --- */}
         <form onSubmit={handleLogin} className="space-y-5">
           {error && (

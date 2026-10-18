@@ -1,6 +1,14 @@
 import Link from "next/link";
 import Navbar from "@/components/shared/organisms/Navbar";
 import Footer from "@/components/shared/organisms/Footer";
+import { createPageMetadata } from "@/lib/seo";
+
+export const metadata = createPageMetadata({
+  title: "Amaturis | Política de privacidad",
+  description:
+    "Conoce cómo Amaturis recopila, usa y protege tus datos personales al utilizar la plataforma.",
+  path: "/politica-de-privacidad",
+});
 
 export default function PrivacyPolicyPage() {
   return (

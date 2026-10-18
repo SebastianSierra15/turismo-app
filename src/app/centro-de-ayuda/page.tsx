@@ -1,6 +1,14 @@
 import Link from "next/link";
 import Navbar from "@/components/shared/organisms/Navbar";
 import Footer from "@/components/shared/organisms/Footer";
+import { createPageMetadata } from "@/lib/seo";
+
+export const metadata = createPageMetadata({
+  title: "Amaturis | Centro de ayuda",
+  description:
+    "Encuentra respuestas sobre cuentas, reservas, pagos y políticas de uso de Amaturis.",
+  path: "/centro-de-ayuda",
+});
 
 const faqItems = [
   {

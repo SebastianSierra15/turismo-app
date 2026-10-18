@@ -7,15 +7,21 @@ const FeaturedPlans = async () => {
   const plans = await getFeaturedPlans();
 
   return (
-    <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+    <section
+      aria-labelledby="featured-plans-title"
+      className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20"
+    >
       <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-4">
         <div className="max-w-2xl">
           <span className="text-primary font-bold tracking-widest uppercase text-sm mb-2 block">
             Experiencias Únicas
           </span>
-          <h3 className="text-3xl md:text-4xl font-extrabold text-slate-900">
+          <h2
+            id="featured-plans-title"
+            className="text-3xl md:text-4xl font-extrabold text-slate-900"
+          >
             Planes Destacados
-          </h3>
+          </h2>
           <p className="mt-4 text-slate-600">
             Seleccionamos las mejores rutas para que vivas la selva con
             seguridad y respeto por la naturaleza.
@@ -39,7 +45,7 @@ const FeaturedPlans = async () => {
           <PlanCard key={plan.id} {...plan} />
         ))}
       </div>
-    </main>
+    </section>
   );
 };
 

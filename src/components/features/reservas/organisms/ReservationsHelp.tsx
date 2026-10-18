@@ -19,7 +19,7 @@ const ReservationsHelp: React.FC = () => {
       <div className="flex flex-wrap justify-center gap-4">
         <Link
           className="inline-flex items-center gap-2 text-sm font-bold text-primary hover:underline"
-          href="#"
+          href="/centro-de-ayuda"
           title="Chatear con soporte"
         >
           <Icon name="chat" className="text-base" />
@@ -27,7 +27,7 @@ const ReservationsHelp: React.FC = () => {
         </Link>
         <Link
           className="inline-flex items-center gap-2 text-sm font-bold text-primary hover:underline"
-          href="#"
+          href="/terminos-del-servicio"
           title="Términos de cancelación"
         >
           <Icon name="description" className="text-base" />

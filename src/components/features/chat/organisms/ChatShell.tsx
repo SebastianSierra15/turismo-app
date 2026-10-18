@@ -26,7 +26,6 @@ type DragState = {
 const BUBBLE_SIZE = 56;
 const EDGE_GAP = 20;
 const DEFAULT_GAP = 24;
-const PANEL_GAP = 14;
 const DRAG_THRESHOLD = 4;
 
 const clamp = (value: number, min: number, max: number) =>
@@ -113,9 +112,9 @@ export const ChatShell: React.FC = () => {
       EDGE_GAP,
       viewportWidth - panelWidth - EDGE_GAP,
     );
-    const topAbove = position.y - PANEL_GAP - panelHeight;
-    const topBelow = position.y + BUBBLE_SIZE + PANEL_GAP;
-    const preferredTop = topAbove >= EDGE_GAP ? topAbove : topBelow;
+    // El panel conserva la misma coordenada vertical del launcher. Solo se
+    // limita cuando no cabe completo dentro del viewport.
+    const preferredTop = position.y;
     const top = clamp(
       preferredTop,
       EDGE_GAP,
@@ -330,7 +329,7 @@ export const ChatShell: React.FC = () => {
         </div>
       )}
 
-      {position && (
+      {position && !isOpen && (
         <div
           className="fixed left-0 top-0 z-50"
           style={{

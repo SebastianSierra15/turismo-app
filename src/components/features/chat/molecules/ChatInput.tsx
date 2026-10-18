@@ -44,12 +44,23 @@ export const ChatInput: React.FC<ChatInputProps> = ({
     adjustTextareaHeight();
   }, [text, externalDraftKey, adjustTextareaHeight]);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const submitMessage = React.useCallback(() => {
     if (text.trim() && !isLoading) {
       onSendMessage(text);
       setText("");
     }
+  }, [isLoading, onSendMessage, text]);
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    submitMessage();
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key !== "Enter" || e.shiftKey || e.nativeEvent.isComposing) return;
+
+    e.preventDefault();
+    submitMessage();
   };
 
   return (
@@ -62,6 +73,7 @@ export const ChatInput: React.FC<ChatInputProps> = ({
         rows={1}
         value={text}
         onChange={(e) => setText(e.target.value)}
+        onKeyDown={handleKeyDown}
         disabled={isLoading}
         placeholder="Escribe un mensaje..."
         className="flex-1 bg-slate-50 border-none focus:ring-2 focus:ring-emerald-500 rounded-xl px-4 py-2 text-sm leading-6 transition-all disabled:opacity-50 resize-none overflow-y-hidden"

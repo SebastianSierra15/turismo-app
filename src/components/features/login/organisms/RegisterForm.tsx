@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import Input from "@/components/shared/atoms/Input";
 import Button from "@/components/shared/atoms/Button";
 import Icon from "@/components/shared/atoms/Icon";
-import SocialButtons from "../molecules/SocialButtons";
 import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
 import { buildApiUrl } from "@/lib/api";
@@ -105,20 +104,6 @@ const RegisterForm: React.FC = () => {
       </div>
 
       <div className="mt-8 space-y-6">
-        <SocialButtons />
-
-        {/* Separador */}
-        <div className="relative">
-          <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-slate-300"></div>
-          </div>
-          <div className="relative flex justify-center text-sm">
-            <span className="bg-background-light px-2 text-slate-500">
-              O regístrate con tu correo
-            </span>
-          </div>
-        </div>
-
         {/* Formulario */}
         <form onSubmit={handleRegister} className="space-y-5" noValidate>
           {error && (

@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import ReactMarkdown from "react-markdown";
 import { ChatMessage } from "@/types/chat";
 import { twMerge } from "tailwind-merge";
 
@@ -26,7 +27,22 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({ message }) => {
             : "bg-[#2D5A27] text-white rounded-tr-none"
         )}
       >
-        <p className="leading-relaxed">{message.text}</p>
+        {isBot ? (
+          <div
+            className={twMerge(
+              "leading-relaxed",
+              "[&>p]:mb-2 [&>p:last-child]:mb-0",
+              "[&>ul]:my-2 [&>ul]:list-disc [&>ul]:pl-5",
+              "[&>ol]:my-2 [&>ol]:list-decimal [&>ol]:pl-5",
+              "[&_strong]:font-bold [&_em]:italic",
+              "[&_a]:font-medium [&_a]:underline",
+            )}
+          >
+            <ReactMarkdown>{message.text}</ReactMarkdown>
+          </div>
+        ) : (
+          <p className="leading-relaxed">{message.text}</p>
+        )}
         <span
           className={twMerge(
             "text-[10px] mt-1 block opacity-70 text-right",

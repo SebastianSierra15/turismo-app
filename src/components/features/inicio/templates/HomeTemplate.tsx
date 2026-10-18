@@ -9,9 +9,11 @@ const HomeTemplate: React.FC = () => {
   return (
     <div className="relative flex min-h-screen w-full flex-col overflow-x-hidden bg-background-light text-slate-900">
       <Navbar />
-      <Hero />
-      <FeaturedPlans />
-      <Newsletter />
+      <main>
+        <Hero />
+        <FeaturedPlans />
+        <Newsletter />
+      </main>
       <Footer />
     </div>
   );

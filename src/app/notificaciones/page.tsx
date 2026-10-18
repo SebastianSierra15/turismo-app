@@ -5,6 +5,7 @@ export const metadata: Metadata = {
   title: "Amaturis | Notificaciones",
   description:
     "Centro de notificaciones para reservas, pagos, mensajes del guia y novedades.",
+  robots: { index: false, follow: false },
 };
 
 export default function NotificacionesPage() {

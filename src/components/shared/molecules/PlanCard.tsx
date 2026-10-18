@@ -60,7 +60,7 @@ const PlanCard: React.FC<PlanCardProps> = ({
             {tag}
           </div>
         </div>
-        <h4 className="text-xl font-bold text-slate-900 mb-2">{title}</h4>
+        <h3 className="text-xl font-bold text-slate-900 mb-2">{title}</h3>
         <p className="text-slate-500 text-sm mb-6 line-clamp-2">
           {description}
         </p>

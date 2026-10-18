@@ -14,6 +14,7 @@ export const metadata: Metadata = {
   title: "Amaturis | Pasarela segura de pagos turisticos",
   description:
     "Finaliza tu reserva en Amaturis con una pasarela de pagos segura y validaciones obligatorias.",
+  robots: { index: false, follow: false },
 };
 
 export default async function PasarelaPagosPage({ searchParams }: PasarelaPageProps) {

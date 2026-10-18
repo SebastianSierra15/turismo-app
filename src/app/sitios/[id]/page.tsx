@@ -2,9 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import SiteDetailTemplate from "@/components/features/sitios/templates/SiteDetailTemplate";
 import { getSiteDetail, getSiteRelatedPlans } from "@/services/siteDetail";
-
-const DEFAULT_IMAGE =
-  "https://lh3.googleusercontent.com/aida-public/AB6AXuACIPCeuaxb96R-SaywaQUN_XcMFMUXM6NRMH8C0_MIoTvgdbx6cajPu0Pns7DkGzf3l23-ZCWs_dnOJrOSwnulwtShpSnolzUN3rTeqennEgUShJkEzYXRbHZ0a_BxbZ6ph31B12OJm5sYafBAONYMqSlyzV0nqfwxSx4Ov4IA0Vqvwv60YqAlXeRdvd6YT99i-kEsRK34To1I-bYFSESkXLare6F8LE3mX2CsxN4I-lU7iL5dZx2qmnbOyyOX0Ox7HbgrruIdJh6r";
+import { createPageMetadata, DEFAULT_SOCIAL_IMAGE } from "@/lib/seo";
 
 type SiteDetailPageProps = {
   params: Promise<{ id: string }>;
@@ -17,10 +15,12 @@ export const generateMetadata = async (
   const site = await getSiteDetail(id);
 
   if (!site) {
-    return {
+    return createPageMetadata({
       title: "Amaturis | Sitio no encontrado",
       description: "El sitio turistico solicitado no esta disponible.",
-    };
+      path: `/sitios/${id}`,
+      noIndex: true,
+    });
   }
 
   const description = site.description[0]
@@ -29,26 +29,13 @@ export const generateMetadata = async (
       : site.description[0]
     : "Explora destinos autenticos en Caqueta.";
 
-  return {
+  return createPageMetadata({
     title: `Amaturis | ${site.name}`,
     description,
-    openGraph: {
-      title: `Amaturis | ${site.name}`,
-      description,
-      images: [
-        {
-          url: DEFAULT_IMAGE,
-          alt: site.name,
-        },
-      ],
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: `Amaturis | ${site.name}`,
-      description,
-      images: [DEFAULT_IMAGE],
-    },
-  };
+    path: `/sitios/${id}`,
+    image: site.heroImage ?? DEFAULT_SOCIAL_IMAGE,
+    imageAlt: site.name,
+  });
 };
 
 export default async function SiteDetailPage({ params }: SiteDetailPageProps) {

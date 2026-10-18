@@ -1,9 +1,7 @@
 import type { Metadata } from "next";
 import PlanDetailPageClient from "@/app/planes/[id]/PlanDetailPageClient";
 import { getPlanDetail } from "@/services/planDetail";
-
-const DEFAULT_IMAGE =
-  "https://lh3.googleusercontent.com/aida-public/AB6AXuCnYgzb2OOjNV0klNlydE3WlXGb3G7x5_uIBQfCx3Q_1VvAQEVyUU2Qaf74rHnylTIcUbMHGqVglazKTWXrfStk_x5gINqYhHI9vFITVhRSnPftOIrsXQ94JQPjp1O_D1cLddjjij6MKPfzI7YIM7HWYiBiLfhSPqlRiSJhU3iKXPcEqMdc9UbLCyGFirZbK7GZDbIc3QBfmz8OgmWbSv7PLIXv_SNQGPAvT_zJZLJGH3d8reBOuGLbXoJAQBBxBm8c0Cm9PDUhTYA";
+import { createPageMetadata, DEFAULT_SOCIAL_IMAGE } from "@/lib/seo";
 
 type PlanDetailPageProps = {
   params: Promise<{ id: string }>;
@@ -16,10 +14,12 @@ export const generateMetadata = async ({
   const plan = await getPlanDetail(id);
 
   if (!plan) {
-    return {
+    return createPageMetadata({
       title: "Amaturis | Plan no encontrado",
       description: "El plan turistico solicitado no esta disponible.",
-    };
+      path: `/planes/${id}`,
+      noIndex: true,
+    });
   }
 
   const description =
@@ -27,26 +27,13 @@ export const generateMetadata = async ({
       ? `${plan.description.slice(0, 157)}...`
       : plan.description;
 
-  return {
+  return createPageMetadata({
     title: `Amaturis | ${plan.title}`,
     description,
-    openGraph: {
-      title: `Amaturis | ${plan.title}`,
-      description,
-      images: [
-        {
-          url: DEFAULT_IMAGE,
-          alt: plan.title,
-        },
-      ],
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: `Amaturis | ${plan.title}`,
-      description,
-      images: [DEFAULT_IMAGE],
-    },
-  };
+    path: `/planes/${plan.slug}`,
+    image: plan.heroImage ?? DEFAULT_SOCIAL_IMAGE,
+    imageAlt: plan.title,
+  });
 };
 
 export default async function PlanDetailPage({ params }: PlanDetailPageProps) {

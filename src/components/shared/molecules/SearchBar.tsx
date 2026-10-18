@@ -257,9 +257,9 @@ const SearchBar: React.FC<SearchBarProps> = ({
 
   return (
     <div ref={containerRef} className={`w-full max-w-5xl ${className}`}>
-      <div className="w-full bg-white p-2 md:p-3 rounded-2xl md:rounded-full shadow-2xl flex flex-col md:flex-row items-center gap-2">
+      <div className="w-full bg-white p-1.5 md:p-3 rounded-2xl md:rounded-full shadow-2xl flex flex-col md:flex-row items-center gap-2">
         <div
-          className="relative flex-1 w-full flex items-center gap-3 px-6 py-3 border-b md:border-b-0 md:border-r border-slate-100"
+          className="relative flex-1 w-full flex items-center gap-3 px-5 py-2.5 md:px-6 md:py-3 border-b md:border-b-0 md:border-r border-slate-100"
         >
           <Icon name="location_on" className="text-primary" />
           <div className="flex flex-col items-start w-full">
@@ -297,7 +297,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
 
         <div
           ref={datePickerRef}
-          className="relative flex-1 w-full flex items-center gap-3 px-6 py-3 border-b md:border-b-0 md:border-r border-slate-100"
+          className="relative flex-1 w-full flex items-center gap-3 px-5 py-2.5 md:px-6 md:py-3 border-b md:border-b-0 md:border-r border-slate-100"
         >
           <Icon name="calendar_today" className="text-primary" />
           <div className="flex flex-col items-start w-full">
@@ -353,7 +353,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
           )}
         </div>
 
-        <div className="flex-1 w-full flex items-center gap-3 px-6 py-3">
+        <div className="flex-1 w-full flex items-center gap-3 px-5 py-2.5 md:px-6 md:py-3">
           <Icon name="group" className="text-primary" />
           <div className="flex flex-col items-start w-full">
             <span className="text-[10px] font-bold uppercase text-slate-600">
@@ -373,7 +373,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
         </div>
 
         <Button
-          className="w-full md:w-auto px-10 py-4 rounded-full text-base font-bold normal-case tracking-normal shadow-lg shadow-primary/30 hover:scale-[1.02] active:scale-95 cursor-pointer"
+          className="w-full md:w-auto px-8 py-3 md:px-10 md:py-4 rounded-full text-sm md:text-base font-bold normal-case tracking-normal shadow-lg shadow-primary/30 hover:scale-[1.02] active:scale-95 cursor-pointer"
           onClick={handleSearch}
           type="button"
         >

@@ -22,9 +22,9 @@ const Newsletter: React.FC = () => {
             name="mail"
             className="text-primary text-[192px] leading-none mb-4"
           />
-          <h4 className="text-2xl md:text-3xl font-bold text-white mb-4">
+          <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">
             ¿Listo para la aventura?
-          </h4>
+          </h2>
           <p className="text-white/90 mb-8">
             Suscríbete para recibir ofertas exclusivas y guías de viaje
             directamente en tu correo.

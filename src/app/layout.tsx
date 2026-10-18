@@ -4,6 +4,7 @@ import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/context/AuthContext";
 import { ChatShell } from "@/components/features/chat/organisms/ChatShell";
+import { DEFAULT_KEYWORDS, DEFAULT_SOCIAL_IMAGE, SITE_URL } from "@/lib/seo";
 
 const plusJakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
@@ -13,20 +14,68 @@ const plusJakarta = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(
-    process.env.NEXT_PUBLIC_SITE_URL ?? "https://amaturis.com",
-  ),
+  metadataBase: new URL(SITE_URL),
   title: "Amaturis | Turismo sostenible en Caquetá",
   description:
     "Amaturis conecta viajeros con experiencias auténticas en Caquetá: planes turísticos, naturaleza, cultura local y reservas sencillas para vivir aventuras responsables.",
+  keywords: DEFAULT_KEYWORDS,
+  authors: [{ name: "Amaturis" }],
+  creator: "Amaturis",
+  publisher: "Amaturis",
+  category: "travel",
+  alternates: { canonical: "/" },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
   openGraph: {
+    title: "Amaturis | Turismo sostenible en Caquetá",
+    description:
+      "Amaturis conecta viajeros con experiencias auténticas en Caquetá: planes turísticos, naturaleza, cultura local y reservas sencillas para vivir aventuras responsables.",
+    url: "/",
     siteName: "Amaturis",
     type: "website",
     locale: "es_CO",
+    images: [{ url: DEFAULT_SOCIAL_IMAGE, alt: "Paisaje amazónico del Caquetá" }],
   },
   twitter: {
     card: "summary_large_image",
+    title: "Amaturis | Turismo sostenible en Caquetá",
+    description:
+      "Amaturis conecta viajeros con experiencias auténticas en Caquetá: planes turísticos, naturaleza, cultura local y reservas sencillas para vivir aventuras responsables.",
+    images: [DEFAULT_SOCIAL_IMAGE],
   },
+};
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": `${SITE_URL}/#organization`,
+      name: "Amaturis",
+      url: SITE_URL,
+      logo: `${SITE_URL}/favicon.ico`,
+      description:
+        "Plataforma de turismo sostenible y experiencias auténticas en Caquetá.",
+      areaServed: { "@type": "AdministrativeArea", name: "Caquetá, Colombia" },
+    },
+    {
+      "@type": "WebSite",
+      "@id": `${SITE_URL}/#website`,
+      name: "Amaturis",
+      url: SITE_URL,
+      inLanguage: "es-CO",
+      publisher: { "@id": `${SITE_URL}/#organization` },
+    },
+  ],
 };
 
 export default function RootLayout({
@@ -49,6 +98,10 @@ export default function RootLayout({
         />
       </head>
       <body className={`${plusJakarta.variable} antialiased`}>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        />
         <AuthProvider>
           {children}
           <ChatShell />
