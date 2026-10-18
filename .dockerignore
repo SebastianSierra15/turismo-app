@@ -1,0 +1,9 @@
+.git
+.next
+node_modules
+output
+.env
+.env.*
+*.log
+*.tsbuildinfo
+AGENTS.md
